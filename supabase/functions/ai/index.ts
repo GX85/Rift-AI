@@ -23,8 +23,14 @@ Deno.serve(async (req) => {
     if (!GEMINI_API_KEY) {
       throw new Error('Нет GEMINI_API_KEY. Поставь секрет: npm run ai:secret -- GEMINI_API_KEY=...');
     }
-    const { prompt, system } = await req.json();
+    // history — массив {role: 'user'|'assistant', text: string} для чата с агентом
+    const { prompt, system, history } = await req.json();
     if (!prompt) throw new Error('Нужно поле prompt');
+
+    const pastContents = (history ?? []).map((h: { role: string; text: string }) => ({
+      role: h.role === 'assistant' ? 'model' : 'user',
+      parts: [{ text: h.text }],
+    }));
 
     const res = await fetch(
       `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${GEMINI_API_KEY}`,
@@ -33,7 +39,7 @@ Deno.serve(async (req) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           systemInstruction: system ? { parts: [{ text: system }] } : undefined,
-          contents: [{ parts: [{ text: prompt }] }],
+          contents: [...pastContents, { role: 'user', parts: [{ text: prompt }] }],
         }),
       },
     );

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import type { Session } from '@supabase/supabase-js';
 import { supabase } from './lib/supabase';
 import { Auth } from './components/Auth';
-import { Entries } from './components/Entries';
+import { Agents } from './components/Agents';
 
 export default function App() {
   const [session, setSession] = useState<Session | null>(null);
@@ -26,7 +26,7 @@ export default function App() {
   return (
     <main className="container">
       <header className="header">
-        <h1>Мой проект 🚀</h1>
+        <h1>Rift AI 🤖</h1>
         {session && (
           <button className="ghost" onClick={() => supabase.auth.signOut()}>
             Выйти
@@ -35,7 +35,7 @@ export default function App() {
       </header>
 
       {/* Нет сессии → показываем вход. Есть → показываем приложение. */}
-      {!session ? <Auth /> : <Entries userEmail={session.user.email ?? ''} />}
+      {!session ? <Auth /> : <Agents userEmail={session.user.email ?? ''} />}
     </main>
   );
 }
