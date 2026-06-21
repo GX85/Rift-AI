@@ -9,24 +9,35 @@ export default function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // 1) текущая сессия при загрузке
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session);
       setLoading(false);
     });
-    // 2) подписка на вход/выход
     const { data: sub } = supabase.auth.onAuthStateChange((_event, s) => {
       setSession(s);
     });
     return () => sub.subscription.unsubscribe();
   }, []);
 
-  if (loading) return <main className="container"><p>Загрузка…</p></main>;
+  if (loading)
+    return (
+      <main className="container">
+        <p className="center-loading">
+          <span className="spinner" />
+          Загрузка…
+        </p>
+      </main>
+    );
 
   return (
     <main className="container">
       <header className="header">
-        <h1>Rift AI 🤖</h1>
+        <div className="brand">
+          <div className="brand-mark">🤖</div>
+          <div className="brand-name">
+            Rift <span>AI</span>
+          </div>
+        </div>
         {session && (
           <button className="ghost" onClick={() => supabase.auth.signOut()}>
             Выйти
@@ -34,7 +45,6 @@ export default function App() {
         )}
       </header>
 
-      {/* Нет сессии → показываем вход. Есть → показываем приложение. */}
       {!session ? <Auth /> : <Agents userEmail={session.user.email ?? ''} />}
     </main>
   );

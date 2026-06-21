@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 
-// Вход и регистрация по email + паролю. Это пример — Codex поможет улучшить (Google-вход и т.д.).
+// Вход и регистрация по email + паролю.
 export function Auth() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -20,7 +20,7 @@ export function Auth() {
           : supabase.auth.signInWithPassword({ email, password });
       const { error } = await fn;
       if (error) setMessage(error.message);
-      else if (mode === 'signup') setMessage('Готово! Проверь почту, если нужна подтверждалка.');
+      else if (mode === 'signup') setMessage('Готово! Проверь почту, если нужно подтверждение.');
     } catch {
       setMessage('Что-то пошло не так. Попробуй ещё раз.');
     } finally {
@@ -30,7 +30,12 @@ export function Auth() {
 
   return (
     <section className="card">
-      <h2>{mode === 'signin' ? 'Вход' : 'Регистрация'}</h2>
+      <h2>{mode === 'signin' ? 'С возвращением 👋' : 'Создай аккаунт'}</h2>
+      <p className="subtitle">
+        {mode === 'signin'
+          ? 'Войди, чтобы продолжить создавать ИИ-агентов.'
+          : 'Зарегистрируйся и собери своего первого ИИ-агента.'}
+      </p>
       <form onSubmit={handleSubmit} className="form">
         <input
           type="email"
@@ -48,12 +53,14 @@ export function Auth() {
           required
         />
         <button type="submit" disabled={busy}>
-          {busy ? '…' : mode === 'signin' ? 'Войти' : 'Создать аккаунт'}
+          {busy ? <span className="spinner" /> : null}
+          {busy ? 'Подождите…' : mode === 'signin' ? 'Войти' : 'Создать аккаунт'}
         </button>
       </form>
       {message && <p className="message">{message}</p>}
       <button
         className="ghost"
+        style={{ marginTop: 14, width: '100%' }}
         onClick={() => setMode(mode === 'signin' ? 'signup' : 'signin')}
       >
         {mode === 'signin' ? 'Нет аккаунта? Зарегистрируйся' : 'Уже есть аккаунт? Войти'}

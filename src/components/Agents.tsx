@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
+import { avatarFor } from '../lib/avatar';
 import { Chat } from './Chat';
 
 type Agent = {
@@ -16,13 +17,29 @@ type GeneratedAgent = {
   system_prompt: string;
 };
 
-const BUILDER_SYSTEM = `Ты — конструктор ИИ-агентов. По желанию пользователя придумай одного агента.
-Верни ТОЛЬКО JSON без пояснений и без markdown, в формате:
+const BUILDER_SYSTEM = `Ты — конструктор ИИ-агентов экспертного уровня. По желанию пользователя
+спроектируй одного умного, полезного агента. Верни ТОЛЬКО JSON без пояснений и без markdown:
 {"name": "...", "description": "...", "system_prompt": "..."}
-- name: короткое имя агента (2-4 слова), по-русски.
-- description: одно предложение, что этот агент делает.
-- system_prompt: подробная инструкция агенту от второго лица ("ты ..."): его роль,
-  характер, стиль общения и правила. Пиши по-русски, 3-6 предложений.`;
+
+- name: короткое запоминающееся имя (2-4 слова), по-русски.
+- description: одно предложение — что агент делает и для кого.
+- system_prompt: подробная инструкция агенту от второго лица ("ты ..."). Сделай его по-настоящему
+  умным и полезным. Обязательно опиши:
+  1) РОЛЬ И ЭКСПЕРТИЗА — кто он и в чём глубоко разбирается;
+  2) ХАРАКТЕР И СТИЛЬ — как общается (тон, длина ответов, эмодзи или нет);
+  3) КАК ДУМАЕТ — разбивает сложное на шаги, объясняет на примерах, не выдумывает факты,
+     а если не уверен — честно говорит об этом;
+  4) ПРАВИЛА — задаёт уточняющий вопрос, если задача неясна; отвечает по делу, без воды;
+     держится своей роли и не уходит в сторону.
+  Пиши по-русски, живым языком, 6-10 предложений. Это «мозг» агента — чем точнее, тем умнее агент.`;
+
+// Примеры-подсказки для быстрого старта.
+const IDEAS = [
+  'помощник по английскому для подростков',
+  'строгий тренер по продуктивности',
+  'весёлый рассказчик историй',
+  'эксперт по React и коду',
+];
 
 function parseAgent(text: string): GeneratedAgent | null {
   const start = text.indexOf('{');
@@ -61,7 +78,6 @@ export function Agents({ userEmail }: { userEmail: string }) {
     load();
   }, []);
 
-  // Если выбран агент — показываем чат
   if (selectedAgent) {
     return <Chat agent={selectedAgent} onBack={() => setSelectedAgent(null)} />;
   }
@@ -76,7 +92,12 @@ export function Agents({ userEmail }: { userEmail: string }) {
       body: { prompt: wish.trim(), system: BUILDER_SYSTEM },
     });
     if (aiError) {
-      setError('ИИ не ответил: ' + aiError.message);
+      setError('Ошибка: ' + aiError.message);
+      setLoading(false);
+      return;
+    }
+    if (data?.error) {
+      setError('Ошибка ИИ: ' + data.error);
       setLoading(false);
       return;
     }
@@ -101,7 +122,8 @@ export function Agents({ userEmail }: { userEmail: string }) {
     setLoading(false);
   }
 
-  async function remove(id: string) {
+  async function remove(id: string, e: React.MouseEvent) {
+    e.stopPropagation();
     const { error } = await supabase.from('agents').delete().eq('id', id);
     if (error) setError(error.message);
     else load();
@@ -109,47 +131,85 @@ export function Agents({ userEmail }: { userEmail: string }) {
 
   return (
     <section className="card">
-      <p className="hello">Привет, {userEmail} 👋</p>
-      <h2>Rift AI — создай своего ИИ-агента</h2>
-      <p className="empty">
-        Опиши словами, какой агент тебе нужен — ИИ сам придумает ему имя и характер.
+      <p className="hello">Привет, {userEmail}</p>
+      <h2>Создай своего ИИ-агента ✨</h2>
+      <p className="subtitle">
+        Опиши словами, какой агент тебе нужен — Rift AI сам придумает ему имя, характер и
+        способности.
       </p>
 
-      <form onSubmit={createAgent} className="form-row" style={{ marginTop: 16 }}>
+      <form onSubmit={createAgent} className="form-row">
         <input
-          placeholder="например: помощник по английскому для подростков"
+          placeholder="например: помощник по английскому…"
           value={wish}
           onChange={(e) => setWish(e.target.value)}
           disabled={loading}
         />
         <button type="submit" disabled={loading}>
+          {loading ? <span className="spinner" /> : null}
           {loading ? 'Создаю…' : 'Создать'}
         </button>
       </form>
 
+      {/* Быстрые идеи */}
+      {!wish && (
+        <div className="ideas">
+          {IDEAS.map((idea) => (
+            <button
+              key={idea}
+              type="button"
+              className="idea-chip"
+              onClick={() => setWish(idea)}
+              disabled={loading}
+            >
+              {idea}
+            </button>
+          ))}
+        </div>
+      )}
+
       {error && <p className="message">{error}</p>}
 
+      <div className="section-label">
+        <span>Мои агенты</span>
+        <span className="count-pill">{agents.length}</span>
+      </div>
+
       {agents.length === 0 ? (
-        <p className="empty">Пока нет агентов. Создай первого 👆</p>
+        <p className="empty">
+          Пока нет агентов.
+          <br />
+          Опиши идею выше и создай первого 👆
+        </p>
       ) : (
-        <ul className="list">
-          {agents.map((a) => (
-            <li key={a.id}>
-              <div className="agent-info">
-                <strong>{a.name}</strong>
-                {a.description && <span className="agent-desc">{a.description}</span>}
+        <div className="grid">
+          {agents.map((a) => {
+            const av = avatarFor(a.id);
+            return (
+              <div key={a.id} className="agent-card" onClick={() => setSelectedAgent(a)}>
+                <div className="agent-card-top">
+                  <div className="avatar" style={{ background: av.gradient }}>
+                    {av.emoji}
+                  </div>
+                  <div className="agent-name">{a.name}</div>
+                </div>
+                {a.description && <div className="agent-desc">{a.description}</div>}
+                <div className="agent-actions">
+                  <button className="outline small grow" onClick={() => setSelectedAgent(a)}>
+                    Открыть чат
+                  </button>
+                  <button
+                    className="icon-btn"
+                    title="Удалить"
+                    onClick={(e) => remove(a.id, e)}
+                  >
+                    🗑
+                  </button>
+                </div>
               </div>
-              <div style={{ display: 'flex', gap: 8 }}>
-                <button className="small" onClick={() => setSelectedAgent(a)}>
-                  Чат
-                </button>
-                <button className="ghost small" onClick={() => remove(a.id)}>
-                  удалить
-                </button>
-              </div>
-            </li>
-          ))}
-        </ul>
+            );
+          })}
+        </div>
       )}
     </section>
   );
