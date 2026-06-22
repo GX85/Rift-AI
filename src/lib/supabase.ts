@@ -11,4 +11,16 @@ if (!url || !anonKey) {
   );
 }
 
-export const supabase = createClient(url, anonKey);
+export const supabase = createClient(url, anonKey, {
+  auth: {
+    // Запоминаем вход в браузере и сами обновляем токен — не нужно входить каждый раз.
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: true,
+    storageKey: 'rift-auth',
+  },
+});
+
+// Нужны для прямого вызова Edge-функции при стриминге (invoke не умеет читать поток).
+export const SUPABASE_URL = url;
+export const SUPABASE_ANON_KEY = anonKey;

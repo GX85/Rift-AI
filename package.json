@@ -3,10 +3,14 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "main": "electron/main.cjs",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
+    "electron": "electron .",
+    "desktop": "concurrently -k \"npm:dev\" \"wait-on tcp:5173 && electron .\"",
+    "desktop:build": "npm run build && electron-builder --win",
     "db:login": "supabase login",
     "db:link": "supabase link",
     "db:new": "supabase migration new",
@@ -23,8 +27,18 @@
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^4.3.1",
+    "concurrently": "^9.1.0",
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8",
     "supabase": "^2.0.0",
     "typescript": "^5.5.3",
-    "vite": "^5.4.8"
+    "vite": "^5.4.8",
+    "wait-on": "^8.0.1"
+  },
+  "build": {
+    "appId": "ai.rift.desktop",
+    "productName": "Rift AI",
+    "files": ["dist/**/*", "electron/**/*"],
+    "win": { "target": "nsis" }
   }
 }
