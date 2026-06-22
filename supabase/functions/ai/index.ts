@@ -16,8 +16,8 @@ declare const Deno: {
 };
 
 const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY');
-// gemini-2.0-flash — быстрая и стабильная модель, доступна на бесплатном ключе.
-const MODEL = 'gemini-2.0-flash';
+// gemini-2.5-flash — та же модель, что и на фронте (у 2.0-flash на бесплатном ключе нулевая квота).
+const MODEL = 'gemini-2.5-flash';
 
 const cors = {
   'Access-Control-Allow-Origin': '*',
@@ -27,9 +27,10 @@ const cors = {
 // Достаём весь текст из ответа (у "думающих" моделей бывает несколько частей).
 function extractText(data: unknown): string {
   const parts =
-    (data as { candidates?: { content?: { parts?: { text?: string }[] } }[] })?.candidates?.[0]
+    (data as { candidates?: { content?: { parts?: { text?: string; thought?: boolean }[] } }[] })?.candidates?.[0]
       ?.content?.parts ?? [];
   return parts
+    .filter((p) => !p.thought) // части-«мысли» в ответ не отдаём
     .map((p) => p.text ?? '')
     .join('')
     .trim();

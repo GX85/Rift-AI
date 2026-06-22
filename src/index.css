@@ -1,5 +1,5 @@
 :root {
-  /* Тёмная тема "Rift" — космический фон + фиолетово-синий акцент */
+  /* Тёмная тема Amethyst AI — космический фон + фиолетово-синий акцент */
   --bg: #0b0b12;
   --bg-2: #111120;
   --card: rgba(16, 16, 26, 0.55);
@@ -1530,6 +1530,18 @@ input:hover:not(:focus), textarea:hover:not(:focus) { border-color: var(--line-s
   background: #fff;
 }
 .site-preview iframe { width: 100%; height: 100%; border: none; }
+
+.img-preview {
+  margin-top: 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #0b0c12;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.img-preview img { max-width: 100%; max-height: 460px; display: block; }
 
 /* ====================================================================
    PLUS: баннер, файл, озвучка, темы, игры

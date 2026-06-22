@@ -2,12 +2,12 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Markdown } from './Markdown';
 import { AmethystLogo } from './Gems';
 import { Icon } from './Icons';
-import { streamGemini, runAgent, hasDesktop } from '../lib/gemini';
+import { streamGemini, runAgent, generateImage, hasDesktop } from '../lib/gemini';
 import { loadChats, saveChat, deleteChatRow } from '../lib/chatsStore';
 import {
   isPlus,
   redeem,
-  syncPlus,
+  syncAccount,
   getUsage,
   incUsage,
   FREE_LIMIT,
@@ -33,8 +33,9 @@ const RIFT = {
   tagline: 'Умный ИИ для любых задач',
   temperature: 0.7,
   persona:
-    'Ты — Amethyst, мощный универсальный ИИ-ассистент: пишешь код, объясняешь, отлаживаешь баги, ' +
-    'придумываешь идеи и тексты. Отвечай точно, по делу и структурно.',
+    'Ты — Amethyst, мощный универсальный ИИ-ассистент уровня эксперта: пишешь код, объясняешь сложное ' +
+    'простыми словами, отлаживаешь баги, рассуждаешь над задачами и придумываешь идеи. ' +
+    'Прежде чем ответить — продумай задачу по шагам про себя, затем дай точный и выверенный ответ.',
   suggests: ['Напиши функцию на Python', 'Объясни этот код', 'Найди баг в моей функции', 'Придумай идею для проекта'],
 };
 
@@ -53,9 +54,12 @@ function buildSystem(memory: string[]): string {
   const tools = hasDesktop() ? DESKTOP_NOTE : '';
   return `${RIFT.persona}${tools}${mem}
 
-Общие правила:
-• Думай по шагам; не выдумывай факты, не уверен — скажи честно.
-• Отвечай по делу: списки, примеры, код в блоках. Без воды.
+Как рассуждать и отвечать:
+• Сложную задачу разбивай на шаги и решай последовательно; перепроверяй вывод и арифметику.
+• Не выдумывай факты. Не уверен или данных не хватает — честно скажи об этом или задай уточняющий вопрос.
+• Код давай полным и рабочим, с обработкой краевых случаев; кратко поясняй ключевые места.
+• Отвечай по делу и структурно: списки, заголовки, код в блоках. Без воды и лишних извинений.
+• Глубину ответа подбирай под вопрос: простой — коротко, сложный — развёрнуто.
 • Помни весь разговор. Сегодня ${today}. Отвечай на языке собеседника.`;
 }
 
@@ -119,6 +123,12 @@ export function Workspace({
   const [gameHtml, setGameHtml] = useState('');
   const [gameBusy, setGameBusy] = useState(false);
   const [gameErr, setGameErr] = useState('');
+  // Картинки (Plus)
+  const [showImage, setShowImage] = useState(false);
+  const [imgWish, setImgWish] = useState('');
+  const [imgUrl, setImgUrl] = useState('');
+  const [imgBusy, setImgBusy] = useState(false);
+  const [imgErr, setImgErr] = useState('');
   // Темы и озвучка (Plus)
   const [accent, setAccentState] = useState(getAccent());
   const [tts, setTtsState] = useState(getTTS());
@@ -156,7 +166,11 @@ export function Workspace({
     if (activeId) localStorage.setItem(ACTIVE_KEY, activeId);
   }, [activeId]);
   useEffect(() => {
-    syncPlus().then((v) => setPlusState(v));
+    syncAccount().then(({ plus, usage, memory }) => {
+      setPlusState(plus);
+      setUsage(usage);
+      setMemoryState(memory);
+    });
   }, []);
   useEffect(() => {
     applyAccent(accent);
@@ -195,7 +209,7 @@ export function Workspace({
     const t = title.trim() || 'Новый чат';
     setChats((prev) => prev.map((c) => (c.id === id ? { ...c, title: t } : c)));
     const c = chats.find((x) => x.id === id);
-    if (c && c.messages.length) saveChat({ id: c.id, title: t, model: 'rift', messages: c.messages, updatedAt: c.updatedAt });
+    if (c && c.messages.length) saveChat({ id: c.id, title: t, model: 'amethyst', messages: c.messages, updatedAt: c.updatedAt });
     setEditingId(null);
   }
   function clearAll() {
@@ -207,8 +221,9 @@ export function Workspace({
     setShowSettings(false);
   }
 
-  function redeemCode() {
-    if (redeem(code)) {
+  async function redeemCode() {
+    setCodeMsg('Проверяем код…');
+    if (await redeem(code)) {
       setPlusState(true);
       setCodeMsg('✓ Amethyst Plus активирован! Все функции открыты.');
       setCode('');
@@ -271,7 +286,26 @@ export function Workspace({
     }
     setGameBusy(false);
   }
-  function downloadHtml(html: string, filename: string) {
+  async function generateImg() {
+    const w = imgWish.trim();
+    if (!w || imgBusy) return;
+    setImgBusy(true);
+    setImgUrl('');
+    setImgErr('');
+    try {
+      setImgUrl(await generateImage({ prompt: w }));
+    } catch (e) {
+      setImgErr(e instanceof Error ? e.message : 'Ошибка генерации картинки.');
+    }
+    setImgBusy(false);
+  }
+  function downloadImage(url: string) {
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'amethyst-image.png';
+    a.click();
+  }
+  function saveFile(html: string, filename: string) {
     const blob = new Blob([html], { type: 'text/html' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -285,7 +319,7 @@ export function Workspace({
     const md =
       `# ${active.title}\n\n` +
       active.messages.map((m) => `**${m.role === 'user' ? 'Я' : 'Amethyst'}:**\n\n${m.content}`).join('\n\n---\n\n');
-    downloadHtml(md, (active.title || 'chat').replace(/[^\wа-яА-Я -]/g, '').slice(0, 40) + '.md');
+    saveFile(md, (active.title || 'chat').replace(/[^\wа-яА-Я -]/g, '').slice(0, 40) + '.md');
   }
   async function onPickFile(e: React.ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0];
@@ -341,7 +375,7 @@ export function Workspace({
           history,
           prompt: promptForModel,
           temperature: RIFT.temperature,
-          maxTokens: plus ? 8192 : 4096,
+          maxTokens: 8192,
           signal: controller.signal,
         })) {
           full += chunk;
@@ -366,7 +400,7 @@ export function Workspace({
     }
     setUsage(incUsage());
     if (plus && tts) speak(full);
-    saveChat({ id: chatId, title, model: 'rift', messages: [...base, { id: botId, role: 'assistant', content: full }], updatedAt: Date.now() });
+    saveChat({ id: chatId, title, model: 'amethyst', messages: [...base, { id: botId, role: 'assistant', content: full }], updatedAt: Date.now() });
   }
 
   async function submit(text: string) {
@@ -540,6 +574,9 @@ export function Workspace({
         </button>
         <button className="side-link" onClick={() => (plus ? setShowGame(true) : setShowPlus(true))}>
           <Icon name="game" /> Игровая студия {!plus && <span className="lock">PLUS</span>}
+        </button>
+        <button className="side-link" onClick={() => (plus ? setShowImage(true) : setShowPlus(true))}>
+          <Icon name="image" /> Создать картинку {!plus && <span className="lock">PLUS</span>}
         </button>
 
         <button className={`plus-banner ${plus ? 'on' : ''}`} onClick={() => setShowPlus(true)}>
@@ -851,6 +888,7 @@ export function Workspace({
               <li><b>Без лимитов</b> — у бесплатного {FREE_LIMIT} сообщений</li>
               <li><b>Создание сайтов</b> — генерируй и скачивай сайты</li>
               <li><b>Игровая студия</b> — играбельные игры одним кликом</li>
+              <li><b>Генерация картинок</b> — рисует изображения по описанию</li>
               <li><b>Память 20 ГБ</b>, <b>озвучка</b>, <b>темы</b>, <b>файлы</b>, длинные ответы</li>
             </ul>
             {plus ? (
@@ -932,7 +970,7 @@ export function Workspace({
                   <iframe title="site" srcDoc={siteHtml} sandbox="allow-scripts" />
                 </div>
                 <div className="set-actions">
-                  <button onClick={() => downloadHtml(siteHtml, 'site.html')}>⬇ Скачать site.html</button>
+                  <button onClick={() => saveFile(siteHtml, 'site.html')}>⬇ Скачать site.html</button>
                 </div>
               </>
             )}
@@ -964,7 +1002,39 @@ export function Workspace({
                   <iframe title="game" srcDoc={gameHtml} sandbox="allow-scripts" />
                 </div>
                 <div className="set-actions">
-                  <button onClick={() => downloadHtml(gameHtml, 'game.html')}>⬇ Скачать game.html</button>
+                  <button onClick={() => saveFile(gameHtml, 'game.html')}>⬇ Скачать game.html</button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Создание картинок */}
+      {showImage && (
+        <div className="modal-scrim" onClick={() => setShowImage(false)}>
+          <div className="modal modal-wide" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-head">
+              <h3>Создать картинку</h3>
+              <button className="icon-only" onClick={() => setShowImage(false)}>
+                ✕
+              </button>
+            </div>
+            <div className="redeem">
+              <input placeholder="Опиши картинку: напр. неоновый кот-космонавт в стиле 3D" value={imgWish} onChange={(e) => setImgWish(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && generateImg()} disabled={imgBusy} />
+              <button onClick={generateImg} disabled={imgBusy || !imgWish.trim()}>
+                {imgBusy ? '…' : 'Создать'}
+              </button>
+            </div>
+            {imgBusy && <p className="muted-line">Amethyst рисует картинку…</p>}
+            {imgErr && <p className="composer-error">{imgErr}</p>}
+            {imgUrl && (
+              <>
+                <div className="img-preview">
+                  <img src={imgUrl} alt="Сгенерированная картинка" />
+                </div>
+                <div className="set-actions">
+                  <button onClick={() => downloadImage(imgUrl)}>⬇ Скачать картинку</button>
                 </div>
               </>
             )}

@@ -6,6 +6,12 @@ const KEY = import.meta.env.VITE_GEMINI_API_KEY as string | undefined;
 // gemini-2.5-flash — рабочая модель на текущем ключе (у 2.0-flash нулевая квота).
 const MODEL = 'gemini-2.5-flash';
 
+// «Бюджет мышления»: сколько модель рассуждает перед ответом — это и делает её умнее.
+//  -1  → динамически: модель сама решает, сколько думать (умно, рекомендуется).
+//   0  → выключено: быстро, но заметно «глупее» на сложных задачах.
+//  N>0 → жёсткий лимит токенов на размышления (напр. 4096) — компромисс скорость/ум.
+const THINKING_BUDGET = -1;
+
 export type ChatTurn = { role: 'user' | 'assistant'; text: string };
 
 // ──────────── Агент с инструментами (десктоп) ────────────
@@ -51,6 +57,62 @@ const AGENT_TOOLS = [
 
 export function hasDesktop(): boolean {
   return typeof window !== 'undefined' && !!window.rift?.desktop;
+}
+
+// ──────────── Генерация изображений ────────────
+// Модель «Nano Banana» — генерация и редактирование картинок. Возвращает data-URL (PNG/JPEG),
+// который можно сразу вставить в <img src> и скачать. Опционально принимает входное изображение
+// (data-URL) для редактирования: «дорисуй…», «смени фон…».
+const IMAGE_MODEL = 'gemini-2.5-flash-image';
+
+function dataUrlToInline(dataUrl: string): { mimeType: string; data: string } | null {
+  const m = /^data:([^;]+);base64,(.+)$/.exec(dataUrl);
+  return m ? { mimeType: m[1], data: m[2] } : null;
+}
+
+export async function generateImage(opts: { prompt: string; image?: string; signal?: AbortSignal }): Promise<string> {
+  if (!KEY) throw new Error('Нет VITE_GEMINI_API_KEY в .env — добавь ключ и перезапусти npm run dev.');
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const parts: any[] = [{ text: opts.prompt }];
+  if (opts.image) {
+    const inline = dataUrlToInline(opts.image);
+    if (inline) parts.push({ inlineData: inline });
+  }
+
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${IMAGE_MODEL}:generateContent?key=${KEY}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        contents: [{ role: 'user', parts }],
+        generationConfig: { responseModalities: ['IMAGE'] },
+      }),
+      signal: opts.signal,
+    },
+  );
+
+  const data = await res.json();
+  if (data?.error) {
+    const c = data.error.code;
+    if (c === 429) throw new Error('Лимит генерации картинок исчерпан. Подожди немного и попробуй снова.');
+    if (c === 404) throw new Error('Модель картинок недоступна на твоём ключе Gemini. Возьми ключ на aistudio.google.com.');
+    throw new Error('Gemini: ' + (data.error.message ?? 'ошибка генерации картинки'));
+  }
+
+  const respParts = data?.candidates?.[0]?.content?.parts ?? [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  for (const p of respParts as any[]) {
+    const inline = p.inlineData ?? p.inline_data;
+    if (inline?.data) return `data:${inline.mimeType ?? inline.mime_type ?? 'image/png'};base64,${inline.data}`;
+  }
+  // Картинки нет — возможно, запрос заблокирован фильтрами; покажем причину, если она есть.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const reason = (data?.candidates?.[0] as any)?.finishReason;
+  if (reason && reason !== 'STOP')
+    throw new Error('Запрос отклонён (' + reason + '). Переформулируй описание картинки.');
+  throw new Error('Модель не вернула изображение. Попробуй переформулировать запрос.');
 }
 
 async function execTool(name: string, args: Record<string, unknown>): Promise<string> {
@@ -104,7 +166,7 @@ export async function runAgent(opts: {
           systemInstruction: { parts: [{ text: opts.system }] },
           contents,
           tools: AGENT_TOOLS,
-          generationConfig: { temperature: opts.temperature, maxOutputTokens: 4096, thinkingConfig: { thinkingBudget: 0 } },
+          generationConfig: { temperature: opts.temperature, maxOutputTokens: 8192, thinkingConfig: { thinkingBudget: THINKING_BUDGET } },
         }),
         signal: opts.signal,
       },
@@ -138,7 +200,7 @@ export async function runAgent(opts: {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const text = parts.map((p: any) => p.text ?? '').join('').trim();
+    const text = parts.filter((p: any) => !p.thought).map((p: any) => p.text ?? '').join('').trim();
     return text || '(агент выполнил действия)';
   }
   return 'Агент остановлен: слишком много шагов.';
@@ -175,8 +237,9 @@ export async function* streamGemini(opts: {
           temperature: opts.temperature,
           maxOutputTokens: opts.maxTokens ?? 4096,
           topP: 0.95,
-          // Отключаем «размышления» — отвечает сразу текстом, а не тратит токены на мысли.
-          thinkingConfig: { thinkingBudget: 0 },
+          // Включаем «размышления»: модель сначала думает, потом отвечает — это делает её умнее.
+          // Сами мысли в ответ не возвращаются (includeThoughts не выставлен), только итоговый текст.
+          thinkingConfig: { thinkingBudget: THINKING_BUDGET },
         },
       }),
       signal: opts.signal,
@@ -215,7 +278,11 @@ export async function* streamGemini(opts: {
       try {
         const json = JSON.parse(payload);
         const parts = json?.candidates?.[0]?.content?.parts ?? [];
-        const text = parts.map((p: { text?: string }) => p.text ?? '').join('');
+        // Пропускаем части-«мысли» (thought) — пользователю нужен только итоговый ответ.
+        const text = parts
+          .filter((p: { thought?: boolean }) => !p.thought)
+          .map((p: { text?: string }) => p.text ?? '')
+          .join('');
         if (text) yield text;
       } catch {
         /* неполный JSON — придёт в следующем кусочке */

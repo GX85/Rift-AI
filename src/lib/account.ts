@@ -1,64 +1,83 @@
 // Amethyst Plus: подписка по коду, лимит сообщений и память ИИ.
+// Лимит, статус Plus и память хранятся в базе (привязаны к аккаунту, синхронизируются между
+// устройствами). localStorage используется как мгновенный кэш и офлайн-фолбэк.
 import { supabase } from './supabase';
 
 const PLUS_KEY = 'rift_plus';
 const USAGE_KEY = 'rift_usage';
 const MEM_KEY = 'rift_memory';
 
-// Бесплатно — 50 сообщений на каждую модель. В Plus — без лимита.
+// Бесплатно — 50 сообщений. В Plus — без лимита.
 export const FREE_LIMIT = 50;
 // Память: бесплатно 1 ГБ, в Plus — 20 ГБ (показывается как «запас»).
 export const MEM_FREE = 1 * 1024 * 1024 * 1024;
 export const MEM_PLUS = 20 * 1024 * 1024 * 1024;
 
-// Коды активации Amethyst Plus (раздаёшь сам). Регистр и пробелы не важны.
-export const VALID_CODES = ['RIFT-PLUS', 'TITANIUM-2026', 'GIGABYTE-VIP', 'RIFT-PLUS-FOREVER'];
-
 export function isPlus(): boolean {
   return localStorage.getItem(PLUS_KEY) === '1';
 }
-// Только локально (например, при загрузке статуса из базы).
+// Только локальный кэш (например, после загрузки статуса из базы).
 export function cachePlus(v: boolean) {
   localStorage.setItem(PLUS_KEY, v ? '1' : '0');
 }
-// Локально + в Supabase (profiles.is_plus).
-export function setPlus(v: boolean) {
-  cachePlus(v);
-  supabase.auth.getUser().then(({ data }) => {
-    if (data.user) {
-      supabase.from('profiles').update({ is_plus: v }).eq('id', data.user.id).then(() => {});
-    }
-  });
-}
-// Подтянуть статус Plus из базы (синхронизация между устройствами).
-export async function syncPlus(): Promise<boolean> {
-  try {
-    const { data } = await supabase.auth.getUser();
-    if (!data.user) return isPlus();
-    const { data: row } = await supabase.from('profiles').select('is_plus').eq('id', data.user.id).single();
-    const v = !!row?.is_plus;
-    cachePlus(v);
-    return v;
-  } catch {
-    return isPlus();
-  }
-}
-export function redeem(code: string): boolean {
+
+// Активация Plus по коду. Код проверяется на сервере (функция redeem_plus_code) —
+// списка кодов в коде фронта больше нет. Возвращает true при успехе.
+export async function redeem(code: string): Promise<boolean> {
   const c = code.trim().toUpperCase();
-  if (VALID_CODES.includes(c)) {
-    setPlus(true);
-    return true;
+  if (!c) return false;
+  try {
+    const { data, error } = await supabase.rpc('redeem_plus_code', { p_code: c });
+    if (error) throw error;
+    const ok = !!data;
+    if (ok) cachePlus(true);
+    return ok;
+  } catch {
+    // Сервер недоступен / миграция не применена — активировать нельзя.
+    return false;
   }
-  return false;
 }
 
-// ── Лимит сообщений (единый) ──
+// Подтянуть из базы статус Plus, счётчик сообщений и память одним запросом.
+// При ошибке возвращает локальные (кэшированные) значения, чтобы приложение работало офлайн.
+export async function syncAccount(): Promise<{ plus: boolean; usage: number; memory: string[] }> {
+  const local = { plus: isPlus(), usage: getUsage(), memory: getMemory() };
+  try {
+    const { data: u } = await supabase.auth.getUser();
+    if (!u.user) return local;
+    const { data: row, error } = await supabase
+      .from('profiles')
+      .select('is_plus, usage_count, memory')
+      .eq('id', u.user.id)
+      .single();
+    if (error || !row) return local;
+
+    const plus = !!row.is_plus;
+    const usage = Number(row.usage_count ?? 0) || 0;
+    const memory = Array.isArray(row.memory) ? (row.memory as string[]) : local.memory;
+    cachePlus(plus);
+    localStorage.setItem(USAGE_KEY, String(usage));
+    saveMemoryLocal(memory);
+    return { plus, usage, memory };
+  } catch {
+    return local;
+  }
+}
+
+// ── Лимит сообщений ──
 export function getUsage(): number {
   return Number(localStorage.getItem(USAGE_KEY) || '0') || 0;
 }
+// Увеличить счётчик: мгновенно локально + на сервере (best-effort, фоном).
 export function incUsage(): number {
   const n = getUsage() + 1;
   localStorage.setItem(USAGE_KEY, String(n));
+  supabase.rpc('bump_usage').then(
+    ({ data }) => {
+      if (typeof data === 'number') localStorage.setItem(USAGE_KEY, String(data));
+    },
+    () => {},
+  );
   return n;
 }
 
@@ -70,8 +89,17 @@ export function getMemory(): string[] {
     return [];
   }
 }
-export function saveMemory(items: string[]) {
+function saveMemoryLocal(items: string[]) {
   localStorage.setItem(MEM_KEY, JSON.stringify(items));
+}
+// Сохранить память: локально + в профиль (best-effort, синхронизация между устройствами).
+export function saveMemory(items: string[]) {
+  saveMemoryLocal(items);
+  supabase.auth.getUser().then(({ data }) => {
+    if (data.user) {
+      supabase.from('profiles').update({ memory: items }).eq('id', data.user.id).then(() => {}, () => {});
+    }
+  });
 }
 export function memoryBytes(items: string[]): number {
   return new Blob([items.join('\n')]).size;

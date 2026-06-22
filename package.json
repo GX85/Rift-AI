@@ -1,5 +1,5 @@
 {
-  "name": "nfact-teens-starter",
+  "name": "amethyst-ai",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -36,8 +36,8 @@
     "wait-on": "^8.0.1"
   },
   "build": {
-    "appId": "ai.rift.desktop",
-    "productName": "Rift AI",
+    "appId": "ai.amethyst.desktop",
+    "productName": "Amethyst AI",
     "files": ["dist/**/*", "electron/**/*"],
     "win": { "target": "nsis" }
   }

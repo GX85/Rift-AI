@@ -1,5 +1,5 @@
-// Главный процесс Electron — десктоп-оболочка Rift.
-// Даёт агенту Grafen реальный доступ к ПК: команды, файлы, папки.
+// Главный процесс Electron — десктоп-оболочка Amethyst.
+// Даёт агенту Amethyst реальный доступ к ПК: команды, файлы, папки.
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');

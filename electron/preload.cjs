@@ -1,5 +1,5 @@
-// Безопасный мост между десктоп-оболочкой и веб-интерфейсом.
-// В renderer появляется window.rift с разрешёнными действиями.
+// Безопасный мост между десктоп-оболочкой Amethyst и веб-интерфейсом.
+// В renderer появляется window.rift с разрешёнными действиями (имя моста оставлено для совместимости).
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('rift', {

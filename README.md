@@ -1,110 +1,93 @@
-# 🚀 nFactorial Teens — Стартовый шаблон
+# 💎 Amethyst AI
 
-Твоя отправная точка. Здесь уже готово: страница, **вход по email**, **профиль** и **база данных**
-(пример: список записей). Дальше ты переделаешь это под свою идею с помощью **Codex**.
+Умный ИИ-ассистент в одном чате: код, объяснения, идеи, отладка. Плюс — генерация сайтов и игр,
+память о пользователе, озвучка, темы и десктоп-агент с доступом к ПК.
 
-Стек: **Vite + React + TypeScript + Supabase + Vercel**.
+Стек: **Vite + React + TypeScript + Supabase + Gemini**. Десктоп — **Electron**.
 
 ---
 
-## ✅ Запуск за 8 шагов (День 2)
+## ✅ Запуск
 
-> Всё по галочкам. Застрял на шаге — подними руку, не прыгай дальше.
-
-1. **Возьми свою копию.** На GitHub нажми зелёную кнопку **«Use this template» → Create a new
-   repository**. Назови репозиторий своим именем проекта. Это твоя копия, не оригинал.
-
-2. **Открой в VSCode.** Скопируй ссылку своего репо → в терминале:
-   ```bash
-   git clone <ссылка-твоего-репо>
-   cd <папка-проекта>
-   code .
-   ```
-
-3. **Установи зависимости.** В терминале VSCode:
+1. **Установи зависимости.**
    ```bash
    npm install
    ```
 
-4. **Создай проект в Supabase.** Зайди на [supabase.com](https://supabase.com) → **New project**.
-   Запомни пароль базы. Подожди ~2 минуты, пока проект поднимется.
-
-5. **Вставь ключи.** Скопируй файл `.env.example` → переименуй копию в `.env.local`.
-   В Supabase: **Project Settings → API**. Скопируй **Project URL** и **anon public** ключ,
-   вставь в `.env.local`:
+2. **Вставь ключи.** Скопируй `.env.example` → `.env.local` и заполни:
    ```
    VITE_SUPABASE_URL=https://твой-проект.supabase.co
    VITE_SUPABASE_ANON_KEY=твой-anon-ключ
+   VITE_GEMINI_API_KEY=твой-ключ-gemini   # https://aistudio.google.com/apikey
    ```
-   ⚠️ `.env.local` НЕ коммить — он уже в `.gitignore`.
+   ⚠️ `.env.local` не коммить — он в `.gitignore`.
 
-6. **Создай таблицу КОМАНДОЙ (не вручную).** Базу настраиваем миграциями — это по-взрослому:
+3. **Создай таблицы в Supabase (миграциями).**
    ```bash
-   npm run db:login          # откроется браузер, подтверди вход
-   npm run db:link           # выбери свой проект из списка (спросит пароль базы)
-   npm run db:push           # применит supabase/migrations/* — создаст таблицу entries
+   npm run db:login    # вход в браузере
+   npm run db:link     # выбери свой проект
+   npm run db:push     # применит supabase/migrations/*
    ```
-   `db:push` берёт SQL из `supabase/migrations/` и применяет к твоей базе. Таблицы созданы — без ручного копипаста.
 
-7. **Запусти локально.**
+4. **Запусти локально.**
    ```bash
    npm run dev
    ```
-   Открой ссылку из терминала (обычно `http://localhost:5173`). Зарегистрируйся, добавь запись —
-   она сохранится в твоей базе. Работает? 🎉
+   Открой `http://localhost:5173`, войди через Google и пиши Amethyst.
 
-8. **Выложи в интернет (Vercel).** Залей код на GitHub:
-   ```bash
-   git add .
-   git commit -m "first version"
-   git push
-   ```
-   На [vercel.com](https://vercel.com) → **Add New → Project** → выбери свой репозиторий.
-   В **Environment Variables** добавь те же `VITE_SUPABASE_URL` и `VITE_SUPABASE_ANON_KEY` →
-   **Deploy**. Через минуту у тебя будет **живая ссылка**. Это и есть твой проект в интернете.
+5. **Деплой (Vercel).** Подключи репозиторий, добавь те же переменные окружения → Deploy.
 
 ---
 
-## 🔁 Главный цикл (каждый день)
+## 🖥️ Десктоп-версия (агент с доступом к ПК)
 
-```
-просишь Codex что-то сделать  →  смотришь что он изменил  →
-проверяешь что всё работает (npm run dev)  →  git push  →  Vercel сам обновляет ссылку
+```bash
+npm run desktop          # дев-режим (Vite + Electron)
+npm run desktop:build    # сборка .exe (Windows)
 ```
 
-**Проверка перед push:** приложение запускается? нет красных ошибок? Тогда коммить.
+В десктопе Amethyst может выполнять команды, читать/писать файлы и смотреть папки через инструменты
+(`run_command`, `read_file`, `write_file`, `list_dir`). Каждое выполнение команды и запись файла
+требуют подтверждения. ⚠️ Это мощный доступ к системе — запускай только то, чему доверяешь.
+
+---
+
+## ✦ Amethyst Plus
+
+Plus открывает функции: без лимита сообщений, генерация сайтов и игр, память, озвучка, темы, файлы,
+длинные ответы. Активируется кодом.
+
+- Лимит сообщений, статус Plus и память хранятся в базе (`profiles`) и привязаны к аккаунту.
+- Коды активации лежат в таблице `public.plus_codes` и проверяются серверной функцией
+  `redeem_plus_code` — в коде фронта их нет. Добавить/выключить код:
+  Текущие коды: `It'sAmethyst`, `AmethystAI`, `AmethystPlus` (вводятся в любом регистре).
+  ```sql
+  -- коды храним заглавными: сравнение идёт через upper()
+  insert into public.plus_codes (code) values ('МОЙ-КОД');
+  update public.plus_codes set active = false where code = 'AMETHYSTAI';
+  ```
 
 ---
 
 ## 📂 Что где лежит
 
-| Файл | Что это |
+| Путь | Что это |
 |------|---------|
-| `src/App.tsx` | Главный экран: показывает вход или приложение |
-| `src/components/Auth.tsx` | Вход и регистрация |
-| `src/components/Entries.tsx` | Пример работы с базой (читать/добавить/удалить) |
-| `src/lib/supabase.ts` | Подключение к Supabase |
-| `supabase/migrations/` | Таблицы базы (применяются `npm run db:push`) |
-| `supabase/functions/ai/` | AI на бесплатном ключе Gemini (день 5) |
-| `AGENTS.md` | Контекст для Codex — он читает это сам |
-| `CODEX_SETUP.md` | Готовые промпты для Codex по дням |
-
----
-
-## 🤖 AI (день 5) — бесплатный Gemini
-
-Внутри уже есть AI-функция (`supabase/functions/ai`). Чтобы включить:
-1. Возьми бесплатный ключ: [aistudio.google.com/apikey](https://aistudio.google.com/apikey)
-2. Положи его в секрет: `npm run ai:secret -- GEMINI_API_KEY=твой_ключ`
-3. Задеплой: `npm run ai:deploy`
-4. Вызывай из кода: `supabase.functions.invoke('ai', { body: { prompt, system } })` → `data.text`
+| `src/App.tsx` | Корень: лендинг / чат, профиль |
+| `src/components/Workspace.tsx` | Главный экран чата и все модалки (Plus, память, сайты, игры) |
+| `src/components/Auth.tsx` | Лендинг и вход через Google |
+| `src/lib/gemini.ts` | Вызовы Gemini: стриминг чата и агентный цикл с инструментами |
+| `src/lib/account.ts` | Plus, лимит, память (сервер + локальный кэш) |
+| `src/lib/chatsStore.ts` | Чаты в Supabase + локальный кэш |
+| `supabase/migrations/` | Таблицы базы (`npm run db:push`) |
+| `supabase/functions/ai/` | Edge-функция AI (запасной серверный путь к Gemini) |
+| `electron/` | Десктоп-оболочка и мост к ПК |
 
 ---
 
 ## 🆘 Если сломалось
 
-- **Белый экран + ошибка про ключи** → не вставил ключи в `.env.local` (шаг 5).
-- **«relation entries does not exist»** → не сделал `npm run db:push` (шаг 6).
-- **`db:push` ругается на доступ** → сначала `npm run db:login`, потом `npm run db:link`.
-- **На Vercel пусто, локально работает** → забыл добавить Environment Variables на Vercel (шаг 8).
-- **Codex сломал код** → не коммить! Попроси Codex починить или откати изменения в VSCode.
+- **Белый экран про ключи** → не заполнил `.env.local` (шаг 2).
+- **Чат не отвечает** → нет `VITE_GEMINI_API_KEY` или исчерпана квота ключа.
+- **Чаты/память не сохраняются между устройствами** → не сделал `npm run db:push` (шаг 3).
+- **Код Plus не активируется** → код не добавлен в `plus_codes` или миграция не применена.
