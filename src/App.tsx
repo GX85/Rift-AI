@@ -1,9 +1,12 @@
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import type { Session } from '@supabase/supabase-js';
 import { supabase } from './lib/supabase';
 import { Landing } from './components/Auth';
 import { Workspace } from './components/Workspace';
-import { FractalBackground } from './components/FractalBackground';
+
+const AmethystBackground = lazy(() =>
+  import('./components/AmethystBackground').then((module) => ({ default: module.AmethystBackground })),
+);
 
 // Достаём из профиля Google имя и аватар (поля могут называться по-разному).
 function profileOf(session: Session) {
@@ -60,10 +63,12 @@ export default function App() {
       </main>
     );
 
-  // Живой WebGL-фрактал — только на лендинге (в чате чисто, как у Claude).
+  // 3D Amethyst background lives behind both the landing page and the workspace.
   const bg = (
     <>
-      <FractalBackground />
+      <Suspense fallback={null}>
+        <AmethystBackground />
+      </Suspense>
       <div className="bg-overlay" aria-hidden />
     </>
   );
