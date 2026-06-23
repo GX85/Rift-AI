@@ -51,6 +51,11 @@ export function PlatformChoice({
   onDesktop: () => void;
   onPhone: () => void;
 }) {
+  const phoneLike =
+    typeof window !== 'undefined' &&
+    (window.matchMedia('(max-width: 820px), (pointer: coarse)').matches ||
+      /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent));
+
   return (
     <main className="platform-page">
       <section className="platform-shell">
@@ -72,14 +77,19 @@ export function PlatformChoice({
         <p className="platform-sub">
           Укажи, откуда заходишь. Amethyst откроет подходящую версию платформы.
         </p>
+        <div className="platform-detect">
+          Сейчас похоже на: <b>{phoneLike ? 'телефон / планшет' : 'компьютер'}</b>
+        </div>
 
         <div className="platform-grid">
-          <button className="platform-card" onClick={onDesktop}>
+          <button className={`platform-card ${!phoneLike ? 'recommended' : ''}`} onClick={onDesktop}>
+            {!phoneLike && <span className="platform-badge">Рекомендуется</span>}
             <span className="platform-icon">⌘</span>
             <strong>Войти с компьютера</strong>
             <small>Полная web-версия: чат, сайты, игры, картинки, отзывы и Plus.</small>
           </button>
-          <button className="platform-card phone" onClick={onPhone}>
+          <button className={`platform-card phone ${phoneLike ? 'recommended' : ''}`} onClick={onPhone}>
+            {phoneLike && <span className="platform-badge">Рекомендуется</span>}
             <span className="platform-icon">▯</span>
             <strong>Войти с телефона</strong>
             <small>Если ты на телефоне, откроется mobile app. Если на ПК, появится QR.</small>
