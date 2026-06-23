@@ -3,7 +3,15 @@ import { supabase } from './supabase';
 type ChatRole = 'user' | 'assistant' | 'system';
 type ChatMessage = {
   role: ChatRole;
-  content: string;
+  content?: string;
+  text?: string;
+};
+
+type AgentStep = {
+  kind: 'call' | 'result';
+  name?: string;
+  args?: Record<string, unknown>;
+  result: string;
 };
 
 type GeminiRequest = {
@@ -12,6 +20,9 @@ type GeminiRequest = {
   messages?: ChatMessage[];
   history?: ChatMessage[];
   temperature?: number;
+  maxTokens?: number;
+  signal?: AbortSignal;
+  onStep?: (step: AgentStep) => void;
 };
 
 type AiResponse = {
@@ -127,7 +138,7 @@ function svgImageFallback(text: string): string {
 
 function messagesToPrompt(messages: ChatMessage[] | undefined): string {
   if (!messages?.length) return '';
-  return messages.map((message) => `${message.role}: ${message.content}`).join('\n\n');
+  return messages.map((message) => `${message.role}: ${message.content ?? message.text ?? ''}`).join('\n\n');
 }
 
 function resolvePrompt(input: string | GeminiRequest): { prompt: string; system: string } {
@@ -177,7 +188,9 @@ export async function* streamGemini(
       ? arg3
       : isAbortSignal(arg4)
         ? arg4
-        : undefined;
+        : typeof input !== 'string' && input.signal
+          ? input.signal
+          : undefined;
 
   let text = '';
   try {
@@ -196,12 +209,19 @@ export async function runAgent(
   arg3?: unknown,
   arg4?: unknown,
 ): Promise<string> {
+  void arg3;
+  void arg4;
   const base = resolvePrompt(input);
   const system = typeof arg2 === 'string' ? arg2 : base.system;
-  return invokeAi(base.prompt, system);
+  try {
+    return await invokeAi(base.prompt, system, typeof input !== 'string' ? input.signal : undefined);
+  } catch {
+    return localFallback(base.prompt, system);
+  }
 }
 
-export async function generateImage(prompt: string): Promise<string> {
+export async function generateImage(input: string | { prompt: string }): Promise<string> {
+  const prompt = typeof input === 'string' ? input : input.prompt;
   const system =
     'Ты генератор изображений для Amethyst AI. Улучши запрос пользователя и верни либо URL готовой картинки, ' +
     'либо подробный prompt для генерации изображения, если текущая модель не умеет отдавать файл.';

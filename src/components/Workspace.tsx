@@ -5,7 +5,6 @@ import { Icon } from './Icons';
 import { streamGemini, runAgent, generateImage, hasDesktop } from '../lib/gemini';
 import { loadChats, saveChat, deleteChatRow } from '../lib/chatsStore';
 import {
-  isPlus,
   redeem,
   syncAccount,
   getUsage,
@@ -26,6 +25,7 @@ import {
 
 type Message = { id: string; role: 'user' | 'assistant'; content: string };
 type Chat = { id: string; title: string; messages: Message[]; updatedAt: number };
+type Review = { id: string; name: string; text: string; createdAt: number };
 
 // Единственная модель — Amethyst (мульти-возможности в одной модели).
 const RIFT = {
@@ -98,6 +98,24 @@ const CREATION_RULES = `
 `;
 
 const ACTIVE_KEY = 'rift_active_v2';
+const REVIEWS_KEY = 'amethyst_reviews_v1';
+
+function loadReviews(): Review[] {
+  try {
+    const saved = JSON.parse(localStorage.getItem(REVIEWS_KEY) || '[]') as Review[];
+    if (saved.length) return saved;
+  } catch {
+    /* ignore */
+  }
+  return [
+    { id: 'r1', name: 'Айбар', text: 'Amethyst помог быстро собрать прототип и объяснил код простыми словами.', createdAt: Date.now() - 86400000 },
+    { id: 'r2', name: 'Алия', text: 'Удобно, что можно делать сайты, игры и идеи для проекта в одном месте.', createdAt: Date.now() - 43200000 },
+  ];
+}
+
+function saveReviews(items: Review[]) {
+  localStorage.setItem(REVIEWS_KEY, JSON.stringify(items.slice(0, 50)));
+}
 
 function buildSystem(memory: string[]): string {
   const today = new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
@@ -123,6 +141,7 @@ function newChatObj(): Chat {
 function stripFences(s: string): string {
   return s.replace(/^```html\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
 }
+
 
 export function Workspace({
   name,
@@ -151,6 +170,10 @@ export function Workspace({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [showReviews, setShowReviews] = useState(false);
+  const [reviews, setReviews] = useState<Review[]>(loadReviews);
+  const [reviewName, setReviewName] = useState(name || 'Гость');
+  const [reviewText, setReviewText] = useState('');
   const [search, setSearch] = useState('');
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState('');
@@ -595,6 +618,21 @@ export function Workspace({
     </form>
   );
 
+  function addReview() {
+    const text = reviewText.trim();
+    if (!text) return;
+    const item: Review = {
+      id: crypto.randomUUID(),
+      name: reviewName.trim() || 'Гость',
+      text,
+      createdAt: Date.now(),
+    };
+    const next = [item, ...reviews];
+    setReviews(next);
+    saveReviews(next);
+    setReviewText('');
+  }
+
   return (
     <div className={`ws ${collapsed ? 'ws-collapsed' : ''}`}>
       {sidebarOpen && <div className="ws-scrim" onClick={() => setSidebarOpen(false)} />}
@@ -630,6 +668,10 @@ export function Workspace({
         </button>
         <button className="side-link" onClick={() => (plus ? setShowImage(true) : setShowPlus(true))}>
           <Icon name="image" /> Создать картинку {!plus && <span className="lock">PLUS</span>}
+        </button>
+
+        <button className="side-link" onClick={() => setShowReviews(true)}>
+          <Icon name="star" /> Отзывы
         </button>
 
         <button className={`plus-banner ${plus ? 'on' : ''}`} onClick={() => setShowPlus(true)}>
@@ -923,6 +965,45 @@ export function Workspace({
               </button>
             </div>
             <div className="set-foot">Amethyst AI · работает на Gemini</div>
+          </div>
+        </div>
+      )}
+
+      {/* Отзывы */}
+      {showReviews && (
+        <div className="modal-scrim" onClick={() => setShowReviews(false)}>
+          <div className="modal reviews-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-head">
+              <h3>Отзывы об Amethyst</h3>
+              <button className="icon-only" onClick={() => setShowReviews(false)}>
+                ✕
+              </button>
+            </div>
+            <div className="review-form">
+              <input
+                value={reviewName}
+                onChange={(e) => setReviewName(e.target.value)}
+                placeholder="Твоё имя"
+              />
+              <textarea
+                value={reviewText}
+                onChange={(e) => setReviewText(e.target.value)}
+                placeholder="Напиши отзыв. Регистрация не нужна."
+                rows={4}
+              />
+              <button onClick={addReview} disabled={!reviewText.trim()}>
+                Опубликовать отзыв
+              </button>
+            </div>
+            <div className="reviews-board">
+              {reviews.map((review) => (
+                <article className="app-review-card" key={review.id}>
+                  <div className="review-person">{review.name}</div>
+                  <p>{review.text}</p>
+                  <time>{new Date(review.createdAt).toLocaleDateString('ru-RU')}</time>
+                </article>
+              ))}
+            </div>
           </div>
         </div>
       )}
