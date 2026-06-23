@@ -44,6 +44,57 @@ function GoogleIcon() {
   );
 }
 
+export function PlatformChoice({
+  onDesktop,
+  onPhone,
+}: {
+  onDesktop: () => void;
+  onPhone: () => void;
+}) {
+  return (
+    <main className="platform-page">
+      <section className="platform-shell">
+        <div className="hero-fractal-stage platform-gem" aria-hidden>
+          <div className="fractal-cube">
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+          </div>
+        </div>
+        <p className="platform-kicker">Amethyst AI</p>
+        <h1>Выбери платформу</h1>
+        <p className="platform-sub">
+          Сначала выбери, где будешь пользоваться приложением. Amethyst откроет правильную версию.
+        </p>
+
+        <div className="platform-grid">
+          <button className="platform-card" onClick={onDesktop}>
+            <span className="platform-icon">⌘</span>
+            <strong>Компьютер</strong>
+            <small>Полная версия: чат, сайты, игры, картинки, отзывы и Plus.</small>
+          </button>
+          <button className="platform-card phone" onClick={onPhone}>
+            <span className="platform-icon">▯</span>
+            <strong>Телефон</strong>
+            <small>Мобильная версия через QR или сразу `/mobile` на телефоне.</small>
+          </button>
+        </div>
+
+        <div className="platform-links">
+          <a href="/qr">Показать QR</a>
+          <a href="/reviews">Отзывы</a>
+        </div>
+      </section>
+    </main>
+  );
+}
+
 export function Landing({ onEnter }: { onEnter?: () => void }) {
   const [wish, setWish] = useState('');
   const [accessCode, setAccessCode] = useState('');

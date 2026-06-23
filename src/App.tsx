@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { Session } from '@supabase/supabase-js';
 import { supabase } from './lib/supabase';
-import { Landing, ReviewsPage } from './components/Auth';
+import { Landing, PlatformChoice, ReviewsPage } from './components/Auth';
 import { Workspace } from './components/Workspace';
 import { FractalBackground } from './components/FractalBackground';
 import { MobileApp, MobileEntry, MobileQrPage } from './components/MobileApp';
@@ -19,6 +19,7 @@ export default function App() {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [guest, setGuest] = useState(() => localStorage.getItem('amethyst_guest') === '1');
+  const [platformPicked, setPlatformPicked] = useState(false);
   // 'app' — чат, 'home' — главный экран (лендинг), доступен и после входа.
   const [view, setView] = useState<'app' | 'home'>('app');
 
@@ -87,6 +88,17 @@ export default function App() {
     supabase.auth.signOut();
   }
 
+  function isPhoneLike() {
+    return (
+      window.matchMedia('(max-width: 820px), (pointer: coarse)').matches ||
+      /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)
+    );
+  }
+
+  function choosePhone() {
+    window.location.href = isPhoneLike() ? '/mobile' : '/qr';
+  }
+
   if (window.location.pathname === '/reviews')
     return (
       <>
@@ -131,6 +143,14 @@ export default function App() {
       </>
     );
   }
+
+  if (!session && !guest && !platformPicked)
+    return (
+      <>
+        {bg}
+        <PlatformChoice onDesktop={() => setPlatformPicked(true)} onPhone={choosePhone} />
+      </>
+    );
 
   if (!session && !guest)
     return (
