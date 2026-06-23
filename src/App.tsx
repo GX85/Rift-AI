@@ -1,12 +1,9 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { Session } from '@supabase/supabase-js';
 import { supabase } from './lib/supabase';
 import { Landing } from './components/Auth';
 import { Workspace } from './components/Workspace';
-
-const AmethystBackground = lazy(() =>
-  import('./components/AmethystBackground').then((module) => ({ default: module.AmethystBackground })),
-);
+import { FractalBackground } from './components/FractalBackground';
 
 // Достаём из профиля Google имя и аватар (поля могут называться по-разному).
 function profileOf(session: Session) {
@@ -20,6 +17,7 @@ function profileOf(session: Session) {
 export default function App() {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const [guest, setGuest] = useState(() => localStorage.getItem('amethyst_guest') === '1');
   // 'app' — чат, 'home' — главный экран (лендинг), доступен и после входа.
   const [view, setView] = useState<'app' | 'home'>('app');
 
@@ -30,6 +28,10 @@ export default function App() {
     });
     const { data: sub } = supabase.auth.onAuthStateChange((_event, s) => {
       setSession(s);
+      if (s) {
+        localStorage.removeItem('amethyst_guest');
+        setGuest(false);
+      }
     });
     return () => sub.subscription.unsubscribe();
   }, []);
@@ -63,26 +65,38 @@ export default function App() {
       </main>
     );
 
-  // 3D Amethyst background lives behind both the landing page and the workspace.
+  // Cubic WebGL fractal lives behind both the landing page and the workspace.
   const bg = (
     <>
-      <Suspense fallback={null}>
-        <AmethystBackground />
-      </Suspense>
+      <FractalBackground />
       <div className="bg-overlay" aria-hidden />
     </>
   );
 
   // До входа — полноэкранный маркетинговый лендинг.
-  if (!session)
+  function enterGuest() {
+    localStorage.setItem('amethyst_guest', '1');
+    setGuest(true);
+    setView('app');
+  }
+
+  function leaveApp() {
+    localStorage.removeItem('amethyst_guest');
+    setGuest(false);
+    supabase.auth.signOut();
+  }
+
+  if (!session && !guest)
     return (
       <>
         {bg}
-        <Landing />
+        <Landing onEnter={enterGuest} />
       </>
     );
 
-  const p = profileOf(session);
+  const p = session
+    ? profileOf(session)
+    : { email: 'guest@amethyst.local', name: 'Гость', avatar: '' };
 
   // Главный экран после входа: тот же лендинг, но кнопки открывают чат (без повторного входа).
   if (view === 'home')
@@ -100,7 +114,7 @@ export default function App() {
         name={p.name}
         email={p.email}
         avatar={p.avatar}
-        onSignOut={() => supabase.auth.signOut()}
+        onSignOut={leaveApp}
         onHome={() => setView('home')}
       />
     </>

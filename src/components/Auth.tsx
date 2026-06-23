@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
-import { AmethystLogo } from './Gems';
 import { Icon } from './Icons';
 
 // Возможности (бесплатно) и привилегии Plus — для главного экрана.
@@ -13,6 +12,8 @@ const PLUS_PERKS = [
   { icon: 'volume', title: 'Озвучка и темы', text: 'Голосовое чтение ответов и выбор цвета интерфейса.' },
   { icon: 'attach', title: 'Файлы и длинные ответы', text: 'Прикрепляй файлы и получай развёрнутые ответы.' },
 ];
+
+const ACCESS_CODES = ['itsamethyst', 'amethystai', 'amethystplus'];
 
 function GoogleIcon() {
   return (
@@ -27,15 +28,22 @@ function GoogleIcon() {
 
 export function Landing({ onEnter }: { onEnter?: () => void }) {
   const [wish, setWish] = useState('');
+  const [accessCode, setAccessCode] = useState('');
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState('');
 
   async function start() {
-    if (wish.trim()) localStorage.setItem('rift_wish', wish.trim());
     if (onEnter) {
+      const normalizedCode = accessCode.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+      if (!ACCESS_CODES.includes(normalizedCode)) {
+        setMessage("Введи код доступа: It'sAmethyst, AmethystAI или AmethystPlus.");
+        return;
+      }
+      if (wish.trim()) localStorage.setItem('rift_wish', wish.trim());
       onEnter();
       return;
     }
+    if (wish.trim()) localStorage.setItem('rift_wish', wish.trim());
     setBusy(true);
     setMessage('');
     const { error } = await supabase.auth.signInWithOAuth({
@@ -68,27 +76,47 @@ export function Landing({ onEnter }: { onEnter?: () => void }) {
       </nav>
 
       <header className="hero-center">
-        <div className="hero-logo-big">
-          <AmethystLogo size={64} />
+        <div className="hero-fractal-stage" aria-hidden>
+          <div className="fractal-cube">
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+          </div>
         </div>
         <div className="hero-pill">
           <span className="dot" /> Умный ИИ-ассистент
         </div>
 
         <h1 className="hero-h1">
-          Amethyst — твой <span>ИИ</span>
+          Новое видение <span>Искусственного</span>
           <br />
-          для любых задач
+          Интеллекта
         </h1>
         <p className="hero-p">
           Код, объяснения, идеи, отладка — в одном чате. Быстро, точно и красиво.
         </p>
 
+        {onEnter && (
+          <input
+            className="hero-code-input"
+            placeholder="Код доступа"
+            value={accessCode}
+            onChange={(e) => setAccessCode(e.target.value)}
+            autoComplete="one-time-code"
+          />
+        )}
+
         <button className="google-btn" onClick={start} disabled={busy}>
-          {busy ? <span className="spinner" /> : <GoogleIcon />}
+          {busy ? <span className="spinner" /> : onEnter ? <Icon name="lock" size={18} /> : <GoogleIcon />}
           {onEnter ? 'Открыть Amethyst' : 'Войти через Google'}
         </button>
-        <p className="cta-note">Без паролей — вход за пару секунд.</p>
+        <p className="cta-note">{onEnter ? "Коды: It'sAmethyst, AmethystAI, AmethystPlus" : 'Без паролей — вход за пару секунд.'}</p>
 
         <form className="composer" onSubmit={onSubmit}>
           <textarea

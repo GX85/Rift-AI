@@ -45,6 +45,7 @@ body {
 ::selection { background: rgba(79, 107, 237, 0.35); }
 
 /* 3D Amethyst scene on the background + dark overlay for readable text */
+.fractal-bg,
 .amethyst-bg {
   position: fixed;
   inset: 0;
@@ -54,6 +55,7 @@ body {
   display: block;
   pointer-events: none;
 }
+.fractal-bg canvas,
 .amethyst-bg canvas {
   width: 100%;
   height: 100%;
@@ -736,6 +738,41 @@ input:hover:not(:focus), textarea:hover:not(:focus) { border-color: var(--line-s
   line-height: 1.5;
   color: var(--ink);
   resize: none;
+}
+
+.access-code-input {
+  width: 100%;
+  min-height: 54px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 18px;
+  font-weight: 700;
+  padding: 22px 28px 0;
+}
+.access-code-input::placeholder { color: var(--muted); font-weight: 600; }
+
+.hero-code-input {
+  width: min(360px, calc(100vw - 48px));
+  height: 56px;
+  border: 1px solid var(--line-strong);
+  border-radius: 16px;
+  background: rgba(12, 12, 22, 0.72);
+  color: var(--ink);
+  font: inherit;
+  font-size: 18px;
+  font-weight: 800;
+  text-align: center;
+  outline: none;
+  margin: 0 auto 12px;
+  display: block;
+}
+.hero-code-input::placeholder { color: var(--muted); font-weight: 700; }
+.hero-code-input:focus {
+  border-color: rgba(168, 85, 247, 0.72);
+  box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.16);
 }
 .composer-input:focus { outline: none; box-shadow: none; }
 .composer-bar {
@@ -1697,6 +1734,59 @@ input:hover:not(:focus), textarea:hover:not(:focus) { border-color: var(--line-s
   font-size: 12.5px; font-weight: 600; padding: 3px 10px; border-radius: 8px; box-shadow: none;
 }
 .retry-btn:hover { background: rgba(255, 255, 255, 0.07); transform: none; box-shadow: none; }
+
+.hero-fractal-stage {
+  width: 164px;
+  height: 164px;
+  margin: 0 auto 20px;
+  position: relative;
+  display: grid;
+  place-items: center;
+  perspective: 760px;
+  filter: drop-shadow(0 24px 54px rgba(79, 107, 237, 0.36));
+}
+.hero-fractal-stage::before {
+  content: '';
+  position: absolute;
+  inset: 18px;
+  border: 1px solid rgba(180, 210, 255, 0.18);
+  transform: rotate(45deg);
+  box-shadow:
+    0 0 42px rgba(79, 107, 237, 0.32),
+    inset 0 0 30px rgba(56, 189, 248, 0.12);
+}
+.fractal-cube {
+  width: 104px;
+  height: 104px;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: fractal-spin 13s linear infinite;
+}
+.fractal-cube span {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  border: 1px solid rgba(216, 180, 254, 0.52);
+  background:
+    linear-gradient(135deg, rgba(124, 58, 237, 0.72), rgba(56, 189, 248, 0.22)),
+    rgba(12, 12, 24, 0.34);
+  box-shadow:
+    0 0 24px rgba(168, 85, 247, 0.44),
+    inset 0 0 18px rgba(255, 255, 255, 0.08);
+}
+.fractal-cube span:nth-child(1) { transform: translate3d(0, 0, 52px); }
+.fractal-cube span:nth-child(2) { transform: translate3d(36px, 0, 16px); }
+.fractal-cube span:nth-child(3) { transform: translate3d(-36px, 0, 16px); }
+.fractal-cube span:nth-child(4) { transform: translate3d(0, 36px, 16px); }
+.fractal-cube span:nth-child(5) { transform: translate3d(0, -36px, 16px); }
+.fractal-cube span:nth-child(6) { transform: translate3d(36px, 36px, -22px); }
+.fractal-cube span:nth-child(7) { transform: translate3d(-36px, 36px, -22px); }
+.fractal-cube span:nth-child(8) { transform: translate3d(36px, -36px, -22px); }
+.fractal-cube span:nth-child(9) { transform: translate3d(-36px, -36px, -22px); }
+@keyframes fractal-spin {
+  from { transform: rotateX(-22deg) rotateY(0deg) rotateZ(8deg); }
+  to { transform: rotateX(-22deg) rotateY(360deg) rotateZ(8deg); }
+}
 
 @media (max-width: 560px) {
   .ws-bar { padding: 10px 12px; }
