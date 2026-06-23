@@ -20,6 +20,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [guest, setGuest] = useState(() => localStorage.getItem('amethyst_guest') === '1');
   const [platformPicked, setPlatformPicked] = useState(false);
+  const [entryPlatform, setEntryPlatform] = useState<'desktop' | 'phone'>('desktop');
   // 'app' — чат, 'home' — главный экран (лендинг), доступен и после входа.
   const [view, setView] = useState<'app' | 'home'>('app');
 
@@ -96,7 +97,37 @@ export default function App() {
   }
 
   function choosePhone() {
-    window.location.href = isPhoneLike() ? '/mobile' : '/qr';
+    if (!isPhoneLike()) {
+      window.location.href = '/qr';
+      return;
+    }
+    setEntryPlatform('phone');
+    setPlatformPicked(true);
+    setView('home');
+  }
+
+  function chooseDesktop() {
+    setEntryPlatform('desktop');
+    setPlatformPicked(true);
+    setView('home');
+  }
+
+  function enterSelectedGuest() {
+    if (entryPlatform === 'phone') {
+      localStorage.setItem('amethyst_guest', '1');
+      setGuest(true);
+      window.location.href = '/mobile';
+      return;
+    }
+    enterGuest();
+  }
+
+  function openSelectedApp() {
+    if (entryPlatform === 'phone') {
+      window.location.href = '/mobile';
+      return;
+    }
+    setView('app');
   }
 
   if (window.location.pathname === '/reviews')
@@ -148,7 +179,7 @@ export default function App() {
     return (
       <>
         {bg}
-        <PlatformChoice onDesktop={() => setPlatformPicked(true)} onPhone={choosePhone} />
+        <PlatformChoice onDesktop={chooseDesktop} onPhone={choosePhone} />
       </>
     );
 
@@ -156,7 +187,7 @@ export default function App() {
     return (
       <>
         {bg}
-        <Landing onEnter={enterGuest} />
+        <Landing onEnter={enterSelectedGuest} />
       </>
     );
 
@@ -169,7 +200,7 @@ export default function App() {
     return (
       <>
         {bg}
-        <Landing onEnter={() => setView('app')} />
+        <Landing onEnter={openSelectedApp} />
       </>
     );
 

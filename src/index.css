@@ -3256,6 +3256,34 @@ input:hover:not(:focus), textarea:hover:not(:focus) { border-color: var(--line-s
   line-height: 1.55;
 }
 
+.platform-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  color: rgba(226, 232, 240, 0.72);
+  font-size: 13px;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.platform-flow span {
+  min-height: 30px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.platform-flow i {
+  width: 24px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(196, 181, 253, 0), rgba(196, 181, 253, 0.75), rgba(196, 181, 253, 0));
+}
+
 .platform-detect {
   min-height: 38px;
   display: inline-flex;

@@ -77,6 +77,13 @@ export function PlatformChoice({
         <p className="platform-sub">
           Укажи, откуда заходишь. Amethyst откроет подходящую версию платформы.
         </p>
+        <div className="platform-flow" aria-label="Порядок входа">
+          <span>Платформа</span>
+          <i />
+          <span>Главный экран</span>
+          <i />
+          <span>Amethyst AI</span>
+        </div>
         <div className="platform-detect">
           Сейчас похоже на: <b>{phoneLike ? 'телефон / планшет' : 'компьютер'}</b>
         </div>
