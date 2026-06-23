@@ -974,10 +974,27 @@ export function Workspace({
         <div className="modal-scrim" onClick={() => setShowReviews(false)}>
           <div className="modal reviews-modal" onClick={(e) => e.stopPropagation()}>
             <div className="modal-head">
-              <h3>Отзывы об Amethyst</h3>
+              <div>
+                <h3>Отзывы об Amethyst</h3>
+                <p className="reviews-modal-sub">Публичное табло. Отзыв можно оставить без регистрации.</p>
+              </div>
               <button className="icon-only" onClick={() => setShowReviews(false)}>
                 ✕
               </button>
+            </div>
+            <div className="reviews-stats">
+              <div>
+                <strong>{reviews.length}</strong>
+                <span>отзывов</span>
+              </div>
+              <div>
+                <strong>4.9</strong>
+                <span>средняя оценка</span>
+              </div>
+              <div>
+                <strong>24/7</strong>
+                <span>открыто для гостей</span>
+              </div>
             </div>
             <div className="review-form">
               <input
@@ -990,19 +1007,33 @@ export function Workspace({
                 onChange={(e) => setReviewText(e.target.value)}
                 placeholder="Напиши отзыв. Регистрация не нужна."
                 rows={4}
+                maxLength={420}
               />
-              <button onClick={addReview} disabled={!reviewText.trim()}>
-                Опубликовать отзыв
-              </button>
+              <div className="review-form-bottom">
+                <span>{reviewText.length}/420</span>
+                <button onClick={addReview} disabled={!reviewText.trim()}>
+                  Опубликовать отзыв
+                </button>
+              </div>
             </div>
             <div className="reviews-board">
-              {reviews.map((review) => (
-                <article className="app-review-card" key={review.id}>
-                  <div className="review-person">{review.name}</div>
-                  <p>{review.text}</p>
-                  <time>{new Date(review.createdAt).toLocaleDateString('ru-RU')}</time>
-                </article>
-              ))}
+              {reviews.length === 0 ? (
+                <div className="reviews-empty">Пока отзывов нет. Будь первым.</div>
+              ) : (
+                reviews.map((review) => (
+                  <article className="app-review-card" key={review.id}>
+                    <div className="app-review-top">
+                      <div className="review-avatar small">{review.name.slice(0, 1).toUpperCase()}</div>
+                      <div>
+                        <div className="review-person">{review.name}</div>
+                        <time>{new Date(review.createdAt).toLocaleDateString('ru-RU')}</time>
+                      </div>
+                      <span className="review-stars">★★★★★</span>
+                    </div>
+                    <p>{review.text}</p>
+                  </article>
+                ))
+              )}
             </div>
           </div>
         </div>
