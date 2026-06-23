@@ -68,21 +68,21 @@ export function PlatformChoice({
           </div>
         </div>
         <p className="platform-kicker">Amethyst AI</p>
-        <h1>Выбери платформу</h1>
+        <h1>Выбери вход</h1>
         <p className="platform-sub">
-          Сначала выбери, где будешь пользоваться приложением. Amethyst откроет правильную версию.
+          Укажи, откуда заходишь. Amethyst откроет подходящую версию платформы.
         </p>
 
         <div className="platform-grid">
           <button className="platform-card" onClick={onDesktop}>
             <span className="platform-icon">⌘</span>
-            <strong>Компьютер</strong>
-            <small>Полная версия: чат, сайты, игры, картинки, отзывы и Plus.</small>
+            <strong>Войти с компьютера</strong>
+            <small>Полная web-версия: чат, сайты, игры, картинки, отзывы и Plus.</small>
           </button>
           <button className="platform-card phone" onClick={onPhone}>
             <span className="platform-icon">▯</span>
-            <strong>Телефон</strong>
-            <small>Мобильная версия через QR или сразу `/mobile` на телефоне.</small>
+            <strong>Войти с телефона</strong>
+            <small>Если ты на телефоне, откроется mobile app. Если на ПК, появится QR.</small>
           </button>
         </div>
 

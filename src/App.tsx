@@ -144,7 +144,7 @@ export default function App() {
     );
   }
 
-  if (!session && !guest && !platformPicked)
+  if (!platformPicked)
     return (
       <>
         {bg}
