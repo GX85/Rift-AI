@@ -2626,6 +2626,43 @@ input:hover:not(:focus), textarea:hover:not(:focus) { border-color: var(--line-s
   }
 }
 
+.hero-chat-fractal {
+  width: 132px;
+  height: 132px;
+  margin: 0 auto 20px;
+  display: grid;
+  place-items: center;
+  position: relative;
+  perspective: 760px;
+  filter: drop-shadow(0 22px 52px rgba(124, 58, 237, 0.42));
+  animation: hero-fractal-float 8s ease-in-out infinite;
+}
+.hero-chat-fractal::before {
+  content: '';
+  position: absolute;
+  inset: 22px;
+  border: 1px solid rgba(216, 180, 254, 0.2);
+  transform: rotate(45deg);
+  box-shadow:
+    0 0 42px rgba(124, 58, 237, 0.26),
+    inset 0 0 24px rgba(56, 189, 248, 0.1);
+}
+.hero-chat-fractal .fractal-cube {
+  scale: 0.82;
+}
+
+@media (max-width: 820px) {
+  .hero-chat-fractal {
+    width: 104px;
+    height: 104px;
+    margin-bottom: 14px;
+  }
+
+  .hero-chat-fractal .fractal-cube {
+    scale: 0.68;
+  }
+}
+
 /* No quick-mode prompt chips: keep the product focused on one clean input. */
 .suggest,
 .suggests,

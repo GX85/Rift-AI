@@ -778,8 +778,18 @@ export function Workspace({
 
         {empty ? (
           <div className="hero-chat">
-            <div className="hero-chat-gem">
-              <AmethystLogo size={58} />
+            <div className="hero-chat-fractal" aria-hidden>
+              <div className="fractal-cube">
+                <span />
+                <span />
+                <span />
+                <span />
+                <span />
+                <span />
+                <span />
+                <span />
+                <span />
+              </div>
             </div>
             <h1 className="hero-chat-title">Amethyst</h1>
             <p className="hero-chat-sub">{RIFT.tagline}. Что ты хочешь узнать?</p>
