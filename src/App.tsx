@@ -4,6 +4,7 @@ import { supabase } from './lib/supabase';
 import { Landing, ReviewsPage } from './components/Auth';
 import { Workspace } from './components/Workspace';
 import { FractalBackground } from './components/FractalBackground';
+import { MobileApp, MobileEntry, MobileQrPage } from './components/MobileApp';
 
 // Достаём из профиля Google имя и аватар (поля могут называться по-разному).
 function profileOf(session: Session) {
@@ -93,6 +94,43 @@ export default function App() {
         <ReviewsPage />
       </>
     );
+
+  if (window.location.pathname === '/qr')
+    return (
+      <>
+        {bg}
+        <MobileQrPage />
+      </>
+    );
+
+  if (window.location.pathname === '/mobile') {
+    if (!session && !guest)
+      return (
+        <>
+          {bg}
+          <MobileEntry onEnter={enterGuest} />
+        </>
+      );
+
+    const mobileProfile = session
+      ? profileOf(session)
+      : { email: 'guest@amethyst.local', name: 'Гость', avatar: '' };
+
+    return (
+      <>
+        {bg}
+        <MobileApp
+          name={mobileProfile.name}
+          email={mobileProfile.email}
+          avatar={mobileProfile.avatar}
+          onSignOut={leaveApp}
+          onHome={() => {
+            window.location.href = '/';
+          }}
+        />
+      </>
+    );
+  }
 
   if (!session && !guest)
     return (

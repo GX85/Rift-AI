@@ -679,6 +679,9 @@ export function Workspace({
         <button className="side-link" onClick={() => setShowReviews(true)}>
           <Icon name="star" /> Отзывы
         </button>
+        <a className="side-link" href="/qr">
+          <Icon name="globe" /> QR на телефон
+        </a>
 
         <button className={`plus-banner ${plus ? 'on' : ''}`} onClick={() => setShowPlus(true)}>
           <div className="plus-banner-title">

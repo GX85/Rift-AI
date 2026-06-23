@@ -1,0 +1,19 @@
+{
+  "name": "Amethyst AI Mobile",
+  "short_name": "Amethyst",
+  "description": "Mobile app shell for Amethyst AI.",
+  "start_url": "/mobile",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#080810",
+  "theme_color": "#0b0b12",
+  "icons": [
+    {
+      "src": "/amethyst-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

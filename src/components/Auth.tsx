@@ -88,6 +88,7 @@ export function Landing({ onEnter }: { onEnter?: () => void }) {
         <div className="hero-links">
           <a href="#plus">Amethyst Plus</a>
           <a href="/reviews">Отзывы</a>
+          <a href="/qr">Mobile QR</a>
         </div>
         <button className="nav-open" onClick={start} disabled={busy}>
           {onEnter ? 'Открыть чат →' : 'Войти'}
