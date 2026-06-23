@@ -39,9 +39,9 @@ void main(){
   vec2 uv = (gl_FragCoord.xy * 2.0 - u_res) / u_res.y;
   float t = u_time * 0.11;
 
-  vec3 ro = vec3(0.0, 0.0, 3.3);
-  vec3 rd = normalize(vec3(uv, -1.6));
-  mat3 rot = rotY(t) * rotX(t * 0.55);
+  vec3 ro = vec3(0.0, 0.0, 3.05);
+  vec3 rd = normalize(vec3(uv * 0.96, -1.55));
+  mat3 rot = rotY(t * 1.18) * rotX(t * 0.62);
   ro = rot * ro; rd = rot * rd;
 
   float tt = 0.0, glow = 0.0, dist = 0.0;
@@ -55,18 +55,18 @@ void main(){
     if(tt > 8.0) break;
   }
 
-  vec3 indigo = vec3(0.24, 0.27, 0.55);
-  vec3 steel  = vec3(0.30, 0.45, 0.72);
-  vec3 cyan   = vec3(0.32, 0.62, 0.80);
+  vec3 indigo = vec3(0.22, 0.18, 0.58);
+  vec3 violet = vec3(0.58, 0.22, 0.92);
+  vec3 cyan   = vec3(0.18, 0.78, 0.88);
   float mixv = 0.5 + 0.5 * sin(t*1.0 + uv.x*1.2);
-  vec3 pal = mix(mix(indigo, steel, mixv), cyan, 0.25 + 0.2*sin(t*0.7));
+  vec3 pal = mix(mix(indigo, violet, mixv), cyan, 0.28 + 0.18*sin(t*0.7));
 
   vec3 col = vec3(0.0);
   if(hit){
     float sh = 1.0 - dist / 8.0;
-    col = pal * (0.18 + 0.7 * sh);
+    col = pal * (0.22 + 0.84 * sh);
   }
-  col += pal * glow * 1.15;
+  col += pal * glow * 1.55;
 
   float vig = smoothstep(1.5, 0.15, length(uv));
   col *= mix(0.3, 1.0, vig);

@@ -35,13 +35,13 @@ type ChunkHandler = (chunk: string) => void;
 
 function localFallback(prompt: string, system: string): string {
   const text = `${system}\n${prompt}`.toLowerCase();
-  const isGame = /(игр|игра|игру|game|canvas|платформер|змейк|snake|шутер|runner)/i.test(text);
+  const isGame = /(игр|игра|игру|game|canvas|платформер|змейк|snake|шутер|runner|arcade)/i.test(text);
   const isAgent = /(агент|ии-агент|agent|system prompt|бот|workflow)/i.test(text);
   const isSite = /(сайт|лендинг|landing|html|верстк|website|страниц)/i.test(text);
   const isCode = /(код|react|typescript|javascript|python|bug|ошибк|компонент)/i.test(text);
 
   if (isGame) {
-    return `Готовый шаблон HTML-игры. Сохрани как game.html и открой в браузере.
+    return `Готовая HTML-игра. Сохрани как game.html и открой в браузере.
 
 \`\`\`html
 <!doctype html>
@@ -49,28 +49,23 @@ function localFallback(prompt: string, system: string): string {
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Amethyst Runner</title>
+  <title>Amethyst Arcade</title>
   <style>
-    body{margin:0;background:#090910;color:white;font-family:Arial;display:grid;place-items:center;min-height:100vh}
-    canvas{width:min(94vw,900px);height:auto;border:1px solid #333;border-radius:18px;background:#101225;touch-action:none}
-    .hint{opacity:.75;margin-top:12px;text-align:center}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:radial-gradient(circle at 50% 20%,#4338ca55,transparent 36%),#070711;color:white;font-family:Inter,Arial,sans-serif;overflow:hidden}.wrap{width:min(96vw,980px)}canvas{width:100%;aspect-ratio:16/9;border:1px solid #ffffff26;border-radius:22px;background:#090b18;box-shadow:0 30px 90px #0009;touch-action:none}.hud{display:flex;justify-content:space-between;gap:12px;margin:12px 4px;color:#c7d2fe}.pad{display:none;grid-template-columns:repeat(3,56px);gap:10px;justify-content:center;margin-top:12px}.pad button{height:52px;border:1px solid #ffffff2b;border-radius:16px;background:#ffffff12;color:white;font-size:20px}@media(max-width:720px){.pad{display:grid}.hud{font-size:14px}}
   </style>
 </head>
 <body>
-  <main>
-    <canvas id="game" width="900" height="520"></canvas>
-    <div class="hint">Space/тап — прыжок, P — пауза, R — рестарт</div>
-  </main>
+  <main class="wrap"><canvas id="game" width="960" height="540"></canvas><div class="hud"><b>WASD/стрелки, Space</b><span>P пауза · R рестарт · touch работает</span></div><div class="pad"><span></span><button data-k="up">↑</button><span></span><button data-k="left">←</button><button data-k="fire">●</button><button data-k="right">→</button></div></main>
   <script>
-    const canvas=document.getElementById('game'),ctx=canvas.getContext('2d');
-    let player,blocks,score,best,over,paused,spawn,last;
-    function reset(){player={x:90,y:400,w:38,h:38,vy:0,on:false};blocks=[];score=0;best=+localStorage.bestRunner||0;over=false;paused=false;spawn=0;last=performance.now();}
-    function jump(){if(over){reset();return} if(player.on){player.vy=-15;player.on=false}}
-    addEventListener('keydown',e=>{if(e.code==='Space')jump(); if(e.key==='p')paused=!paused; if(e.key==='r')reset();});
-    addEventListener('pointerdown',jump);
-    function loop(now){const dt=Math.min(32,now-last);last=now;if(!paused&&!over){score+=dt*.01;spawn-=dt;if(spawn<=0){blocks.push({x:930,y:410,w:34+Math.random()*42,h:28+Math.random()*70});spawn=720-Math.min(360,score*6)}player.vy+=.8;player.y+=player.vy;if(player.y+player.h>=438){player.y=438-player.h;player.vy=0;player.on=true}for(const b of blocks)b.x-=6+score*.018;blocks=blocks.filter(b=>b.x+b.w>-20);for(const b of blocks){if(player.x<b.x+b.w&&player.x+player.w>b.x&&player.y<b.y+b.h&&player.y+player.h>b.y){over=true;best=Math.max(best,Math.floor(score));localStorage.bestRunner=best}}}
-      ctx.clearRect(0,0,900,520);const g=ctx.createLinearGradient(0,0,900,520);g.addColorStop(0,'#14142a');g.addColorStop(1,'#32115d');ctx.fillStyle=g;ctx.fillRect(0,0,900,520);ctx.fillStyle='#2dd4bf';ctx.fillRect(0,438,900,6);ctx.fillStyle='#a78bfa';ctx.fillRect(player.x,player.y,player.w,player.h);ctx.fillStyle='#f43f5e';blocks.forEach(b=>ctx.fillRect(b.x,b.y,b.w,b.h));ctx.fillStyle='white';ctx.font='22px Arial';ctx.fillText('Score: '+Math.floor(score),24,34);ctx.fillText('Best: '+best,24,64);if(paused||over){ctx.textAlign='center';ctx.font='44px Arial';ctx.fillText(over?'Game Over':'Pause',450,240);ctx.font='20px Arial';ctx.fillText(over?'Нажми R или тап для рестарта':'Нажми P для продолжения',450,278);ctx.textAlign='left'}requestAnimationFrame(loop)}
-    reset();requestAnimationFrame(loop);
+    const c=document.getElementById('game'),x=c.getContext('2d');let keys={},state='menu',score=0,lives=3,t=0,last=0,player,orbs,shots,parts,spawn=0;
+    function reset(){state='play';score=0;lives=3;t=0;player={x:480,y:420,r:18,vx:0};orbs=[];shots=[];parts=[];spawn=0;last=performance.now()}
+    function boom(px,py,col){for(let i=0;i<18;i++)parts.push({x:px,y:py,vx:(Math.random()-.5)*7,vy:(Math.random()-.5)*7,a:1,c:col})}
+    function fire(){if(state==='menu'||state==='over')return reset();shots.push({x:player.x,y:player.y-18,vy:-9})}
+    addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=1;if(e.code==='Space')fire();if(e.key==='p')state=state==='pause'?'play':'pause';if(e.key==='r')reset()});addEventListener('keyup',e=>keys[e.key.toLowerCase()]=0);
+    document.querySelectorAll('[data-k]').forEach(b=>{b.onpointerdown=()=>{const k=b.dataset.k;if(k==='fire')fire();else keys[k]=1};b.onpointerup=()=>{keys[b.dataset.k]=0}});c.onpointerdown=fire;
+    function step(now){let dt=Math.min(32,now-last||16);last=now;if(state==='play'){t+=dt;spawn-=dt;player.vx=((keys.arrowright||keys.d||keys.right)?1:0)-((keys.arrowleft||keys.a||keys.left)?1:0);player.x=Math.max(24,Math.min(936,player.x+player.vx*(6+score*.006)));if(spawn<=0){orbs.push({x:40+Math.random()*880,y:-30,r:14+Math.random()*20,vy:2.2+score*.015,h:Math.random()*360});spawn=Math.max(230,760-score*4)}shots.forEach(s=>s.y+=s.vy);orbs.forEach(o=>o.y+=o.vy);for(const s of shots)for(const o of orbs)if(Math.hypot(s.x-o.x,s.y-o.y)<o.r+5){s.dead=o.dead=1;score+=10;boom(o.x,o.y,'hsl('+o.h+',90%,65%)')}for(const o of orbs)if(Math.hypot(player.x-o.x,player.y-o.y)<o.r+player.r){o.dead=1;lives--;boom(player.x,player.y,'#fb7185');if(lives<=0)state='over'}shots=shots.filter(s=>!s.dead&&s.y>-20);orbs=orbs.filter(o=>!o.dead&&o.y<590);parts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.a*=.94});parts=parts.filter(p=>p.a>.04)}draw();requestAnimationFrame(step)}
+    function draw(){x.clearRect(0,0,960,540);let g=x.createLinearGradient(0,0,960,540);g.addColorStop(0,'#10163a');g.addColorStop(1,'#210a3d');x.fillStyle=g;x.fillRect(0,0,960,540);for(let i=0;i<70;i++){x.fillStyle='#ffffff12';x.fillRect((i*97+t*.02)%960,(i*53)%540,2,2)}orbs.forEach(o=>{x.fillStyle='hsl('+o.h+',90%,60%)';x.beginPath();x.arc(o.x,o.y,o.r,0,7);x.fill()});shots.forEach(s=>{x.fillStyle='#67e8f9';x.fillRect(s.x-3,s.y-18,6,22)});parts.forEach(p=>{x.globalAlpha=p.a;x.fillStyle=p.c;x.fillRect(p.x,p.y,4,4);x.globalAlpha=1});if(player){x.fillStyle='#c084fc';x.beginPath();x.moveTo(player.x,player.y-24);x.lineTo(player.x-22,player.y+22);x.lineTo(player.x+22,player.y+22);x.closePath();x.fill()}x.fillStyle='white';x.font='22px Arial';x.fillText('Score '+score,24,34);x.fillText('Lives '+lives,24,64);if(state!=='play'){x.textAlign='center';x.font='54px Arial';x.fillText(state==='over'?'Game Over':'Amethyst Arcade',480,240);x.font='22px Arial';x.fillText('Space/тап — старт и огонь, R — рестарт',480,282);x.textAlign='left'}}
+    requestAnimationFrame(step);
   </script>
 </body>
 </html>
@@ -78,23 +73,7 @@ function localFallback(prompt: string, system: string): string {
   }
 
   if (isAgent) {
-    return `Готовый ИИ-агент для Amethyst AI:
-
-**Название:** Project Builder Agent
-
-**Цель:** превращать идею пользователя в готовый план, код, интерфейс или инструкцию.
-
-**System prompt:**
-Ты — Project Builder Agent. Твоя задача — быстро понять цель пользователя, предложить лучшую структуру решения и дать готовый результат. Если нужен код, пиши полный рабочий код. Если нужен сайт, давай HTML/CSS/JS или React-компоненты. Если нужна игра, делай playable prototype с управлением, счётом и рестартом. Отвечай коротко, по делу, без воды.
-
-**Workflow:**
-1. Определи тип задачи: код, сайт, игра, дизайн, текст, стратегия.
-2. Выбери минимальную рабочую реализацию.
-3. Дай готовый результат.
-4. Проверь риски: ошибки, зависимости, запуск.
-5. Предложи 1-2 улучшения.
-
-**Формат ответа:** результат → код/план → как запустить → что улучшить.`;
+    return `Готовый ИИ-агент для Amethyst AI:\n\n**Название:** Product Builder Agent\n\n**Цель:** превращать идею в готовый результат: план, код, сайт, игру, промпт или проверку ошибок.\n\n**System prompt:** Ты — Product Builder Agent. Сначала сам выбираешь лучший путь реализации, затем выдаёшь готовый результат. Для кода давай полный рабочий файл. Для сайта — структуру и HTML/CSS/JS. Для игры — playable prototype с управлением, счётом, рестартом и mobile controls. Отвечай коротко, но достаточно полно.\n\n**Workflow:** понять задачу → выбрать формат → создать результат → проверить ошибки → предложить улучшение.`;
   }
 
   if (isSite) {
@@ -108,38 +87,21 @@ function localFallback(prompt: string, system: string): string {
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Amethyst Site</title>
   <style>
-    *{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:#080810;color:#fff}
-    main{min-height:100vh;display:grid;place-items:center;padding:32px;background:radial-gradient(circle at 70% 20%,#6d28d966,transparent 34%),linear-gradient(135deg,#070710,#111827)}
-    section{width:min(980px,100%);display:grid;gap:28px}
-    h1{font-size:clamp(42px,8vw,92px);line-height:.95;margin:0;letter-spacing:0}
-    p{max-width:620px;color:#c7d2fe;font-size:20px;line-height:1.55}
-    .cta{display:flex;gap:12px;flex-wrap:wrap}.cta a{padding:15px 20px;border-radius:16px;text-decoration:none;font-weight:800}
-    .primary{background:#fff;color:#111827}.secondary{border:1px solid #ffffff33;color:#fff}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
-    .card{padding:18px;border:1px solid #ffffff1f;border-radius:18px;background:#ffffff0d}
+    *{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:#080810;color:#fff}.hero{min-height:100vh;display:grid;align-items:center;padding:32px;background:radial-gradient(circle at 72% 24%,#7c3aed66,transparent 28%),radial-gradient(circle at 18% 72%,#06b6d455,transparent 24%),linear-gradient(135deg,#070710,#111827)}nav{position:fixed;inset:18px 18px auto;display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border:1px solid #ffffff20;border-radius:18px;background:#05051099;backdrop-filter:blur(18px)}section{width:min(1080px,100%);margin:auto;display:grid;gap:28px}.eyebrow{color:#67e8f9;font-weight:800}h1{font-size:clamp(44px,9vw,104px);line-height:.92;margin:0;letter-spacing:0}p{max-width:660px;color:#c7d2fe;font-size:20px;line-height:1.55}.cta{display:flex;gap:12px;flex-wrap:wrap}.cta a{padding:15px 20px;border-radius:16px;text-decoration:none;font-weight:850}.primary{background:#fff;color:#111827}.secondary{border:1px solid #ffffff33;color:#fff}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}.card{padding:20px;border:1px solid #ffffff20;border-radius:20px;background:#ffffff0d;box-shadow:0 20px 60px #0004;transition:.25s}.card:hover{transform:translateY(-4px);background:#ffffff16}@media(max-width:640px){nav{inset:10px 10px auto}.hero{padding:86px 18px 28px}p{font-size:17px}.cta a{width:100%;text-align:center}}
   </style>
 </head>
 <body>
-  <main>
-    <section>
-      <h1>Новое видение Искусственного Интеллекта</h1>
-      <p>Amethyst помогает создавать сайты, игры, изображения и ИИ-агентов в одном понятном рабочем пространстве.</p>
-      <div class="cta"><a class="primary" href="#">Начать</a><a class="secondary" href="#">Посмотреть функции</a></div>
-      <div class="grid"><div class="card">Сайты</div><div class="card">Игры</div><div class="card">Картинки</div><div class="card">ИИ-агенты</div></div>
-    </section>
-  </main>
+  <nav><b>Amethyst</b><span>AI Builder</span></nav>
+  <main class="hero"><section><div class="eyebrow">Новое видение Искусственного Интеллекта</div><h1>Создавай сайты, игры и идеи быстрее</h1><p>Готовый интерфейс с мощным визуальным стилем, адаптацией под телефон и понятными действиями для пользователя.</p><div class="cta"><a class="primary" href="#">Начать</a><a class="secondary" href="#features">Возможности</a></div><div id="features" class="grid"><div class="card">Сайты под ключ</div><div class="card">Игровые прототипы</div><div class="card">ИИ-агенты</div><div class="card">Графика и промпты</div></div></section></main>
 </body>
 </html>
 \`\`\``;
   }
 
-  if (isCode) {
-    return `Я готов помочь с кодом. Пришли задачу или файл, и я дам рабочее решение: полный код, объяснение запуска и проверку типичных ошибок.`;
-  }
+  if (isCode) return `Я готов помочь с кодом. Пришли задачу или файл, и я дам рабочее решение: полный код, объяснение запуска и проверку типичных ошибок.`;
 
   return `Amethyst AI готов. Я могу помочь с кодом, играми, сайтами, ИИ-агентами и картинками. Напиши, что нужно создать, и я дам готовый результат.`;
 }
-
 function isAbortSignal(value: unknown): value is AbortSignal {
   return typeof value === 'object' && value !== null && 'aborted' in value;
 }

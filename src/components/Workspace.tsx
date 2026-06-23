@@ -328,12 +328,14 @@ export function Workspace({
   async function genHtml(kind: 'site' | 'game', wish: string) {
     const sys =
       kind === 'site'
-        ? 'Ты генерируешь сайты. Верни ТОЛЬКО одну полную HTML-страницу (один файл) со встроенными CSS и JS. ' +
-          'Без markdown, без пояснений, начни сразу с <!DOCTYPE html>. Современный адаптивный дизайн.'
-        : 'Ты генерируешь игры. Верни ТОЛЬКО одну полную HTML-страницу (один файл) с играбельной 2D-игрой на ' +
-          'HTML5 Canvas + JavaScript (управление, счёт, рестарт). Без markdown, без пояснений, начни с <!DOCTYPE html>.';
+        ? 'You generate premium production-ready websites. Return ONLY one complete HTML document starting with <!DOCTYPE html>. Use embedded CSS and JS only. No markdown. Build a real first screen, navigation, CTA, feature sections, responsive mobile layout, polished spacing, hover/focus states, micro-animations, accessible buttons, and a visual style that matches the user request. No external assets unless generated with CSS/canvas.'
+        : 'You generate premium playable browser games. Return ONLY one complete HTML document starting with <!DOCTYPE html>. Use embedded CSS and JS only. No markdown. The game must include canvas rendering, start menu, pause/restart, score/HUD, increasing difficulty, win/lose state, keyboard controls, touch/mobile controls, particles or visual feedback, and no external libraries/assets.';
+    const upgradedWish =
+      kind === 'site'
+        ? `User website request: ${wish}\nMake it visually rich, responsive, and ready to download as a single HTML file.`
+        : `User game request: ${wish}\nMake a complete playable arcade prototype with polished graphics, touch controls, score, restart, and balanced difficulty.`;
     let full = '';
-    for await (const chunk of streamGemini({ system: sys, history: [], prompt: wish, temperature: 0.7, maxTokens: 8192 })) {
+    for await (const chunk of streamGemini({ system: sys, history: [], prompt: upgradedWish, temperature: 0.78, maxTokens: 8192 })) {
       full += chunk;
     }
     full = stripFences(full);
