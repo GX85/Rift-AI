@@ -1,8 +1,11 @@
 import { createClient } from '@supabase/supabase-js';
 
 // Ключи берутся из .env.local (локально) и из Vercel → Settings → Environment Variables (на проде).
-const url = import.meta.env.VITE_SUPABASE_URL as string | undefined;
+const rawUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined;
 const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
+const fallbackUrl = 'https://uezekbrbipzfvnddlaob.supabase.co';
+const normalizedUrl = rawUrl?.trim().replace(/\.supabase\.$/, '.supabase.co');
+const url = normalizedUrl && normalizedUrl.includes('.supabase.co') ? normalizedUrl : fallbackUrl;
 
 // Понятная ошибка вместо «белого экрана», если ключи забыли вставить.
 if (!url || !anonKey) {
