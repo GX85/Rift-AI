@@ -1,5 +1,5 @@
 ==== Amethyst AI deploy log ==== 
-Started: 23.06.2026  9:59:15,09 
+Started: 23.06.2026 10:47:54,61 
 Folder: C:\Users\GYPEX\Documents\Rift-AI 
  
 ==== npm.cmd run build ==== 
@@ -7,22 +7,12 @@ Folder: C:\Users\GYPEX\Documents\Rift-AI
 > amethyst-ai@1.0.0 build
 > tsc -b && vite build
 
-[36mvite v5.4.21 [32mbuilding for production...[36m[39m
-transforming...
-[32m✓[39m 82 modules transformed.
-rendering chunks...
-computing gzip size...
-[2mdist/[22m[32mindex.html                 [39m[1m[2m  0.75 kB[22m[1m[22m[2m │ gzip:   0.45 kB[22m
-[2mdist/[22m[35massets/index-Dzqgzmi8.css  [39m[1m[2m 45.67 kB[22m[1m[22m[2m │ gzip:   9.51 kB[22m
-[2mdist/[22m[36massets/index-BgBCXPTd.js   [39m[1m[2m407.79 kB[22m[1m[22m[2m │ gzip: 119.42 kB[22m
-[32m✓ built in 889ms[39m
- 
-==== git status ==== 
- M src/App.tsx
- M src/components/Auth.tsx
- M src/index.css
-?? PUSH_LOG.txt
-?? PUSH_TO_VERCEL.bat
-?? START_LOCAL.bat
- 
-==== git add -A ==== 
+src/components/Workspace.tsx(223,20): error TS2345: Argument of type 'boolean' is not assignable to parameter of type 'SetStateAction<true>'.
+src/components/Workspace.tsx(309,31): error TS2504: Type 'Promise<string>' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
+src/components/Workspace.tsx(309,59): error TS2353: Object literal may only specify known properties, and 'history' does not exist in type 'GeminiRequest'.
+src/components/Workspace.tsx(349,37): error TS2345: Argument of type '{ prompt: string; }' is not assignable to parameter of type 'string'.
+src/components/Workspace.tsx(413,11): error TS2353: Object literal may only specify known properties, and 'history' does not exist in type 'GeminiRequest'.
+src/components/Workspace.tsx(417,20): error TS7006: Parameter 's' implicitly has an 'any' type.
+src/components/Workspace.tsx(426,35): error TS2504: Type 'Promise<string>' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
+src/components/Workspace.tsx(428,11): error TS2353: Object literal may only specify known properties, and 'history' does not exist in type 'GeminiRequest'.
+BUILD_FAILED 

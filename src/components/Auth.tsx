@@ -15,6 +15,24 @@ const PLUS_PERKS = [
 
 const ACCESS_CODES = ['itsamethyst', 'amethystai', 'amethystplus'];
 
+const REVIEWS = [
+  {
+    name: 'Айбар',
+    role: 'ученик nFactorial Teens',
+    text: 'Amethyst помог быстро собрать прототип сайта и объяснил код нормальным языком.',
+  },
+  {
+    name: 'Алия',
+    role: 'начинающий разработчик',
+    text: 'Больше всего понравилась генерация идей для проекта и подсказки по ошибкам в TypeScript.',
+  },
+  {
+    name: 'Данияр',
+    role: 'делает игры на HTML',
+    text: 'Попросил простую игру, получил готовый HTML с управлением, счётом и рестартом.',
+  },
+];
+
 function GoogleIcon() {
   return (
     <svg className="google-icon" viewBox="0 0 18 18" aria-hidden>
@@ -69,6 +87,7 @@ export function Landing({ onEnter }: { onEnter?: () => void }) {
         </div>
         <div className="hero-links">
           <a href="#plus">Amethyst Plus</a>
+          <a href="/reviews">Отзывы</a>
         </div>
         <button className="nav-open" onClick={start} disabled={busy}>
           {onEnter ? 'Открыть чат →' : 'Войти'}
@@ -113,7 +132,7 @@ export function Landing({ onEnter }: { onEnter?: () => void }) {
         )}
 
         <button className="google-btn" onClick={start} disabled={busy}>
-          {busy ? <span className="spinner" /> : onEnter ? <Icon name="lock" size={18} /> : <GoogleIcon />}
+          {busy ? <span className="spinner" /> : onEnter ? <span className="code-dot" /> : <GoogleIcon />}
           {onEnter ? 'Открыть Amethyst' : 'Войти через Google'}
         </button>
         <p className="cta-note">{onEnter ? "Коды: It'sAmethyst, AmethystAI, AmethystPlus" : 'Без паролей — вход за пару секунд.'}</p>
@@ -161,5 +180,41 @@ export function Landing({ onEnter }: { onEnter?: () => void }) {
 
       <footer className="landing-footer">Amethyst AI · работает на Gemini</footer>
     </div>
+  );
+}
+
+export function ReviewsPage() {
+  return (
+    <main className="reviews-page">
+      <nav className="hero-nav reviews-nav">
+        <a className="hero-logo" href="/">
+          Amethyst<span>AI</span>
+        </a>
+        <a className="nav-open" href="/">
+          Открыть
+        </a>
+      </nav>
+
+      <section className="reviews-hero">
+        <div className="hero-pill">
+          <span className="dot" /> Отзывы
+        </div>
+        <h1 className="reviews-title">Что говорят об Amethyst AI</h1>
+        <p className="reviews-sub">
+          Публичная страница отзывов: её можно открыть без входа, отправить по ссылке или показать через QR-код.
+        </p>
+      </section>
+
+      <section className="reviews-grid" aria-label="Отзывы пользователей">
+        {REVIEWS.map((review) => (
+          <article className="review-card" key={review.name}>
+            <div className="review-avatar">{review.name.slice(0, 1)}</div>
+            <p className="review-text">“{review.text}”</p>
+            <div className="review-person">{review.name}</div>
+            <div className="review-role">{review.role}</div>
+          </article>
+        ))}
+      </section>
+    </main>
   );
 }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { Session } from '@supabase/supabase-js';
 import { supabase } from './lib/supabase';
-import { Landing } from './components/Auth';
+import { Landing, ReviewsPage } from './components/Auth';
 import { Workspace } from './components/Workspace';
 import { FractalBackground } from './components/FractalBackground';
 
@@ -85,6 +85,14 @@ export default function App() {
     setGuest(false);
     supabase.auth.signOut();
   }
+
+  if (window.location.pathname === '/reviews')
+    return (
+      <>
+        {bg}
+        <ReviewsPage />
+      </>
+    );
 
   if (!session && !guest)
     return (

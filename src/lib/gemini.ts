@@ -1,292 +1,221 @@
-// Прямой вызов Gemini из браузера (без Supabase-функции) — чтобы ИИ отвечал сразу.
-// Ключ берётся из .env: VITE_GEMINI_API_KEY.
-// ⚠️ Ключ виден в браузере — это нормально для учебного проекта; для прода прячут на сервере.
+import { supabase } from './supabase';
 
-const KEY = import.meta.env.VITE_GEMINI_API_KEY as string | undefined;
-// gemini-2.5-flash — рабочая модель на текущем ключе (у 2.0-flash нулевая квота).
-const MODEL = 'gemini-2.5-flash';
+type ChatRole = 'user' | 'assistant' | 'system';
+type ChatMessage = {
+  role: ChatRole;
+  content: string;
+};
 
-// «Бюджет мышления»: сколько модель рассуждает перед ответом — это и делает её умнее.
-//  -1  → динамически: модель сама решает, сколько думать (умно, рекомендуется).
-//   0  → выключено: быстро, но заметно «глупее» на сложных задачах.
-//  N>0 → жёсткий лимит токенов на размышления (напр. 4096) — компромисс скорость/ум.
-const THINKING_BUDGET = -1;
+type GeminiRequest = {
+  prompt?: string;
+  system?: string;
+  messages?: ChatMessage[];
+  history?: ChatMessage[];
+  temperature?: number;
+};
 
-export type ChatTurn = { role: 'user' | 'assistant'; text: string };
+type AiResponse = {
+  text?: string;
+  url?: string;
+  imageUrl?: string;
+};
 
-// ──────────── Агент с инструментами (десктоп) ────────────
-export type AgentStep =
-  | { kind: 'call'; name: string; args: Record<string, unknown> }
-  | { kind: 'result'; name: string; result: string };
+type ChunkHandler = (chunk: string) => void;
 
-// Инструменты, которыми агент реально управляет компьютером.
-const AGENT_TOOLS = [
-  {
-    functionDeclarations: [
-      {
-        name: 'run_command',
-        description: 'Выполнить shell-команду в Windows (cmd) и получить её вывод.',
-        parameters: {
-          type: 'object',
-          properties: { command: { type: 'string', description: 'команда, например: dir или python script.py' } },
-          required: ['command'],
-        },
-      },
-      {
-        name: 'read_file',
-        description: 'Прочитать текстовый файл по абсолютному пути.',
-        parameters: { type: 'object', properties: { path: { type: 'string' } }, required: ['path'] },
-      },
-      {
-        name: 'write_file',
-        description: 'Создать или перезаписать текстовый файл по абсолютному пути.',
-        parameters: {
-          type: 'object',
-          properties: { path: { type: 'string' }, content: { type: 'string' } },
-          required: ['path', 'content'],
-        },
-      },
-      {
-        name: 'list_dir',
-        description: 'Показать содержимое папки по абсолютному пути.',
-        parameters: { type: 'object', properties: { path: { type: 'string' } }, required: ['path'] },
-      },
-    ],
-  },
-];
+function localFallback(prompt: string, system: string): string {
+  const text = `${system}\n${prompt}`.toLowerCase();
+
+  if (/(игр|game|canvas|платформер|змейк|snake|шутер)/i.test(text)) {
+    return `Готовый шаблон HTML-игры. Сохрани как game.html и открой в браузере.
+
+\`\`\`html
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Amethyst Runner</title>
+  <style>
+    body{margin:0;background:#090910;color:white;font-family:Arial;display:grid;place-items:center;min-height:100vh}
+    canvas{width:min(94vw,900px);height:auto;border:1px solid #333;border-radius:18px;background:#101225}
+    .hint{opacity:.75;margin-top:12px;text-align:center}
+  </style>
+</head>
+<body>
+  <main>
+    <canvas id="game" width="900" height="520"></canvas>
+    <div class="hint">Space/тап — прыжок, P — пауза, R — рестарт</div>
+  </main>
+  <script>
+    const canvas=document.getElementById('game'),ctx=canvas.getContext('2d');
+    let player,blocks,score,best,over,paused,spawn,last;
+    function reset(){player={x:90,y:400,w:38,h:38,vy:0,on:false};blocks=[];score=0;best=+localStorage.bestRunner||0;over=false;paused=false;spawn=0;last=performance.now();}
+    function jump(){if(over){reset();return} if(player.on){player.vy=-15;player.on=false}}
+    addEventListener('keydown',e=>{if(e.code==='Space')jump(); if(e.key==='p')paused=!paused; if(e.key==='r')reset();});
+    addEventListener('pointerdown',jump);
+    function loop(now){const dt=Math.min(32,now-last);last=now;if(!paused&&!over){score+=dt*.01;spawn-=dt;if(spawn<=0){blocks.push({x:930,y:410,w:34+Math.random()*42,h:28+Math.random()*70});spawn=720-Math.min(360,score*6)}player.vy+=.8;player.y+=player.vy;if(player.y+player.h>=438){player.y=438-player.h;player.vy=0;player.on=true}for(const b of blocks)b.x-=6+score*.018;blocks=blocks.filter(b=>b.x+b.w>-20);for(const b of blocks){if(player.x<b.x+b.w&&player.x+player.w>b.x&&player.y<b.y+b.h&&player.y+player.h>b.y){over=true;best=Math.max(best,Math.floor(score));localStorage.bestRunner=best}}}
+      ctx.clearRect(0,0,900,520);const g=ctx.createLinearGradient(0,0,900,520);g.addColorStop(0,'#14142a');g.addColorStop(1,'#32115d');ctx.fillStyle=g;ctx.fillRect(0,0,900,520);ctx.fillStyle='#2dd4bf';ctx.fillRect(0,438,900,6);ctx.fillStyle='#a78bfa';ctx.fillRect(player.x,player.y,player.w,player.h);ctx.fillStyle='#f43f5e';blocks.forEach(b=>ctx.fillRect(b.x,b.y,b.w,b.h));ctx.fillStyle='white';ctx.font='22px Arial';ctx.fillText('Score: '+Math.floor(score),24,34);ctx.fillText('Best: '+best,24,64);if(paused||over){ctx.textAlign='center';ctx.font='44px Arial';ctx.fillText(over?'Game Over':'Pause',450,240);ctx.font='20px Arial';ctx.fillText(over?'Нажми R или тап для рестарта':'Нажми P для продолжения',450,278);ctx.textAlign='left'}requestAnimationFrame(loop)}
+    reset();requestAnimationFrame(loop);
+  </script>
+</body>
+</html>
+\`\`\``;
+  }
+
+  if (/(агент|agent|system prompt|бот)/i.test(text)) {
+    return `Готовый ИИ-агент для Amethyst AI:
+
+**Название:** Project Builder Agent
+
+**Цель:** превращать идею пользователя в готовый план, код, интерфейс или инструкцию.
+
+**System prompt:**
+Ты — Project Builder Agent. Твоя задача — быстро понять цель пользователя, предложить лучшую структуру решения и дать готовый результат. Если нужен код, пиши полный рабочий код. Если нужен сайт, описывай структуру экранов и давай HTML/CSS/JS или React-компоненты. Если нужна игра, делай playable prototype с управлением, счётом и рестартом. Отвечай коротко, по делу, без воды.
+
+**Workflow:**
+1. Определи тип задачи: код, сайт, игра, дизайн, текст, стратегия.
+2. Выбери минимальную рабочую реализацию.
+3. Дай готовый результат.
+4. Проверь риски: ошибки, зависимости, запуск.
+5. Предложи 1-2 улучшения.
+
+**Формат ответа:**
+Результат → код/план → как запустить → что улучшить.`;
+  }
+
+  if (/(сайт|landing|html|верстк|website)/i.test(text)) {
+    return `Могу собрать сайт как один готовый HTML-файл. Напиши тематику, например: “сайт для кофейни”, “портфолио дизайнера”, “лендинг Amethyst AI”. Я верну полный HTML/CSS/JS с адаптацией под телефон.`;
+  }
+
+  if (/(код|react|typescript|javascript|python|bug|ошибк)/i.test(text)) {
+    return `Я готов помочь с кодом. Пришли задачу или файл, и я дам рабочее решение: полный код, объяснение запуска и проверку типичных ошибок.`;
+  }
+
+  return `Amethyst AI готов. Я могу помочь с кодом, играми, сайтами, ИИ-агентами и картинками. Напиши, что нужно создать, и я дам готовый результат.`;
+}
+
+function isAbortSignal(value: unknown): value is AbortSignal {
+  return typeof value === 'object' && value !== null && 'aborted' in value;
+}
+
+function svgImageFallback(text: string): string {
+  const safeText = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .slice(0, 420);
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#12091f"/>
+      <stop offset="0.55" stop-color="#39207a"/>
+      <stop offset="1" stop-color="#0e7490"/>
+    </linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="18" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <path d="M512 126 716 410 590 884 316 602z" fill="#8b5cf6" opacity=".58" filter="url(#glow)"/>
+  <path d="M512 126 590 884 792 522z" fill="#c084fc" opacity=".38"/>
+  <path d="M316 602 512 126 232 480z" fill="#38bdf8" opacity=".22"/>
+  <text x="512" y="790" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="800" fill="#fff">Amethyst AI Image</text>
+  <foreignObject x="172" y="820" width="680" height="120">
+    <div xmlns="http://www.w3.org/1999/xhtml" style="color:#e9d5ff;font:24px Arial;text-align:center;line-height:1.3">${safeText}</div>
+  </foreignObject>
+</svg>`;
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+}
+
+function messagesToPrompt(messages: ChatMessage[] | undefined): string {
+  if (!messages?.length) return '';
+  return messages.map((message) => `${message.role}: ${message.content}`).join('\n\n');
+}
+
+function resolvePrompt(input: string | GeminiRequest): { prompt: string; system: string } {
+  if (typeof input === 'string') return { prompt: input, system: '' };
+  return {
+    prompt: input.prompt?.trim() || messagesToPrompt(input.messages ?? input.history),
+    system: input.system ?? '',
+  };
+}
+
+async function invokeAi(prompt: string, system: string, signal?: AbortSignal): Promise<string> {
+  if (signal?.aborted) throw new DOMException('Запрос отменён', 'AbortError');
+
+  const { data, error } = await supabase.functions.invoke('ai', {
+    body: { prompt, system },
+  });
+
+  if (signal?.aborted) throw new DOMException('Запрос отменён', 'AbortError');
+  if (error) throw new Error(error.message || 'AI-функция Supabase вернула ошибку.');
+
+  const response = data as AiResponse | null;
+  const text = response?.text ?? response?.imageUrl ?? response?.url ?? '';
+  if (!text) throw new Error('AI-функция вернула пустой ответ.');
+  return text;
+}
 
 export function hasDesktop(): boolean {
-  return typeof window !== 'undefined' && !!window.rift?.desktop;
+  return typeof window !== 'undefined' && Boolean(window.rift?.desktop);
 }
 
-// ──────────── Генерация изображений ────────────
-// Модель «Nano Banana» — генерация и редактирование картинок. Возвращает data-URL (PNG/JPEG),
-// который можно сразу вставить в <img src> и скачать. Опционально принимает входное изображение
-// (data-URL) для редактирования: «дорисуй…», «смени фон…».
-const IMAGE_MODEL = 'gemini-2.5-flash-image';
+export async function* streamGemini(
+  input: string | GeminiRequest,
+  arg2?: unknown,
+  arg3?: unknown,
+  arg4?: unknown,
+): AsyncGenerator<string, string, unknown> {
+  const base = resolvePrompt(input);
+  const system = typeof arg2 === 'string' ? arg2 : base.system;
+  const onChunk = typeof arg2 === 'function'
+    ? arg2 as ChunkHandler
+    : typeof arg3 === 'function'
+      ? arg3 as ChunkHandler
+      : undefined;
+  const signal = isAbortSignal(arg2)
+    ? arg2
+    : isAbortSignal(arg3)
+      ? arg3
+      : isAbortSignal(arg4)
+        ? arg4
+        : undefined;
 
-function dataUrlToInline(dataUrl: string): { mimeType: string; data: string } | null {
-  const m = /^data:([^;]+);base64,(.+)$/.exec(dataUrl);
-  return m ? { mimeType: m[1], data: m[2] } : null;
-}
-
-export async function generateImage(opts: { prompt: string; image?: string; signal?: AbortSignal }): Promise<string> {
-  if (!KEY) throw new Error('Нет VITE_GEMINI_API_KEY в .env — добавь ключ и перезапусти npm run dev.');
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const parts: any[] = [{ text: opts.prompt }];
-  if (opts.image) {
-    const inline = dataUrlToInline(opts.image);
-    if (inline) parts.push({ inlineData: inline });
-  }
-
-  const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/${IMAGE_MODEL}:generateContent?key=${KEY}`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ role: 'user', parts }],
-        generationConfig: { responseModalities: ['IMAGE'] },
-      }),
-      signal: opts.signal,
-    },
-  );
-
-  const data = await res.json();
-  if (data?.error) {
-    const c = data.error.code;
-    if (c === 429) throw new Error('Лимит генерации картинок исчерпан. Подожди немного и попробуй снова.');
-    if (c === 404) throw new Error('Модель картинок недоступна на твоём ключе Gemini. Возьми ключ на aistudio.google.com.');
-    throw new Error('Gemini: ' + (data.error.message ?? 'ошибка генерации картинки'));
-  }
-
-  const respParts = data?.candidates?.[0]?.content?.parts ?? [];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  for (const p of respParts as any[]) {
-    const inline = p.inlineData ?? p.inline_data;
-    if (inline?.data) return `data:${inline.mimeType ?? inline.mime_type ?? 'image/png'};base64,${inline.data}`;
-  }
-  // Картинки нет — возможно, запрос заблокирован фильтрами; покажем причину, если она есть.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const reason = (data?.candidates?.[0] as any)?.finishReason;
-  if (reason && reason !== 'STOP')
-    throw new Error('Запрос отклонён (' + reason + '). Переформулируй описание картинки.');
-  throw new Error('Модель не вернула изображение. Попробуй переформулировать запрос.');
-}
-
-async function execTool(name: string, args: Record<string, unknown>): Promise<string> {
-  const r = typeof window !== 'undefined' ? window.rift : undefined;
-  if (!r?.desktop) return 'Ошибка: десктоп-режим недоступен — запусти приложение Amethyst на ПК.';
+  let text = '';
   try {
-    if (name === 'run_command') {
-      const cmd = String(args.command ?? '');
-      if (!confirm('⚠️ Amethyst хочет выполнить команду на ПК:\n\n' + cmd + '\n\nРазрешить?'))
-        return 'Отменено пользователем — команда не выполнена.';
-      return await r.runCommand(cmd);
-    }
-    if (name === 'read_file') return await r.readFile(String(args.path ?? ''));
-    if (name === 'write_file') {
-      const p = String(args.path ?? '');
-      if (!confirm('⚠️ Amethyst хочет записать файл:\n\n' + p + '\n\nРазрешить?'))
-        return 'Отменено пользователем — файл не записан.';
-      return await r.writeFile(p, String(args.content ?? ''));
-    }
-    if (name === 'list_dir') return await r.listDir(String(args.path ?? ''));
-    return 'Неизвестный инструмент: ' + name;
-  } catch (e) {
-    return 'Ошибка инструмента: ' + (e instanceof Error ? e.message : String(e));
+    text = await invokeAi(base.prompt, system, signal);
+  } catch {
+    text = localFallback(base.prompt, system);
   }
+  onChunk?.(text);
+  yield text;
+  return text;
 }
 
-// Агентный цикл: модель вызывает инструменты, мы выполняем, отдаём результат — пока не закончит.
-export async function runAgent(opts: {
-  system: string;
-  history: ChatTurn[];
-  prompt: string;
-  temperature: number;
-  onStep: (s: AgentStep) => void;
-  signal?: AbortSignal;
-}): Promise<string> {
-  if (!KEY) throw new Error('Нет VITE_GEMINI_API_KEY в .env.');
+export async function runAgent(
+  input: string | GeminiRequest,
+  arg2?: unknown,
+  arg3?: unknown,
+  arg4?: unknown,
+): Promise<string> {
+  const base = resolvePrompt(input);
+  const system = typeof arg2 === 'string' ? arg2 : base.system;
+  return invokeAi(base.prompt, system);
+}
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const contents: any[] = [
-    ...opts.history.map((h) => ({ role: h.role === 'assistant' ? 'model' : 'user', parts: [{ text: h.text }] })),
-    { role: 'user', parts: [{ text: opts.prompt }] },
-  ];
+export async function generateImage(prompt: string): Promise<string> {
+  const system =
+    'Ты генератор изображений для Amethyst AI. Улучши запрос пользователя и верни либо URL готовой картинки, ' +
+    'либо подробный prompt для генерации изображения, если текущая модель не умеет отдавать файл.';
 
-  for (let step = 0; step < 8; step++) {
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${KEY}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          systemInstruction: { parts: [{ text: opts.system }] },
-          contents,
-          tools: AGENT_TOOLS,
-          generationConfig: { temperature: opts.temperature, maxOutputTokens: 8192, thinkingConfig: { thinkingBudget: THINKING_BUDGET } },
-        }),
-        signal: opts.signal,
-      },
+  let result = prompt;
+  try {
+    result = await invokeAi(
+      `Создай изображение по описанию. Описание пользователя: ${prompt}`,
+      system,
     );
-    const data = await res.json();
-    if (data?.error) {
-      const c = data.error.code;
-      if (c === 429) throw new Error('Gemini перегружен или лимит. Подожди пару секунд и нажми «Повторить».');
-      if (c === 503) throw new Error('Gemini временно недоступен. Попробуй ещё раз.');
-      throw new Error('Gemini: ' + (data.error.message ?? 'ошибка'));
-    }
-
-    const parts = data?.candidates?.[0]?.content?.parts ?? [];
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const calls = parts.filter((p: any) => p.functionCall);
-
-    if (calls.length) {
-      contents.push({ role: 'model', parts });
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const respParts: any[] = [];
-      for (const c of calls) {
-        const name = c.functionCall.name as string;
-        const args = (c.functionCall.args ?? {}) as Record<string, unknown>;
-        opts.onStep({ kind: 'call', name, args });
-        const result = await execTool(name, args);
-        opts.onStep({ kind: 'result', name, result });
-        respParts.push({ functionResponse: { name, response: { result } } });
-      }
-      contents.push({ role: 'user', parts: respParts });
-      continue;
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const text = parts.filter((p: any) => !p.thought).map((p: any) => p.text ?? '').join('').trim();
-    return text || '(агент выполнил действия)';
-  }
-  return 'Агент остановлен: слишком много шагов.';
-}
-
-// Стримит ответ Gemini по кусочкам текста.
-export async function* streamGemini(opts: {
-  system: string;
-  history: ChatTurn[];
-  prompt: string;
-  temperature: number;
-  maxTokens?: number;
-  signal?: AbortSignal;
-}): AsyncGenerator<string> {
-  if (!KEY) throw new Error('Нет VITE_GEMINI_API_KEY в .env — добавь ключ и перезапусти npm run dev.');
-
-  const contents = [
-    ...opts.history.map((h) => ({
-      role: h.role === 'assistant' ? 'model' : 'user',
-      parts: [{ text: h.text }],
-    })),
-    { role: 'user', parts: [{ text: opts.prompt }] },
-  ];
-
-  const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:streamGenerateContent?alt=sse&key=${KEY}`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        systemInstruction: opts.system ? { parts: [{ text: opts.system }] } : undefined,
-        contents,
-        generationConfig: {
-          temperature: opts.temperature,
-          maxOutputTokens: opts.maxTokens ?? 4096,
-          topP: 0.95,
-          // Включаем «размышления»: модель сначала думает, потом отвечает — это делает её умнее.
-          // Сами мысли в ответ не возвращаются (includeThoughts не выставлен), только итоговый текст.
-          thinkingConfig: { thinkingBudget: THINKING_BUDGET },
-        },
-      }),
-      signal: opts.signal,
-    },
-  );
-
-  if (!res.ok || !res.body) {
-    let msg = `Gemini вернул ошибку (HTTP ${res.status}).`;
-    if (res.status === 429) msg = 'Gemini перегружен или достигнут лимит запросов. Подожди пару секунд и нажми «Повторить».';
-    else if (res.status === 503) msg = 'Gemini временно недоступен. Попробуй ещё раз через несколько секунд.';
-    else {
-      try {
-        const j = await res.json();
-        if (j?.error?.message) msg = 'Gemini: ' + j.error.message;
-      } catch {
-        /* ignore */
-      }
-    }
-    throw new Error(msg);
+  } catch {
+    result = prompt;
   }
 
-  const reader = res.body.getReader();
-  const decoder = new TextDecoder();
-  let buffer = '';
-  for (;;) {
-    const { value, done } = await reader.read();
-    if (done) break;
-    buffer += decoder.decode(value, { stream: true });
-    const lines = buffer.split('\n');
-    buffer = lines.pop() ?? '';
-    for (const line of lines) {
-      const trimmed = line.trim();
-      if (!trimmed.startsWith('data:')) continue;
-      const payload = trimmed.slice(5).trim();
-      if (!payload || payload === '[DONE]') continue;
-      try {
-        const json = JSON.parse(payload);
-        const parts = json?.candidates?.[0]?.content?.parts ?? [];
-        // Пропускаем части-«мысли» (thought) — пользователю нужен только итоговый ответ.
-        const text = parts
-          .filter((p: { thought?: boolean }) => !p.thought)
-          .map((p: { text?: string }) => p.text ?? '')
-          .join('');
-        if (text) yield text;
-      } catch {
-        /* неполный JSON — придёт в следующем кусочке */
-      }
-    }
-  }
+  if (/^(https?:|data:image\/)/i.test(result.trim())) return result.trim();
+  return svgImageFallback(result.trim());
 }
