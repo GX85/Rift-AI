@@ -26,6 +26,8 @@ import {
 type Message = { id: string; role: 'user' | 'assistant'; content: string };
 type Chat = { id: string; title: string; messages: Message[]; updatedAt: number };
 type Review = { id: string; name: string; text: string; createdAt: number };
+type PreviewMode = 'desktop' | 'mobile';
+type CreatorPreset = { label: string; prompt: string };
 
 // Единственная модель — Amethyst (мульти-возможности в одной модели).
 const RIFT = {
@@ -43,6 +45,27 @@ const RIFT = {
     'Улучши этот код и найди баги',
   ],
 };
+
+const SITE_PRESETS: CreatorPreset[] = [
+  { label: 'Лендинг AI', prompt: 'Премиальный лендинг для AI-приложения с hero, тарифами, отзывами и CTA' },
+  { label: 'Магазин', prompt: 'Современный интернет-магазин техники с карточками товаров, фильтрами и корзиной' },
+  { label: 'Портфолио', prompt: 'Портфолио 3D-дизайнера с галереей проектов, услугами и формой заявки' },
+  { label: 'SaaS dashboard', prompt: 'Рабочий SaaS-дашборд с сайдбаром, графиками, таблицей задач и адаптацией под телефон' },
+];
+
+const GAME_PRESETS: CreatorPreset[] = [
+  { label: 'Аркада', prompt: 'Неоновая аркада на canvas: игрок уклоняется от препятствий, собирает кристаллы, есть уровни' },
+  { label: 'Платформер', prompt: 'Платформер с прыжками, монетами, врагами, финишем, рестартом и touch-кнопками' },
+  { label: 'Шутер', prompt: 'Космический шутер сверху: волны врагов, бонусы, счет, жизни, пауза и мобильное управление' },
+  { label: 'Пазл', prompt: 'Пазл-игра с плитками, таймером, счетом, победой, подсказкой и красивой анимацией' },
+];
+
+const IMAGE_PRESETS: CreatorPreset[] = [
+  { label: 'Hero 3D', prompt: '3D hero background: кубический аметистовый фрактал, темная сцена, мягкое свечение, cinematic light' },
+  { label: 'Логотип', prompt: 'Минималистичный логотип Amethyst AI: кристалл, бело-фиолетовая палитра, чистый tech style' },
+  { label: 'Персонаж', prompt: '3D персонаж AI-ассистента из аметиста, дружелюбный, glossy material, studio render' },
+  { label: 'Иконка', prompt: 'App icon для Amethyst AI: объемный фиолетовый кристалл на темном фоне, high detail' },
+];
 
 // Инструменты доступны, когда Amethyst работает в десктоп-версии (управление ПК).
 const DESKTOP_NOTE =
@@ -197,12 +220,14 @@ export function Workspace({
   const [siteHtml, setSiteHtml] = useState('');
   const [siteBusy, setSiteBusy] = useState(false);
   const [siteErr, setSiteErr] = useState('');
+  const [sitePreviewMode, setSitePreviewMode] = useState<PreviewMode>('desktop');
   // Игры (Plus)
   const [showGame, setShowGame] = useState(false);
   const [gameWish, setGameWish] = useState('');
   const [gameHtml, setGameHtml] = useState('');
   const [gameBusy, setGameBusy] = useState(false);
   const [gameErr, setGameErr] = useState('');
+  const [gamePreviewMode, setGamePreviewMode] = useState<PreviewMode>('desktop');
   // Картинки (Plus)
   const [showImage, setShowImage] = useState(false);
   const [imgWish, setImgWish] = useState('');
@@ -325,6 +350,44 @@ export function Workspace({
     saveMemory(next);
   }
 
+  function improveSitePrompt(wish: string) {
+    const base = wish.trim() || 'сайт для современного AI-продукта';
+    return `Сделай ${base}. Нужен готовый премиальный адаптивный сайт: hero, понятный CTA, секции пользы, карточки, отзывы, мобильная версия, аккуратные hover/focus состояния и чистый визуальный стиль.`;
+  }
+
+  function improveGamePrompt(wish: string) {
+    const base = wish.trim() || 'аркадную игру с кристаллами';
+    return `Сделай ${base}. Нужен готовый playable HTML-прототип на canvas: старт, пауза, рестарт, счет, уровни, проигрыш/победа, клавиатура на ПК и touch-кнопки на телефоне, частицы и плавная анимация.`;
+  }
+
+  function improveImagePrompt(wish: string) {
+    const base = wish.trim() || 'кубический аметистовый фрактал';
+    return `${base}. 3D render, cinematic lighting, detailed materials, clean composition, high contrast, polished product visual, no text artifacts.`;
+  }
+
+  async function copyToClipboard(text: string) {
+    await navigator.clipboard?.writeText(text);
+  }
+
+  function openHtml(html: string) {
+    const blob = new Blob([html], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank', 'noopener,noreferrer');
+    window.setTimeout(() => URL.revokeObjectURL(url), 30000);
+  }
+
+  function openAsset(url: string) {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
+
+  function startAgentBuilder() {
+    setInput(
+      'Создай ИИ-агента для моей задачи. Опиши: название, цель, роль, входные данные, инструменты, память, ограничения, workflow, system prompt, формат ответа и 3 примера запросов пользователя.',
+    );
+    setSidebarOpen(false);
+    window.setTimeout(() => taRef.current?.focus(), 0);
+  }
+
   async function genHtml(kind: 'site' | 'game', wish: string) {
     const sys =
       kind === 'site'
@@ -332,8 +395,8 @@ export function Workspace({
         : 'You generate premium playable browser games. Return ONLY one complete HTML document starting with <!DOCTYPE html>. Use embedded CSS and JS only. No markdown. The game must include canvas rendering, start menu, pause/restart, score/HUD, increasing difficulty, win/lose state, keyboard controls, touch/mobile controls, particles or visual feedback, and no external libraries/assets.';
     const upgradedWish =
       kind === 'site'
-        ? `User website request: ${wish}\nMake it visually rich, responsive, and ready to download as a single HTML file.`
-        : `User game request: ${wish}\nMake a complete playable arcade prototype with polished graphics, touch controls, score, restart, and balanced difficulty.`;
+        ? `User website request: ${improveSitePrompt(wish)}\nMake it visually rich, responsive, and ready to download as a single HTML file.`
+        : `User game request: ${improveGamePrompt(wish)}\nMake a complete playable arcade prototype with polished graphics, touch controls, score, restart, and balanced difficulty.`;
     let full = '';
     for await (const chunk of streamGemini({ system: sys, history: [], prompt: upgradedWish, temperature: 0.78, maxTokens: 8192 })) {
       full += chunk;
@@ -375,7 +438,7 @@ export function Workspace({
     setImgUrl('');
     setImgErr('');
     try {
-      setImgUrl(await generateImage({ prompt: w }));
+      setImgUrl(await generateImage({ prompt: improveImagePrompt(w) }));
     } catch (e) {
       setImgErr(e instanceof Error ? e.message : 'Ошибка генерации картинки.');
     }
@@ -665,6 +728,9 @@ export function Workspace({
         </button>
         <button className="side-link" onClick={() => setShowMemory(true)}>
           <Icon name="memory" /> Память ИИ
+        </button>
+        <button className="side-link" onClick={startAgentBuilder}>
+          <Icon name="models" /> ИИ-агент
         </button>
         <button className="side-link" onClick={() => (plus ? setShowSite(true) : setShowPlus(true))}>
           <Icon name="globe" /> Создать сайт {!plus && <span className="lock">PLUS</span>}
@@ -1142,19 +1208,41 @@ export function Workspace({
             </div>
             <div className="redeem">
               <input placeholder="Опиши сайт: напр. лендинг для кофейни с меню" value={siteWish} onChange={(e) => setSiteWish(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && generateSite()} disabled={siteBusy} />
+              <button onClick={() => setSiteWish(improveSitePrompt(siteWish))} disabled={siteBusy}>
+                Улучшить
+              </button>
               <button onClick={generateSite} disabled={siteBusy || !siteWish.trim()}>
                 {siteBusy ? '…' : 'Создать'}
               </button>
+            </div>
+            <div className="prompt-chips" aria-label="Быстрые идеи для сайта">
+              {SITE_PRESETS.map((preset) => (
+                <button key={preset.label} className="prompt-chip" onClick={() => setSiteWish(preset.prompt)} disabled={siteBusy}>
+                  {preset.label}
+                </button>
+              ))}
             </div>
             {siteBusy && <p className="muted-line">Amethyst собирает сайт…</p>}
             {siteErr && <p className="composer-error">{siteErr}</p>}
             {siteHtml && (
               <>
-                <div className="site-preview">
-                  <iframe title="site" srcDoc={siteHtml} sandbox="allow-scripts" />
+                <div className="preview-toolbar">
+                  <div className="preview-segmented" aria-label="Режим предпросмотра">
+                    <button className={sitePreviewMode === 'desktop' ? 'active' : ''} onClick={() => setSitePreviewMode('desktop')}>
+                      Desktop
+                    </button>
+                    <button className={sitePreviewMode === 'mobile' ? 'active' : ''} onClick={() => setSitePreviewMode('mobile')}>
+                      Mobile
+                    </button>
+                  </div>
+                  <div className="preview-actions">
+                    <button onClick={() => openHtml(siteHtml)}>Открыть</button>
+                    <button onClick={() => void copyToClipboard(siteHtml)}>Копировать HTML</button>
+                    <button onClick={() => saveFile(siteHtml, 'site.html')}>Скачать site.html</button>
+                  </div>
                 </div>
-                <div className="set-actions">
-                  <button onClick={() => saveFile(siteHtml, 'site.html')}>⬇ Скачать site.html</button>
+                <div className={`site-preview ${sitePreviewMode === 'mobile' ? 'preview-mobile' : 'preview-desktop'}`}>
+                  <iframe title="site" srcDoc={siteHtml} sandbox="allow-scripts" />
                 </div>
               </>
             )}
@@ -1174,19 +1262,41 @@ export function Workspace({
             </div>
             <div className="redeem">
               <input placeholder="Опиши игру: напр. змейка, платформер" value={gameWish} onChange={(e) => setGameWish(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && generateGame()} disabled={gameBusy} />
+              <button onClick={() => setGameWish(improveGamePrompt(gameWish))} disabled={gameBusy}>
+                Улучшить
+              </button>
               <button onClick={generateGame} disabled={gameBusy || !gameWish.trim()}>
                 {gameBusy ? '…' : 'Создать'}
               </button>
+            </div>
+            <div className="prompt-chips" aria-label="Быстрые идеи для игры">
+              {GAME_PRESETS.map((preset) => (
+                <button key={preset.label} className="prompt-chip" onClick={() => setGameWish(preset.prompt)} disabled={gameBusy}>
+                  {preset.label}
+                </button>
+              ))}
             </div>
             {gameBusy && <p className="muted-line">Amethyst собирает игру…</p>}
             {gameErr && <p className="composer-error">{gameErr}</p>}
             {gameHtml && (
               <>
-                <div className="site-preview">
-                  <iframe title="game" srcDoc={gameHtml} sandbox="allow-scripts" />
+                <div className="preview-toolbar">
+                  <div className="preview-segmented" aria-label="Режим предпросмотра">
+                    <button className={gamePreviewMode === 'desktop' ? 'active' : ''} onClick={() => setGamePreviewMode('desktop')}>
+                      Desktop
+                    </button>
+                    <button className={gamePreviewMode === 'mobile' ? 'active' : ''} onClick={() => setGamePreviewMode('mobile')}>
+                      Mobile
+                    </button>
+                  </div>
+                  <div className="preview-actions">
+                    <button onClick={() => openHtml(gameHtml)}>Открыть</button>
+                    <button onClick={() => void copyToClipboard(gameHtml)}>Копировать HTML</button>
+                    <button onClick={() => saveFile(gameHtml, 'game.html')}>Скачать game.html</button>
+                  </div>
                 </div>
-                <div className="set-actions">
-                  <button onClick={() => saveFile(gameHtml, 'game.html')}>⬇ Скачать game.html</button>
+                <div className={`site-preview ${gamePreviewMode === 'mobile' ? 'preview-mobile' : 'preview-desktop'}`}>
+                  <iframe title="game" srcDoc={gameHtml} sandbox="allow-scripts" />
                 </div>
               </>
             )}
@@ -1206,19 +1316,33 @@ export function Workspace({
             </div>
             <div className="redeem">
               <input placeholder="Опиши картинку: напр. неоновый кот-космонавт в стиле 3D" value={imgWish} onChange={(e) => setImgWish(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && generateImg()} disabled={imgBusy} />
+              <button onClick={() => setImgWish(improveImagePrompt(imgWish))} disabled={imgBusy}>
+                Улучшить
+              </button>
               <button onClick={generateImg} disabled={imgBusy || !imgWish.trim()}>
                 {imgBusy ? '…' : 'Создать'}
               </button>
+            </div>
+            <div className="prompt-chips" aria-label="Быстрые идеи для картинки">
+              {IMAGE_PRESETS.map((preset) => (
+                <button key={preset.label} className="prompt-chip" onClick={() => setImgWish(preset.prompt)} disabled={imgBusy}>
+                  {preset.label}
+                </button>
+              ))}
             </div>
             {imgBusy && <p className="muted-line">Amethyst рисует картинку…</p>}
             {imgErr && <p className="composer-error">{imgErr}</p>}
             {imgUrl && (
               <>
+                <div className="preview-toolbar">
+                  <div className="preview-actions">
+                    <button onClick={() => openAsset(imgUrl)}>Открыть</button>
+                    <button onClick={() => void copyToClipboard(imgWish)}>Копировать prompt</button>
+                    <button onClick={() => downloadImage(imgUrl)}>Скачать картинку</button>
+                  </div>
+                </div>
                 <div className="img-preview">
                   <img src={imgUrl} alt="Сгенерированная картинка" />
-                </div>
-                <div className="set-actions">
-                  <button onClick={() => downloadImage(imgUrl)}>⬇ Скачать картинку</button>
                 </div>
               </>
             )}
