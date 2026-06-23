@@ -35,8 +35,12 @@ type ChunkHandler = (chunk: string) => void;
 
 function localFallback(prompt: string, system: string): string {
   const text = `${system}\n${prompt}`.toLowerCase();
+  const isGame = /(игр|игра|игру|game|canvas|платформер|змейк|snake|шутер|runner)/i.test(text);
+  const isAgent = /(агент|ии-агент|agent|system prompt|бот|workflow)/i.test(text);
+  const isSite = /(сайт|лендинг|landing|html|верстк|website|страниц)/i.test(text);
+  const isCode = /(код|react|typescript|javascript|python|bug|ошибк|компонент)/i.test(text);
 
-  if (/(игр|game|canvas|платформер|змейк|snake|шутер)/i.test(text)) {
+  if (isGame) {
     return `Готовый шаблон HTML-игры. Сохрани как game.html и открой в браузере.
 
 \`\`\`html
@@ -48,7 +52,7 @@ function localFallback(prompt: string, system: string): string {
   <title>Amethyst Runner</title>
   <style>
     body{margin:0;background:#090910;color:white;font-family:Arial;display:grid;place-items:center;min-height:100vh}
-    canvas{width:min(94vw,900px);height:auto;border:1px solid #333;border-radius:18px;background:#101225}
+    canvas{width:min(94vw,900px);height:auto;border:1px solid #333;border-radius:18px;background:#101225;touch-action:none}
     .hint{opacity:.75;margin-top:12px;text-align:center}
   </style>
 </head>
@@ -73,7 +77,7 @@ function localFallback(prompt: string, system: string): string {
 \`\`\``;
   }
 
-  if (/(агент|agent|system prompt|бот)/i.test(text)) {
+  if (isAgent) {
     return `Готовый ИИ-агент для Amethyst AI:
 
 **Название:** Project Builder Agent
@@ -81,7 +85,7 @@ function localFallback(prompt: string, system: string): string {
 **Цель:** превращать идею пользователя в готовый план, код, интерфейс или инструкцию.
 
 **System prompt:**
-Ты — Project Builder Agent. Твоя задача — быстро понять цель пользователя, предложить лучшую структуру решения и дать готовый результат. Если нужен код, пиши полный рабочий код. Если нужен сайт, описывай структуру экранов и давай HTML/CSS/JS или React-компоненты. Если нужна игра, делай playable prototype с управлением, счётом и рестартом. Отвечай коротко, по делу, без воды.
+Ты — Project Builder Agent. Твоя задача — быстро понять цель пользователя, предложить лучшую структуру решения и дать готовый результат. Если нужен код, пиши полный рабочий код. Если нужен сайт, давай HTML/CSS/JS или React-компоненты. Если нужна игра, делай playable prototype с управлением, счётом и рестартом. Отвечай коротко, по делу, без воды.
 
 **Workflow:**
 1. Определи тип задачи: код, сайт, игра, дизайн, текст, стратегия.
@@ -90,15 +94,46 @@ function localFallback(prompt: string, system: string): string {
 4. Проверь риски: ошибки, зависимости, запуск.
 5. Предложи 1-2 улучшения.
 
-**Формат ответа:**
-Результат → код/план → как запустить → что улучшить.`;
+**Формат ответа:** результат → код/план → как запустить → что улучшить.`;
   }
 
-  if (/(сайт|landing|html|верстк|website)/i.test(text)) {
-    return `Могу собрать сайт как один готовый HTML-файл. Напиши тематику, например: “сайт для кофейни”, “портфолио дизайнера”, “лендинг Amethyst AI”. Я верну полный HTML/CSS/JS с адаптацией под телефон.`;
+  if (isSite) {
+    return `Готовый HTML-сайт. Сохрани как site.html и открой в браузере.
+
+\`\`\`html
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Amethyst Site</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:#080810;color:#fff}
+    main{min-height:100vh;display:grid;place-items:center;padding:32px;background:radial-gradient(circle at 70% 20%,#6d28d966,transparent 34%),linear-gradient(135deg,#070710,#111827)}
+    section{width:min(980px,100%);display:grid;gap:28px}
+    h1{font-size:clamp(42px,8vw,92px);line-height:.95;margin:0;letter-spacing:0}
+    p{max-width:620px;color:#c7d2fe;font-size:20px;line-height:1.55}
+    .cta{display:flex;gap:12px;flex-wrap:wrap}.cta a{padding:15px 20px;border-radius:16px;text-decoration:none;font-weight:800}
+    .primary{background:#fff;color:#111827}.secondary{border:1px solid #ffffff33;color:#fff}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px}
+    .card{padding:18px;border:1px solid #ffffff1f;border-radius:18px;background:#ffffff0d}
+  </style>
+</head>
+<body>
+  <main>
+    <section>
+      <h1>Новое видение Искусственного Интеллекта</h1>
+      <p>Amethyst помогает создавать сайты, игры, изображения и ИИ-агентов в одном понятном рабочем пространстве.</p>
+      <div class="cta"><a class="primary" href="#">Начать</a><a class="secondary" href="#">Посмотреть функции</a></div>
+      <div class="grid"><div class="card">Сайты</div><div class="card">Игры</div><div class="card">Картинки</div><div class="card">ИИ-агенты</div></div>
+    </section>
+  </main>
+</body>
+</html>
+\`\`\``;
   }
 
-  if (/(код|react|typescript|javascript|python|bug|ошибк)/i.test(text)) {
+  if (isCode) {
     return `Я готов помочь с кодом. Пришли задачу или файл, и я дам рабочее решение: полный код, объяснение запуска и проверку типичных ошибок.`;
   }
 

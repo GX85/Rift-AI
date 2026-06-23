@@ -3032,3 +3032,36 @@ input:hover:not(:focus), textarea:hover:not(:focus) { border-color: var(--line-s
 /* Логотип-аметист (пиксельный) */
 .amlogo { display: inline-grid; place-items: center; flex-shrink: 0; vertical-align: middle; }
 .amlogo svg { display: block; image-rendering: pixelated; filter: drop-shadow(0 2px 4px rgba(124, 58, 237, 0.45)); }
+
+/* Keep the 3D cubic fractal visible inside the app workspace. */
+.fractal-bg {
+  opacity: 1;
+}
+
+.bg-overlay {
+  background:
+    radial-gradient(circle at 50% 32%, rgba(101, 80, 255, 0.1), transparent 38%),
+    linear-gradient(180deg, rgba(3, 3, 8, 0.2), rgba(3, 3, 8, 0.62));
+}
+
+.ws {
+  background: rgba(3, 3, 8, 0.34) !important;
+}
+
+.ws-main {
+  background:
+    radial-gradient(820px 520px at 50% 38%, rgba(71, 101, 255, 0.12), transparent 68%),
+    linear-gradient(180deg, rgba(5, 5, 8, 0.28), rgba(5, 5, 8, 0.5)) !important;
+}
+
+.hero-chat {
+  background: radial-gradient(circle at 50% 42%, rgba(80, 60, 180, 0.12), transparent 46%);
+}
+
+.ws-side,
+.ws-top,
+.composer-box,
+.cbox,
+.modal {
+  backdrop-filter: blur(20px);
+}

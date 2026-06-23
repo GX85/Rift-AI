@@ -139,7 +139,11 @@ function newChatObj(): Chat {
 }
 
 function stripFences(s: string): string {
-  return s.replace(/^```html\s*/i, '').replace(/^```\s*/i, '').replace(/```\s*$/i, '').trim();
+  const trimmed = s.trim();
+  const fenced = trimmed.match(/```(?:html)?\s*([\s\S]*?)```/i);
+  const body = (fenced?.[1] ?? trimmed).trim();
+  const htmlStart = body.search(/<!doctype html>|<html[\s>]/i);
+  return htmlStart >= 0 ? body.slice(htmlStart).trim() : body;
 }
 
 
