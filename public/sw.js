@@ -1,4 +1,4 @@
-const CACHE_NAME = 'amethyst-mobile-v5-reference-logo-20260624';
+const CACHE_NAME = 'amethyst-mobile-v6-clean-reference-gem-20260624';
 const APP_SHELL = [
   '/',
   '/mobile',

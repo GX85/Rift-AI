@@ -10352,3 +10352,134 @@ body {
 .nav-open {
   border-radius: 14px !important;
 }
+
+/* Final reference lock: exact clean pixel amethyst, no fake boxes */
+.hero-logo::before,
+.hero-logo::after,
+.amlogo::before,
+.amlogo::after,
+.hero-fractal-stage::before,
+.hero-fractal-stage::after,
+.platform-gem::before,
+.platform-gem::after,
+.hero-chat-logo::before,
+.hero-chat-logo::after,
+.acode-logo::before,
+.acode-logo::after,
+.side-logo::before,
+.side-logo::after {
+  content: none !important;
+  display: none !important;
+}
+
+.amlogo,
+.hero-logo .amlogo,
+.platform-kicker .amlogo,
+.brand .amlogo,
+.acode-logo .amlogo,
+.side-logo .amlogo,
+.mobile-app-icon .amlogo,
+.mobile-qr-logo,
+.acode-model .amlogo,
+.acode-msg-avatar .amlogo,
+.acode-empty .amlogo,
+.acode-empty-copy > .amlogo {
+  width: auto;
+  aspect-ratio: 1 !important;
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: visible !important;
+  border-radius: 0 !important;
+  transform: translateZ(0) !important;
+  filter:
+    drop-shadow(0 0 3px rgba(255, 105, 244, 1))
+    drop-shadow(0 0 10px rgba(157, 78, 255, .95))
+    drop-shadow(0 0 22px rgba(85, 231, 255, .26)) !important;
+}
+
+.hero-logo .amlogo,
+.side-logo .amlogo,
+.acode-logo .amlogo {
+  width: 34px !important;
+  height: 34px !important;
+}
+
+.platform-kicker .amlogo,
+.acode-model .amlogo,
+.acode-msg-avatar .amlogo {
+  width: 22px !important;
+  height: 22px !important;
+}
+
+.hero-fractal-stage {
+  width: 64px !important;
+  height: 64px !important;
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  filter:
+    drop-shadow(0 0 8px rgba(255, 105, 244, .88))
+    drop-shadow(0 0 24px rgba(157, 78, 255, .78)) !important;
+}
+
+.hero-fractal-stage .amlogo {
+  width: 64px !important;
+  height: 64px !important;
+}
+
+.amlogo svg {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  overflow: visible !important;
+  shape-rendering: crispEdges !important;
+  image-rendering: pixelated !important;
+  filter: none !important;
+}
+
+.amlogo .gem-aura { fill: rgba(170, 72, 255, .22) !important; }
+.amlogo .gem-edge-light { fill: #fbecff !important; }
+.amlogo .gem-edge-dark { fill: transparent !important; }
+.amlogo .gem-pink { fill: #ff5bf1 !important; }
+.amlogo .gem-purple { fill: #a044ff !important; }
+.amlogo .gem-deep { fill: #651cff !important; }
+.amlogo .gem-white { fill: #ffffff !important; }
+.amlogo .gem-cyan { fill: #58eaff !important; }
+.amlogo .gem-spark { fill: #ffffff !important; }
+
+.hero2 {
+  background:
+    radial-gradient(circle at 50% 9%, rgba(166, 82, 255, 0.24), transparent 18%),
+    radial-gradient(circle at 72% 34%, rgba(88, 234, 255, 0.13), transparent 24%),
+    linear-gradient(135deg, #090a1c 0%, #11142c 52%, #071e33 100%) !important;
+}
+
+.hero2::before {
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, .4) 0 1px, transparent 1.5px),
+    radial-gradient(circle, rgba(255, 91, 241, .26) 0 1px, transparent 1.5px),
+    linear-gradient(90deg, rgba(255,255,255,.022) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255,255,255,.018) 1px, transparent 1px) !important;
+  background-size: 156px 156px, 228px 228px, 18px 18px, 18px 18px !important;
+  opacity: .32 !important;
+}
+
+.hero-nav,
+.composer,
+.features,
+.feature-card,
+.review-card,
+.platform-card,
+.hero-prompt-grid button,
+.hero-platforms span {
+  border-radius: 18px !important;
+  border: 1px solid rgba(255, 255, 255, .12) !important;
+  box-shadow: 0 22px 70px rgba(0, 0, 0, .28), inset 0 1px 0 rgba(255,255,255,.08) !important;
+}
