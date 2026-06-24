@@ -37,8 +37,8 @@ function polishedLocalFallback(prompt: string, system: string): string {
   const text = `${system}\n${prompt}`.toLowerCase();
   const isGame = /(игр|game|canvas|platformer|snake|runner|arcade|shooter|платформер|шутер)/i.test(text);
   const isBot = /(чатбот|бот|bot|agent|агент|system prompt|workflow|диалог)/i.test(text);
-  const isSite = /(сайт|лендинг|landing|html|верстк|website|страниц)/i.test(text);
-  const isCode = /(код|react|typescript|javascript|python|bug|ошибк|компонент|api|supabase)/i.test(text);
+  const isSite = /(сайт|лендинг|landing|html|верстк|website|страниц|web-app|прототип|mvp)/i.test(text);
+  const isCode = /(код|react|typescript|javascript|python|bug|ошибк|компонент|api|supabase|review|рефактор)/i.test(text);
 
   if (isGame) {
     return `Готовый playable prototype. Сохрани как \`game.html\` и открой в браузере.
@@ -105,6 +105,71 @@ add('Привет! Я Amethyst. Чем помочь?');
 form.onsubmit=e=>{e.preventDefault();const text=input.value.trim();if(!text)return;add(text,'user');input.value='';setTimeout(()=>add(reply(text)),250)}
 </script>
 \`\`\``;
+  }
+
+  if (/react|typescript|tsx|компонент/i.test(text)) {
+    return `Готовый React + TypeScript компонент. Он типизирован, без any, с loading/empty/error состояниями.
+
+\`\`\`tsx
+import { useMemo, useState } from 'react';
+
+type Item = {
+  id: string;
+  title: string;
+  status: 'todo' | 'progress' | 'done';
+};
+
+type SmartPanelProps = {
+  title: string;
+  items?: Item[];
+  loading?: boolean;
+  error?: string;
+  onCreate?: (title: string) => void;
+};
+
+export function SmartPanel({ title, items = [], loading = false, error = '', onCreate }: SmartPanelProps) {
+  const [draft, setDraft] = useState('');
+  const doneCount = useMemo(() => items.filter((item) => item.status === 'done').length, [items]);
+
+  if (loading) return <section className="panel">Загрузка...</section>;
+  if (error) return <section className="panel panel_error">{error}</section>;
+
+  return (
+    <section className="panel">
+      <header className="panel__head">
+        <h2>{title}</h2>
+        <span>{doneCount}/{items.length}</span>
+      </header>
+
+      {items.length === 0 ? (
+        <p className="panel__empty">Пока пусто. Добавь первую задачу.</p>
+      ) : (
+        <ul className="panel__list">
+          {items.map((item) => (
+            <li key={item.id} data-status={item.status}>{item.title}</li>
+          ))}
+        </ul>
+      )}
+
+      <form
+        className="panel__form"
+        onSubmit={(event) => {
+          event.preventDefault();
+          const value = draft.trim();
+          if (!value) return;
+          onCreate?.(value);
+          setDraft('');
+        }}
+      >
+        <input value={draft} onChange={(event) => setDraft(event.target.value)} placeholder="Новая задача" />
+        <button type="submit">Добавить</button>
+      </form>
+    </section>
+  );
+}
+\`\`\`
+
+Проверь: пустой список, loading, error, длинные названия и отправку формы.`;
   }
 
   if (isSite) {

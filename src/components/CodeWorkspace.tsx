@@ -44,6 +44,61 @@ function titleFrom(text: string) {
   return text.replace(/\s+/g, ' ').trim().slice(0, 46) || 'Новый чат';
 }
 
+function buildTaskBrief(text: string) {
+  const normalized = text.toLowerCase();
+  const rules: string[] = [
+    'Сначала определи тип задачи и выбери самый полезный формат результата.',
+    'Если просишь код, возвращай рабочий код без TODO-заглушек.',
+    'Проверяй мобильную адаптацию, пустые состояния и ошибки.',
+  ];
+
+  if (/сайт|лендинг|landing|website|html|страниц/.test(normalized)) {
+    rules.push(
+      'Для сайта верни один полный HTML-файл с <!doctype html>, CSS в <style> и JS в <script> если нужен.',
+      'Сайт должен иметь nav, hero, CTA, секции, footer, hover/focus, mobile layout и не иметь горизонтального скролла.',
+    );
+  }
+  if (/игр|game|canvas|runner|snake|arcade|шутер|платформер/.test(normalized)) {
+    rules.push(
+      'Для игры верни один playable HTML-файл: canvas/DOM, старт, пауза, рестарт, счет, уровни/жизни, collision logic, клавиатура и touch-кнопки.',
+    );
+  }
+  if (/чатбот|бот|bot|agent|агент|dialog|диалог/.test(normalized)) {
+    rules.push(
+      'Для чатбота верни system prompt, intents, сценарии, fallback, guardrails, memory policy, тестовые диалоги и UI/JS-прототип при реализации.',
+    );
+  }
+  if (/react|typescript|tsx|компонент/.test(normalized)) {
+    rules.push(
+      'Для React/TypeScript используй строгие типы, без any, с loading/empty/error состояниями и понятными props.',
+    );
+  }
+
+  return `${text}\n\n--- Amethyst quality brief ---\n${rules.map((rule) => `- ${rule}`).join('\n')}`;
+}
+
+function extractHtmlArtifact(content: string) {
+  const blocks = Array.from(content.matchAll(/```([a-zA-Z0-9_-]*)\n([\s\S]*?)```/g));
+  const html = blocks.find((match) => {
+    const lang = match[1].toLowerCase();
+    const code = match[2].trim().toLowerCase();
+    return lang === 'html' || code.startsWith('<!doctype html') || code.startsWith('<html');
+  });
+  return html?.[2].trim() ?? '';
+}
+
+function downloadText(filename: string, text: string) {
+  const blob = new Blob([text], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 800);
+}
+
 function buildSystem() {
   return `Ты — Amethyst, coding assistant на базе Gemini.
 
@@ -175,7 +230,8 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
 
     const file = attached;
     const userContent = file ? `${text}\n\n📎 ${file.name}` : text;
-    const prompt = file ? `${text}\n\n--- File: ${file.name} ---\n${file.content}` : text;
+    const promptText = buildTaskBrief(text);
+    const prompt = file ? `${promptText}\n\n--- File: ${file.name} ---\n${file.content}` : promptText;
     const userMessage: Message = { id: crypto.randomUUID(), role: 'user', content: userContent };
     const assistantId = crypto.randomUUID();
     const baseMessages = [...messages, userMessage];
@@ -245,6 +301,13 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
   function useStarter(text: string) {
     setInput(text);
     window.setTimeout(() => inputRef.current?.focus(), 0);
+  }
+
+  function downloadHtml(message: Message) {
+    const html = extractHtmlArtifact(message.content);
+    if (!html) return;
+    const filename = `${titleFrom(message.content).toLowerCase().replace(/[^a-z0-9а-яё]+/gi, '-').replace(/^-|-$/g, '').slice(0, 38) || 'amethyst-result'}.html`;
+    downloadText(filename, html);
   }
 
   return (
@@ -345,9 +408,16 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
                 <div className="acode-msg-body">
                   {message.content ? <Markdown text={message.content} /> : <span className="acode-dots">Amethyst думает...</span>}
                   {message.content && (
-                    <button className="acode-copy" onClick={() => copyMessage(message)}>
-                      {copiedId === message.id ? 'скопировано' : 'копировать'}
-                    </button>
+                    <div className="acode-msg-actions">
+                      <button className="acode-copy" onClick={() => copyMessage(message)}>
+                        {copiedId === message.id ? 'скопировано' : 'копировать'}
+                      </button>
+                      {message.role === 'assistant' && extractHtmlArtifact(message.content) && (
+                        <button className="acode-copy acode-download" onClick={() => downloadHtml(message)}>
+                          скачать HTML
+                        </button>
+                      )}
+                    </div>
                   )}
                 </div>
               </article>
