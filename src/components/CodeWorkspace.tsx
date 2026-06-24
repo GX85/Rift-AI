@@ -211,16 +211,6 @@ function downloadText(filename: string, text: string) {
   window.setTimeout(() => URL.revokeObjectURL(url), 800);
 }
 
-function openHtmlArtifact(html: string) {
-  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const win = window.open(url, '_blank', 'noopener,noreferrer');
-  if (!win) {
-    downloadText('amethyst-result.html', html);
-  }
-  window.setTimeout(() => URL.revokeObjectURL(url), 60000);
-}
-
 function htmlFilename(content: string) {
   const slug = titleFrom(content)
     .toLowerCase()
@@ -418,7 +408,6 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
   const [error, setError] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [crystalSettingsOpen, setCrystalSettingsOpen] = useState(false);
 
   const fileRef = useRef<HTMLInputElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -479,7 +468,6 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
     setAttached(null);
     setError('');
     setSidebarOpen(false);
-    setCrystalSettingsOpen(false);
     window.setTimeout(() => inputRef.current?.focus(), 0);
   }
 
@@ -649,7 +637,6 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
   }
 
   function focusChat() {
-    setCrystalSettingsOpen(false);
     setSidebarOpen(false);
     window.setTimeout(() => inputRef.current?.focus(), 0);
   }
@@ -671,9 +658,9 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
           <AmethystNavigatorStone size={132} />
           <span>Новый</span>
         </button>
-        <button className="acode-bg-crystal settings" type="button" onClick={() => setCrystalSettingsOpen(true)} title="Настройки">
+        <button className="acode-bg-crystal settings" type="button" onClick={() => useStarter(MOBILE_ACTIONS[0].prompt)} title="Собрать сайт">
           <AmethystNavigatorStone size={146} />
-          <span>Настройки</span>
+          <span>Сайт</span>
         </button>
         <button className="acode-bg-crystal home" type="button" onClick={onHome} title="Главная">
           <AmethystNavigatorStone size={122} />
@@ -856,7 +843,7 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
                           <iframe
                             title="Amethyst artifact preview"
                             srcDoc={htmlArtifact}
-                            sandbox="allow-scripts allow-forms allow-pointer-lock allow-popups"
+                            sandbox="allow-scripts allow-forms allow-pointer-lock"
                           />
                         </div>
                         <details className="acode-artifact-code">
@@ -876,9 +863,6 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
                         </button>
                         {htmlArtifact && (
                           <>
-                            <button className="acode-copy acode-open" onClick={() => openHtmlArtifact(htmlArtifact)}>
-                              открыть
-                            </button>
                             <button className="acode-copy" onClick={() => void navigator.clipboard?.writeText(htmlArtifact)}>
                               копировать HTML
                             </button>
@@ -953,55 +937,6 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
         </footer>
       </main>
 
-      {crystalSettingsOpen && (
-        <div className="acode-crystal-settings" role="dialog" aria-modal="true" aria-label="Настройки Amethyst">
-          <button className="acode-crystal-settings-backdrop" type="button" onClick={() => setCrystalSettingsOpen(false)} aria-label="Закрыть" />
-          <section className="acode-crystal-settings-card">
-            <div className="acode-crystal-settings-head">
-              <AmethystLogo size={46} />
-              <div>
-                <strong>Настройки Amethyst</strong>
-                <span>Gemini 2.5 Flash, код, сайты, игры и MVP в одном чате.</span>
-              </div>
-              <button className="acode-icon" type="button" onClick={() => setCrystalSettingsOpen(false)} title="Закрыть">
-                <Icon name="x" size={16} />
-              </button>
-            </div>
-            <div className="acode-crystal-settings-grid">
-              <div>
-                <b>Модель</b>
-                <span>Gemini 2.5 Flash</span>
-              </div>
-              <div>
-                <b>Режим</b>
-                <span>готовые HTML/React/TS артефакты</span>
-              </div>
-              <div>
-                <b>Интерфейс</b>
-                <span>кристаллическая тема без пикселей</span>
-              </div>
-              <div>
-                <b>Фокус</b>
-                <span>код, продукт, бизнес и запуск MVP</span>
-              </div>
-            </div>
-            <div className="acode-crystal-settings-actions">
-              <button type="button" onClick={createChat}>
-                <Icon name="plus" size={16} />
-                Новый чат
-              </button>
-              <button type="button" onClick={focusChat}>
-                <Icon name="send" size={16} />
-                Вернуться в чат
-              </button>
-              <button type="button" onClick={onSignOut}>
-                <Icon name="logout" size={16} />
-                Выйти
-              </button>
-            </div>
-          </section>
-        </div>
-      )}
     </div>
   );
 }

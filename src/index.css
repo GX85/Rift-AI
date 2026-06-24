@@ -16621,3 +16621,127 @@ body,
     height: 98px !important;
   }
 }
+
+/* Clean Amethyst UI v2: new classes so old square feature-card styles cannot leak */
+.crystal-perk-grid {
+  width: min(1120px, calc(100% - 32px)) !important;
+  margin: 34px auto 0 !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 18px !important;
+}
+
+.crystal-perk-tile {
+  position: relative !important;
+  min-height: 210px !important;
+  display: grid !important;
+  grid-template-columns: 126px 1fr !important;
+  align-items: center !important;
+  gap: 24px !important;
+  padding: 28px 34px !important;
+  overflow: hidden !important;
+  color: #f8f4ff !important;
+  border: 1px solid rgba(222, 200, 255, .26) !important;
+  background:
+    radial-gradient(220px 180px at 12% 16%, rgba(255, 87, 238, .2), transparent 72%),
+    radial-gradient(230px 170px at 96% 14%, rgba(78, 231, 255, .13), transparent 72%),
+    linear-gradient(140deg, rgba(12, 9, 31, .78), rgba(7, 13, 31, .62)) !important;
+  clip-path: polygon(0 36px, 32px 0, calc(100% - 54px) 0, 100% 42px, 100% calc(100% - 38px), calc(100% - 34px) 100%, 42px 100%, 0 calc(100% - 46px)) !important;
+  box-shadow:
+    0 28px 86px rgba(0,0,0,.32),
+    inset 0 1px 0 rgba(255,255,255,.12),
+    inset 0 -1px 0 rgba(135,92,255,.28) !important;
+}
+
+.crystal-perk-tile::before,
+.crystal-perk-tile::after {
+  content: '' !important;
+  position: absolute !important;
+  pointer-events: none !important;
+}
+
+.crystal-perk-tile::before {
+  right: 18px !important;
+  bottom: 18px !important;
+  width: 46px !important;
+  height: 58px !important;
+  opacity: .55 !important;
+  background: linear-gradient(138deg, #fff, #ff60ee 28%, #8b5cf6 58%, #55e7ff) !important;
+  clip-path: polygon(50% 0, 88% 24%, 76% 76%, 50% 100%, 24% 76%, 12% 24%) !important;
+  filter: drop-shadow(0 0 18px rgba(255, 92, 240, .42)) !important;
+}
+
+.crystal-perk-tile::after {
+  inset: 0 !important;
+  opacity: .78 !important;
+  background:
+    radial-gradient(42px 32px at 16% 20%, rgba(255,255,255,.11), transparent 72%),
+    radial-gradient(34px 30px at 88% 72%, rgba(78,231,255,.13), transparent 74%) !important;
+}
+
+.crystal-perk-tile > .amnav-stone {
+  width: 118px !important;
+  height: 142px !important;
+  z-index: 1 !important;
+  justify-self: center !important;
+  filter:
+    drop-shadow(0 0 24px rgba(255, 83, 238, .66))
+    drop-shadow(0 0 30px rgba(78, 231, 255, .26)) !important;
+}
+
+.crystal-perk-copy {
+  position: relative !important;
+  z-index: 1 !important;
+  min-width: 0 !important;
+}
+
+.crystal-perk-title {
+  font-size: clamp(23px, 2vw, 31px) !important;
+  line-height: 1.08 !important;
+  font-weight: 950 !important;
+  color: #fff !important;
+  letter-spacing: 0 !important;
+}
+
+.crystal-perk-text {
+  margin-top: 12px !important;
+  font-size: clamp(15px, 1.25vw, 18px) !important;
+  line-height: 1.48 !important;
+  color: rgba(234, 230, 255, .82) !important;
+}
+
+.hero-prompt-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+
+.hero-prompt-grid button {
+  min-height: 74px !important;
+  font-size: 16px !important;
+}
+
+.acode-crystal-settings {
+  display: none !important;
+}
+
+.acode-artifact-live iframe {
+  border: 0 !important;
+}
+
+@media (max-width: 760px) {
+  .crystal-perk-grid {
+    grid-template-columns: 1fr !important;
+    width: min(100% - 22px, 520px) !important;
+  }
+
+  .crystal-perk-tile {
+    grid-template-columns: 84px 1fr !important;
+    min-height: 176px !important;
+    padding: 22px !important;
+    gap: 16px !important;
+  }
+
+  .crystal-perk-tile > .amnav-stone {
+    width: 82px !important;
+    height: 102px !important;
+  }
+}

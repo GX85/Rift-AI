@@ -269,13 +269,13 @@ export function Landing({ onEnter }: { onEnter?: () => void }) {
           <h2 className="features-h">Больше силы для проектов</h2>
           <p className="plus-sub">Активируется по коду. Открывает больше функций для разработки, MVP и бизнес-задач.</p>
         </div>
-        <div className="features-grid">
+        <div className="crystal-perk-grid">
           {PLUS_PERKS.map((p) => (
-            <div key={p.title} className="feature-card">
+            <div key={p.title} className="crystal-perk-tile">
               <AmethystNavigatorStone size={118} />
-              <div className="feature-content">
-                <div className="feature-title">{p.title}</div>
-                <div className="feature-text">{p.text}</div>
+              <div className="crystal-perk-copy">
+                <div className="crystal-perk-title">{p.title}</div>
+                <div className="crystal-perk-text">{p.text}</div>
               </div>
             </div>
           ))}
