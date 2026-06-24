@@ -274,7 +274,6 @@ export function Landing({ onEnter }: { onEnter?: () => void }) {
             <div key={p.title} className="feature-card">
               <div className="feature-gem">
                 <AmethystNavigatorStone size={74} />
-                <Icon name={p.icon} size={18} />
               </div>
               <div className="feature-title">{p.title}</div>
               <div className="feature-text">{p.text}</div>

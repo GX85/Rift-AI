@@ -344,6 +344,23 @@ function ensureCreatedArtifact(request: string, response: string) {
   return `${intro}\n\n${fallback}`;
 }
 
+function buildInstantArtifactResponse(kind: ArtifactKind, request: string) {
+  const title =
+    kind === 'game'
+      ? 'Я сразу собрал рабочую HTML-игру. Ее уже можно открыть, скачать и показать в демо.'
+      : kind === 'bot'
+        ? 'Я сразу собрал рабочий HTML-прототип чатбота. Его уже можно открыть, скачать и показать в демо.'
+        : kind === 'app'
+          ? 'Я сразу собрал рабочий HTML-прототип приложения. Его уже можно открыть, скачать и показать в демо.'
+          : 'Я сразу собрал рабочий HTML-сайт. Его уже можно открыть, скачать и показать в демо.';
+
+  return `${title}
+
+Пока Gemini готовит более точную версию под твой запрос, ниже уже есть гарантированный рабочий артефакт:
+
+${buildGuaranteedHtmlArtifact(kind, request)}`;
+}
+
 function buildSystem() {
   return `Ты — Amethyst, coding assistant на базе Gemini 2.5 Flash.
 
@@ -516,6 +533,8 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
     const firstTitle = messages.length === 0 ? titleFrom(text) : active.title;
     const controller = new AbortController();
     const localAnswer = file ? '' : localConversationAnswer(text);
+    const artifactKind = file ? null : detectArtifactKind(text);
+    const instantArtifact = artifactKind ? buildInstantArtifactResponse(artifactKind, text) : '';
 
     setInput('');
     setAttached(null);
@@ -531,7 +550,17 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
       updatedAt: Date.now(),
     }));
 
-    let full = '';
+    let full = instantArtifact;
+    let streamed = '';
+    if (instantArtifact) {
+      applyChat(active.id, (chat) => ({
+        ...chat,
+        messages: chat.messages.map((message) =>
+          message.id === assistantId ? { ...message, content: instantArtifact } : message,
+        ),
+        updatedAt: Date.now(),
+      }));
+    }
     if (localAnswer) {
       full = localAnswer;
       applyChat(active.id, (chat) => ({
@@ -561,7 +590,10 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
         maxTokens: 8192,
         signal: controller.signal,
       })) {
-        full += chunk;
+        streamed += chunk;
+        full = instantArtifact
+          ? `${instantArtifact}\n\n---\nGemini уточняет результат под твой запрос:\n\n${streamed}`
+          : streamed;
         applyChat(active.id, (chat) => ({
           ...chat,
           messages: chat.messages.map((message) =>
@@ -580,7 +612,7 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
     }
 
     if (!controller.signal.aborted) {
-      const ensured = ensureCreatedArtifact(text, full);
+      const ensured = ensureCreatedArtifact(text, streamed || full);
       if (ensured !== full) {
         full = ensured;
         applyChat(active.id, (chat) => ({

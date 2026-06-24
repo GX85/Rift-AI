@@ -16308,3 +16308,178 @@ code {
     height: 80px !important;
   }
 }
+
+/* Remove cheap stripe language: keep crystal chips and readable premium cards */
+.feature-card::after,
+.hero-prompt-grid button::after,
+.acode-studio-grid button::after,
+.platform-card::after {
+  background:
+    radial-gradient(28px 24px at 15% 18%, rgba(255, 92, 240, .18), transparent 72%),
+    radial-gradient(34px 28px at 86% 76%, rgba(78, 231, 255, .13), transparent 74%),
+    radial-gradient(18px 20px at 62% 22%, rgba(255,255,255,.08), transparent 72%) !important;
+  opacity: .7 !important;
+}
+
+.hero-prompt-grid {
+  width: min(1100px, 100%) !important;
+  gap: 14px !important;
+}
+
+.hero-prompt-grid button {
+  min-height: 82px !important;
+  padding: 18px 64px 18px 22px !important;
+  align-items: center !important;
+  background:
+    radial-gradient(120px 90px at 92% 50%, rgba(156, 92, 255, .26), transparent 74%),
+    radial-gradient(90px 70px at 12% 10%, rgba(78, 231, 255, .12), transparent 72%),
+    linear-gradient(140deg, rgba(16, 13, 39, .82), rgba(7, 13, 31, .74)) !important;
+}
+
+.hero-prompt-grid button::before {
+  right: 18px !important;
+  top: 50% !important;
+  bottom: auto !important;
+  transform: translateY(-50%) rotate(8deg) !important;
+  width: 42px !important;
+  height: 52px !important;
+}
+
+.hero-prompt-grid button > svg {
+  flex: 0 0 auto !important;
+}
+
+.hero-prompt-grid button span {
+  min-width: 0 !important;
+  overflow-wrap: anywhere !important;
+}
+
+.feature-card {
+  padding: 28px 30px 32px !important;
+  min-height: 260px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+}
+
+.feature-card::before {
+  right: 20px !important;
+  bottom: 18px !important;
+  width: 34px !important;
+  height: 42px !important;
+  opacity: .42 !important;
+}
+
+.feature-title {
+  margin-top: 0 !important;
+  font-size: clamp(20px, 2vw, 26px) !important;
+  line-height: 1.1 !important;
+}
+
+.feature-text {
+  margin-top: 12px !important;
+  font-size: clamp(15px, 1.35vw, 18px) !important;
+  line-height: 1.46 !important;
+}
+
+/* Strong presentation pass: show the cave, remove visible placeholder grid/square leftovers */
+.hero-grid,
+.hero-vignette {
+  display: none !important;
+}
+
+body,
+.hero2,
+.platform-page,
+.reviews-page,
+.mobile-entry,
+.mobile-qr-page,
+.acode {
+  background-image:
+    radial-gradient(900px 640px at 50% 32%, rgba(3, 5, 17, .26), rgba(3, 5, 17, .72) 78%),
+    url('/amethyst-cave-premium.png') !important;
+  background-size: cover, cover !important;
+  background-position: center center !important;
+}
+
+.hero2::before,
+.platform-page::before,
+.reviews-page::before,
+.mobile-entry::before,
+.mobile-qr-page::before,
+.acode::before {
+  opacity: .94 !important;
+  background:
+    radial-gradient(760px 560px at 50% 34%, rgba(2, 4, 16, .1), rgba(2, 4, 16, .66) 84%),
+    url('/amethyst-cave-premium.png') center / cover no-repeat !important;
+}
+
+.hero2::after,
+.platform-page::after,
+.reviews-page::after,
+.mobile-entry::after,
+.mobile-qr-page::after,
+.acode::after {
+  background:
+    radial-gradient(360px 280px at 18% 20%, rgba(255, 69, 235, .2), transparent 74%),
+    radial-gradient(420px 340px at 86% 18%, rgba(66, 226, 255, .17), transparent 76%),
+    linear-gradient(90deg, rgba(3, 5, 17, .34), transparent 28%, transparent 72%, rgba(3, 5, 17, .34)) !important;
+}
+
+.hero-nav,
+.platform-shell,
+.features,
+.acode-side,
+.acode-top,
+.acode-compose,
+.acode-artifact-card,
+.feature-card,
+.hero-prompt-grid button {
+  backdrop-filter: blur(10px) saturate(1.18) !important;
+  background:
+    radial-gradient(240px 150px at 18% 6%, rgba(255, 85, 240, .14), transparent 74%),
+    radial-gradient(240px 150px at 92% 20%, rgba(78, 231, 255, .1), transparent 74%),
+    rgba(8, 10, 26, .62) !important;
+}
+
+.feature-gem {
+  display: grid !important;
+  place-items: center !important;
+}
+
+.feature-gem .amnav-stone {
+  width: 96px !important;
+  height: 108px !important;
+}
+
+.feature-gem > svg,
+.feature-gem > .icon,
+.feature-gem > :not(.amnav-stone) {
+  display: none !important;
+}
+
+.google-btn,
+.nav-open,
+.composer-cta,
+.acode-send,
+.acode-copy,
+.acode-new,
+.acode-chat-item,
+.hero-prompt-grid button {
+  border-radius: 0 !important;
+  clip-path: polygon(0 18px, 16px 0, calc(100% - 24px) 0, 100% 18px, 100% calc(100% - 20px), calc(100% - 18px) 100%, 18px 100%, 0 calc(100% - 18px)) !important;
+}
+
+.google-btn::before,
+.nav-open::before,
+.composer-cta::before,
+.acode-send::before,
+.acode-copy::before,
+.acode-new::before,
+.acode-chat-item::before {
+  width: 24px !important;
+  height: 30px !important;
+  opacity: .5 !important;
+  background: linear-gradient(138deg, #fff, #ff60ee 28%, #8b5cf6 58%, #55e7ff) !important;
+  clip-path: polygon(50% 0, 88% 24%, 76% 76%, 50% 100%, 24% 76%, 12% 24%) !important;
+}
