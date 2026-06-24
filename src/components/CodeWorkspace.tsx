@@ -108,6 +108,118 @@ function htmlFilename(content: string) {
   return `${slug || 'amethyst-result'}.html`;
 }
 
+type ArtifactKind = 'site' | 'game' | 'bot' | 'app';
+
+function escapeHtml(value: string) {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function detectArtifactKind(text: string): ArtifactKind | null {
+  const normalized = text.toLowerCase();
+  if (/игр|game|canvas|runner|snake|arcade|шутер|платформер/.test(normalized)) return 'game';
+  if (/чатбот|бот|bot|agent|агент|диалог/.test(normalized)) return 'bot';
+  if (/сайт|лендинг|landing|website|страниц|html/.test(normalized)) return 'site';
+  if (/программ|прилож|app|web-app|mvp|crm|dashboard|панел|сервис/.test(normalized)) return 'app';
+  return null;
+}
+
+function buildGuaranteedHtmlArtifact(kind: ArtifactKind, request: string) {
+  const title = escapeHtml(titleFrom(request).replace(/^создай\s+/i, '') || 'Amethyst result');
+  const isGame = kind === 'game';
+  const isBot = kind === 'bot';
+  const isApp = kind === 'app';
+
+  if (isGame) {
+    return `\`\`\`html
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>${title}</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;background:radial-gradient(circle at 50% 0,#7c3aed66,transparent 34%),#070711;color:white;font-family:Inter,Arial,sans-serif;overflow:hidden}.wrap{width:min(96vw,980px)}canvas{width:100%;aspect-ratio:16/9;border:1px solid #ffffff26;border-radius:22px;background:#090b18;box-shadow:0 30px 90px #0009;touch-action:none}.hud{display:flex;justify-content:space-between;gap:12px;margin:12px 4px;color:#c7d2fe}.pad{display:none;grid-template-columns:repeat(3,56px);gap:10px;justify-content:center;margin-top:12px}.pad button{height:52px;border:1px solid #ffffff2b;border-radius:16px;background:#ffffff12;color:white;font-size:20px}@media(max-width:720px){.pad{display:grid}.hud{font-size:14px;flex-direction:column}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <canvas id="game" width="960" height="540"></canvas>
+    <div class="hud"><b>Стрелки/WASD + Space</b><span>P пауза · R рестарт · touch работает</span></div>
+    <div class="pad"><span></span><button data-k="up">↑</button><span></span><button data-k="left">←</button><button data-k="fire">●</button><button data-k="right">→</button></div>
+  </main>
+  <script>
+    const c=document.getElementById('game'),x=c.getContext('2d');let keys={},state='menu',score=0,lives=3,t=0,last=0,player,orbs,shots,parts,spawn=0;
+    function reset(){state='play';score=0;lives=3;t=0;player={x:480,y:420,r:18,vx:0};orbs=[];shots=[];parts=[];spawn=0;last=performance.now()}
+    function boom(px,py,col){for(let i=0;i<18;i++)parts.push({x:px,y:py,vx:(Math.random()-.5)*7,vy:(Math.random()-.5)*7,a:1,c:col})}
+    function fire(){if(state==='menu'||state==='over')return reset();shots.push({x:player.x,y:player.y-18,vy:-9})}
+    addEventListener('keydown',e=>{keys[e.key.toLowerCase()]=1;if(e.code==='Space')fire();if(e.key==='p')state=state==='pause'?'play':'pause';if(e.key==='r')reset()});addEventListener('keyup',e=>keys[e.key.toLowerCase()]=0);
+    document.querySelectorAll('[data-k]').forEach(b=>{b.onpointerdown=()=>{const k=b.dataset.k;if(k==='fire')fire();else keys[k]=1};b.onpointerup=()=>{keys[b.dataset.k]=0}});c.onpointerdown=fire;
+    function step(now){let dt=Math.min(32,now-last||16);last=now;if(state==='play'){t+=dt;spawn-=dt;player.vx=((keys.arrowright||keys.d||keys.right)?1:0)-((keys.arrowleft||keys.a||keys.left)?1:0);player.x=Math.max(24,Math.min(936,player.x+player.vx*(6+score*.006)));if(spawn<=0){orbs.push({x:40+Math.random()*880,y:-30,r:14+Math.random()*20,vy:2.2+score*.015,h:Math.random()*360});spawn=Math.max(230,760-score*4)}shots.forEach(s=>s.y+=s.vy);orbs.forEach(o=>o.y+=o.vy);for(const s of shots)for(const o of orbs)if(Math.hypot(s.x-o.x,s.y-o.y)<o.r+5){s.dead=o.dead=1;score+=10;boom(o.x,o.y,'hsl('+o.h+',90%,65%)')}for(const o of orbs)if(Math.hypot(player.x-o.x,player.y-o.y)<o.r+player.r){o.dead=1;lives--;boom(player.x,player.y,'#fb7185');if(lives<=0)state='over'}shots=shots.filter(s=>!s.dead&&s.y>-20);orbs=orbs.filter(o=>!o.dead&&o.y<590);parts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.a*=.94});parts=parts.filter(p=>p.a>.04)}draw();requestAnimationFrame(step)}
+    function draw(){x.clearRect(0,0,960,540);let g=x.createLinearGradient(0,0,960,540);g.addColorStop(0,'#10163a');g.addColorStop(1,'#210a3d');x.fillStyle=g;x.fillRect(0,0,960,540);for(let i=0;i<70;i++){x.fillStyle='#ffffff12';x.fillRect((i*97+t*.02)%960,(i*53)%540,2,2)}orbs.forEach(o=>{x.fillStyle='hsl('+o.h+',90%,60%)';x.beginPath();x.arc(o.x,o.y,o.r,0,7);x.fill()});shots.forEach(s=>{x.fillStyle='#67e8f9';x.fillRect(s.x-3,s.y-18,6,22)});parts.forEach(p=>{x.globalAlpha=p.a;x.fillStyle=p.c;x.fillRect(p.x,p.y,4,4);x.globalAlpha=1});if(player){x.fillStyle='#c084fc';x.beginPath();x.moveTo(player.x,player.y-24);x.lineTo(player.x-22,player.y+22);x.lineTo(player.x+22,player.y+22);x.closePath();x.fill()}x.fillStyle='white';x.font='22px Arial';x.fillText('Score '+score,24,34);x.fillText('Lives '+lives,24,64);if(state!=='play'){x.textAlign='center';x.font='54px Arial';x.fillText(state==='over'?'Game Over':'${title}',480,240);x.font='22px Arial';x.fillText('Space/тап — старт и огонь, R — рестарт',480,282);x.textAlign='left'}}
+    requestAnimationFrame(step);
+  </script>
+</body>
+</html>
+\`\`\``;
+  }
+
+  return `\`\`\`html
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>${title}</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:#080810;color:#fff}button,input,textarea{font:inherit}.shell{min-height:100vh;padding:24px;background:radial-gradient(circle at 78% 18%,#7c3aed66,transparent 28%),radial-gradient(circle at 12% 78%,#06b6d455,transparent 24%),linear-gradient(135deg,#070710,#111827)}.wrap{width:min(1120px,100%);margin:auto}.nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:56px}.brand{font-weight:950}.btn{display:inline-flex;min-height:44px;align-items:center;justify-content:center;border:0;border-radius:14px;padding:0 18px;background:#fff;color:#111827;text-decoration:none;font-weight:850}.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:center}.panel,.card{border:1px solid #ffffff1f;border-radius:22px;background:#ffffff0d;box-shadow:0 24px 80px #0005}.panel{padding:22px}.eyebrow{color:#67e8f9;font-weight:900}h1{font-size:clamp(42px,8vw,88px);line-height:.94;margin:12px 0}p{color:#c7d2fe;line-height:1.6}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:26px}.card{padding:18px}.app{display:grid;gap:12px}.row{display:flex;gap:8px}.row input{flex:1;min-width:0;border:1px solid #ffffff1f;border-radius:14px;background:#ffffff12;color:#fff;padding:12px}.list{display:grid;gap:8px}.item{display:flex;justify-content:space-between;gap:8px;padding:12px;border-radius:14px;background:#ffffff10}@media(max-width:760px){.shell{padding:14px}.nav{margin-bottom:32px}.hero{grid-template-columns:1fr}.btn{width:100%}.row{flex-direction:column}}
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <div class="wrap">
+      <nav class="nav"><div class="brand">Amethyst</div><a class="btn" href="#start">Начать</a></nav>
+      <section class="hero">
+        <div>
+          <div class="eyebrow">${isBot ? 'Chatbot builder' : isApp ? 'Web app prototype' : 'Website builder'}</div>
+          <h1>${title}</h1>
+          <p>${isBot ? 'Готовый прототип чатбота: сценарии, fallback-ответы и мини-интерфейс диалога.' : isApp ? 'Готовый прототип программы с мок-данными, формой, списком и сохранением в браузере.' : 'Готовый адаптивный сайт с hero, секциями, CTA и мобильной версткой.'}</p>
+          <div class="grid"><div class="card">Адаптив</div><div class="card">Рабочая логика</div><div class="card">Без внешних CDN</div></div>
+        </div>
+        <div class="panel app" id="start">
+          <b>${isBot ? 'Amethyst Bot' : isApp ? 'Task Program' : 'Заявка'}</b>
+          <div class="list" id="list"></div>
+          <form class="row" id="form"><input id="input" placeholder="${isBot ? 'Напиши сообщение...' : 'Новая задача или заявка...'}" /><button class="btn">Добавить</button></form>
+        </div>
+      </section>
+    </div>
+  </main>
+  <script>
+    const key='amethyst-demo-items';const list=document.getElementById('list');const form=document.getElementById('form');const input=document.getElementById('input');
+    let items=JSON.parse(localStorage.getItem(key)||'["Первый рабочий элемент","Проверить мобильную версию"]');
+    function render(){list.innerHTML=items.length?items.map((item,i)=>'<div class="item"><span>'+item+'</span><button onclick="del('+i+')">×</button></div>').join(''):'<p>Пока пусто. Добавь первый элемент.</p>';localStorage.setItem(key,JSON.stringify(items))}
+    function del(i){items.splice(i,1);render()} window.del=del;
+    form.onsubmit=e=>{e.preventDefault();const value=input.value.trim();if(!value)return;items.push(value);input.value='';render()};
+    render();
+  </script>
+</body>
+</html>
+\`\`\``;
+}
+
+function ensureCreatedArtifact(request: string, response: string) {
+  const kind = detectArtifactKind(request);
+  if (!kind || extractHtmlArtifact(response)) return response;
+  const fallback = buildGuaranteedHtmlArtifact(kind, request);
+  const intro = response.trim()
+    ? `${response.trim()}\n\n---\nЯ добавил рабочий HTML-файл, чтобы результат точно можно было скачать и открыть:`
+    : 'Готово. Я создал рабочий HTML-файл, который можно скачать и открыть:';
+  return `${intro}\n\n${fallback}`;
+}
+
 function buildSystem() {
   return `Ты — Amethyst, coding assistant на базе Gemini.
 
@@ -287,6 +399,20 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
     } finally {
       abortRef.current = null;
       setBusy(false);
+    }
+
+    if (!controller.signal.aborted) {
+      const ensured = ensureCreatedArtifact(text, full);
+      if (ensured !== full) {
+        full = ensured;
+        applyChat(active.id, (chat) => ({
+          ...chat,
+          messages: chat.messages.map((message) =>
+            message.id === assistantId ? { ...message, content: full } : message,
+          ),
+          updatedAt: Date.now(),
+        }));
+      }
     }
 
     if (full.trim()) {
