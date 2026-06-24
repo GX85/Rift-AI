@@ -14076,7 +14076,7 @@ body,
     linear-gradient(180deg, rgba(5, 6, 16, .22), rgba(5, 6, 16, .88)),
     radial-gradient(780px 520px at 18% 10%, rgba(255, 79, 232, .20), transparent 70%),
     radial-gradient(760px 520px at 80% 16%, rgba(78, 231, 255, .20), transparent 72%),
-    url('/amethyst-cave.webp') !important;
+    url('/amethyst-crystal-cave.png') !important;
   background-size: cover, auto, auto, cover !important;
   background-position: center, center, center, center !important;
   background-attachment: fixed !important;
