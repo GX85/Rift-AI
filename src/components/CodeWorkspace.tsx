@@ -99,14 +99,15 @@ function titleFrom(text: string) {
 function isArtifactRequest(text: string) {
   const normalized = text.toLowerCase();
   const createWords =
-    /создай|сделай|собери|сгенерируй|напиши|построй|разработай|create|make|build|generate|write|code|код|html|react|typescript|прилож|сайт|лендинг|игр|бот|mvp|dashboard|web-app/.test(
+    /создай|сделай|собери|сгенерируй|напиши код|напиши сайт|напиши игру|построй|разработай|сверстай|запрограммируй|почини код|исправь код|create|make|build|generate|write code|code|код|html|react|typescript|прилож|сайт|лендинг|игр|бот|mvp|dashboard|web-app/.test(
       normalized,
     );
+  const casualWriting = /напиши (эссе|текст|письмо|пост|сообщение|описание|план|идею|идеи|ответ|речь|презентац)/.test(normalized);
   const questionOnly =
     /^(какая|какой|какое|какие|когда|где|почему|зачем|сколько|что такое|объясни|расскажи|who|what|when|where|why|how)\b/.test(
       normalized,
     );
-  return createWords && !questionOnly;
+  return createWords && !questionOnly && !casualWriting;
 }
 
 function buildTaskBrief(text: string) {
@@ -124,6 +125,9 @@ function buildTaskBrief(text: string) {
     'Если создаёшь сайт, приложение, игру или бота, обязательно верни готовый результат в fenced-блоке ```html ... ```.',
     'Не ограничивайся объяснением: результат должен быть скачиваемым, открываемым и рабочим без дополнительных файлов.',
     'Для UI добавляй плавные hover/focus/transition состояния, адаптив под телефон и отсутствие горизонтального скролла.',
+    'Перед ответом мысленно проверь, что HTML содержит видимый первый экран, реальные элементы интерфейса, рабочие кнопки, обработчики событий и не даёт пустой фон.',
+    'Если делаешь игру, обязательно нарисуй начальное меню/игровую сцену, счёт, рестарт, управление клавиатурой и touch, а также requestAnimationFrame или явную игровую логику.',
+    'Если делаешь сайт, обязательно добавь hero, навигацию, CTA, секции, footer, адаптив и визуальную тему, а не пустую карточку.',
   ];
   const rules: string[] = [
     'Сначала определи тип задачи и выбери самый полезный формат результата.',
@@ -154,6 +158,17 @@ function buildTaskBrief(text: string) {
   }
 
   return `${text}\n\n--- Amethyst quality brief ---\n${[...rules, ...artifactRules].map((rule) => `- ${rule}`).join('\n')}`;
+}
+
+function localConversationAnswer(text: string) {
+  const normalized = text.trim().toLowerCase();
+  if (/^(привет|здравствуй|здравствуйте|хай|hello|hi)[!.?\s]*$/.test(normalized)) {
+    return 'Привет. Я Amethyst: могу нормально поговорить, объяснить тему, помочь с презентацией, написать код, собрать сайт, игру или web-приложение. Что делаем?';
+  }
+  if (/^(что ты умеешь|что умеешь|помощь|help)[?.!\s]*$/.test(normalized)) {
+    return 'Я умею: общаться на разные темы, объяснять код, искать ошибки, писать React/TypeScript, собирать HTML-сайты, простые игры и MVP-приложения с живым превью и скачиванием результата.';
+  }
+  return '';
 }
 
 function extractHtmlArtifact(content: string) {
@@ -487,10 +502,11 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
     const baseMessages = [...messages, userMessage];
     const firstTitle = messages.length === 0 ? titleFrom(text) : active.title;
     const controller = new AbortController();
+    const localAnswer = file ? '' : localConversationAnswer(text);
 
     setInput('');
     setAttached(null);
-    setBusy(true);
+    setBusy(!localAnswer);
     setError('');
     abortRef.current = controller;
     if (inputRef.current) inputRef.current.style.height = 'auto';
@@ -503,6 +519,26 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
     }));
 
     let full = '';
+    if (localAnswer) {
+      full = localAnswer;
+      applyChat(active.id, (chat) => ({
+        ...chat,
+        messages: chat.messages.map((message) =>
+          message.id === assistantId ? { ...message, content: full } : message,
+        ),
+        updatedAt: Date.now(),
+      }));
+      await saveChat({
+        id: active.id,
+        title: firstTitle,
+        model: 'amethyst-code',
+        messages: [...baseMessages, { id: assistantId, role: 'assistant', content: full }],
+        updatedAt: Date.now(),
+      });
+      abortRef.current = null;
+      return;
+    }
+
     try {
       for await (const chunk of streamGemini({
         system: buildSystem(),

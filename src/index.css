@@ -15306,3 +15306,208 @@ code {
     bottom: 132px !important;
   }
 }
+
+/* Final crystal cut: jagged geometry, visible navigator stones, no smooth empty blocks */
+.acode::before {
+  background:
+    radial-gradient(480px 360px at 78% 22%, rgba(211, 87, 255, .16), transparent 72%),
+    radial-gradient(420px 320px at 82% 74%, rgba(79, 226, 255, .11), transparent 72%),
+    linear-gradient(116deg, transparent 0 18%, rgba(255,255,255,.035) 18.4% 18.9%, transparent 19.3% 100%),
+    linear-gradient(38deg, transparent 0 58%, rgba(168,85,247,.08) 58.3% 61%, transparent 61.4% 100%),
+    rgba(3, 5, 14, .32) !important;
+}
+
+.acode-crystal-nav {
+  z-index: 4 !important;
+  mix-blend-mode: normal !important;
+}
+
+.acode-bg-crystal {
+  pointer-events: auto !important;
+  width: 132px !important;
+  height: 168px !important;
+  opacity: .86 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  filter: drop-shadow(0 0 26px rgba(190, 88, 255, .42)) !important;
+  mix-blend-mode: screen !important;
+}
+
+.acode-bg-crystal::before {
+  inset: 0 !important;
+  opacity: .95 !important;
+  border-radius: 0 !important;
+  clip-path: polygon(50% 0, 82% 18%, 94% 44%, 72% 84%, 50% 100%, 23% 82%, 6% 42%, 18% 18%) !important;
+  background:
+    linear-gradient(132deg, rgba(255,255,255,.88) 0 12%, rgba(255,85,244,.74) 13% 38%, rgba(124,82,255,.62) 39% 66%, rgba(75,221,255,.58) 67% 100%),
+    radial-gradient(circle at 36% 22%, rgba(255,255,255,.72), transparent 12%) !important;
+  filter: drop-shadow(0 0 34px rgba(205, 88, 255, .52)) !important;
+}
+
+.acode-bg-crystal::after {
+  inset: 15px 20px 18px !important;
+  opacity: .78 !important;
+  border-radius: 0 !important;
+  clip-path: polygon(50% 0, 64% 40%, 82% 48%, 56% 60%, 50% 100%, 42% 60%, 18% 48%, 36% 40%) !important;
+  background:
+    linear-gradient(90deg, transparent 0 43%, rgba(255,255,255,.58) 44% 49%, transparent 50%),
+    linear-gradient(28deg, transparent 0 54%, rgba(83,225,255,.4) 55% 61%, transparent 62%),
+    linear-gradient(142deg, transparent 0 34%, rgba(255,108,244,.36) 35% 42%, transparent 43%) !important;
+}
+
+.acode-bg-crystal span {
+  top: 58% !important;
+  opacity: .62 !important;
+  padding: 5px 9px !important;
+  color: rgba(255,255,255,.92) !important;
+  background: rgba(3, 5, 15, .42) !important;
+  border: 1px solid rgba(227, 204, 255, .18) !important;
+  text-shadow: 0 0 14px rgba(255, 97, 244, .72) !important;
+}
+
+.acode-bg-crystal.chat {
+  right: 26px !important;
+  top: 160px !important;
+}
+
+.acode-bg-crystal.settings {
+  right: 32px !important;
+  bottom: 176px !important;
+}
+
+.acode-bg-crystal.create {
+  right: 162px !important;
+  bottom: 54px !important;
+}
+
+.acode-bg-crystal.home {
+  left: 438px !important;
+  top: 112px !important;
+}
+
+.acode-side,
+.acode-top,
+.acode-compose,
+.acode-msg-body,
+.acode-artifact-card,
+.platform-shell,
+.platform-card,
+.platform-detect,
+.platform-flow span {
+  border-radius: 0 !important;
+  clip-path: polygon(0 16px, 18px 0, calc(100% - 24px) 0, 100% 18px, 100% calc(100% - 18px), calc(100% - 16px) 100%, 22px 100%, 0 calc(100% - 20px)) !important;
+}
+
+.acode-logo,
+.acode-new,
+.acode-chat-item,
+.acode-copy,
+.acode-send,
+.acode-icon,
+.google-btn,
+.composer-cta,
+.nav-open,
+.hero-prompt-grid button,
+.acode-studio-grid button,
+.platform-links a {
+  border-radius: 0 !important;
+  clip-path: polygon(0 12px, 12px 0, calc(100% - 14px) 0, 100% 12px, 100% calc(100% - 12px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px)) !important;
+}
+
+.acode-side::before,
+.acode-top::before,
+.acode-compose::before,
+.acode-artifact-card::before,
+.platform-shell::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  opacity: .48 !important;
+  background:
+    radial-gradient(34px 28px at 9% 14%, rgba(255,105,246,.32), transparent 72%),
+    radial-gradient(42px 30px at 88% 20%, rgba(78,231,255,.22), transparent 72%),
+    linear-gradient(123deg, transparent 0 22%, rgba(255,255,255,.09) 22.4% 23.2%, transparent 23.6% 100%),
+    linear-gradient(38deg, transparent 0 68%, rgba(169,92,255,.13) 68.4% 71%, transparent 71.5% 100%) !important;
+}
+
+.acode-side,
+.acode-top,
+.acode-compose,
+.acode-artifact-card,
+.platform-shell {
+  position: relative !important;
+}
+
+.acode-model .amlogo,
+.acode-logo .amlogo,
+.acode-msg-avatar .amlogo {
+  filter:
+    drop-shadow(0 0 18px rgba(255, 82, 244, .78))
+    drop-shadow(0 0 28px rgba(89, 226, 255, .28)) !important;
+}
+
+.acode-msg.assistant .acode-msg-body:not(.artifact-ready) {
+  border-color: rgba(214, 189, 255, .22) !important;
+  background:
+    radial-gradient(120px 70px at 7% 12%, rgba(255,97,244,.16), transparent 72%),
+    radial-gradient(120px 80px at 92% 15%, rgba(84,226,255,.1), transparent 72%),
+    rgba(7, 10, 24, .78) !important;
+}
+
+.acode-compose textarea {
+  border-radius: 0 !important;
+  clip-path: polygon(0 13px, 13px 0, calc(100% - 16px) 0, 100% 13px, 100% calc(100% - 13px), calc(100% - 13px) 100%, 13px 100%, 0 calc(100% - 13px)) !important;
+}
+
+.acode-thread {
+  width: min(1180px, calc(100% - 56px)) !important;
+}
+
+.acode-main[data-empty="false"] .acode-thread {
+  padding-top: 94px !important;
+}
+
+.acode-main[data-empty="false"] .acode-top {
+  max-width: 940px !important;
+}
+
+.acode-artifact-live iframe {
+  border-radius: 0 !important;
+  clip-path: polygon(0 16px, 16px 0, calc(100% - 18px) 0, 100% 16px, 100% calc(100% - 16px), calc(100% - 16px) 100%, 16px 100%, 0 calc(100% - 16px)) !important;
+}
+
+@media (max-width: 900px) {
+  .acode-bg-crystal {
+    width: 82px !important;
+    height: 104px !important;
+    opacity: .62 !important;
+  }
+
+  .acode-bg-crystal.home,
+  .acode-bg-crystal.create {
+    display: block !important;
+    opacity: .34 !important;
+  }
+
+  .acode-bg-crystal.chat {
+    right: -24px !important;
+    top: 84px !important;
+  }
+
+  .acode-bg-crystal.settings {
+    right: -24px !important;
+    bottom: 122px !important;
+  }
+
+  .acode-bg-crystal.home {
+    left: auto !important;
+    right: 56px !important;
+    top: 18px !important;
+  }
+
+  .acode-bg-crystal.create {
+    right: 56px !important;
+    bottom: 46px !important;
+  }
+}
