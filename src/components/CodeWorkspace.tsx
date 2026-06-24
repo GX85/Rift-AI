@@ -45,6 +45,35 @@ const MOBILE_CAPABILITIES = [
   { label: 'Games', icon: 'game' },
 ];
 
+const STUDIO_CARDS = [
+  {
+    icon: 'globe',
+    title: 'Сайт за минуту',
+    text: 'Лендинг с hero, секциями, CTA, адаптивом и готовым HTML-файлом.',
+    prompt: MOBILE_ACTIONS[0].prompt,
+  },
+  {
+    icon: 'models',
+    title: 'Web-app MVP',
+    text: 'Интерфейс, mock data, формы, пустые состояния и localStorage.',
+    prompt: 'Собери web-app MVP одним HTML-файлом: dashboard, mock data, формы, фильтры, empty/error states, localStorage. Идея: ',
+  },
+  {
+    icon: 'game',
+    title: 'Игровой прототип',
+    text: 'Playable HTML-игра с touch-кнопками, счетом, рестартом и уровнями.',
+    prompt: MOBILE_ACTIONS[1].prompt,
+  },
+  {
+    icon: 'bug',
+    title: 'Fix & review',
+    text: 'Разбор ошибки, точный фикс, объяснение причины и как проверить.',
+    prompt: MOBILE_ACTIONS[2].prompt,
+  },
+];
+
+const OUTPUTS = ['HTML artifact', 'React/TS code', 'Bug fix', 'Business brief', 'Game prototype'];
+
 function newChat(): Chat {
   return { id: crypto.randomUUID(), title: 'Новый чат', messages: [], updatedAt: Date.now() };
 }
@@ -549,6 +578,43 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
         <section className="acode-thread" ref={scrollRef}>
           {messages.length === 0 ? (
             <div className="acode-empty">
+              <div className="acode-empty-hero">
+                <div className="acode-empty-copy">
+                  <AmethystLogo size={78} />
+                  <div className="acode-empty-orbit" aria-hidden="true">
+                    <span />
+                    <span />
+                    <span />
+                  </div>
+                  <span className="acode-empty-kicker">AI product studio</span>
+                  <h1>Собери продукт, а не просто ответ</h1>
+                  <p>Выбери режим или напиши задачу. Amethyst генерирует сайты, web-app MVP, игры, исправления кода и бизнес-структуру прямо в чате.</p>
+                </div>
+                <div className="acode-live-preview" aria-hidden="true">
+                  <div className="acode-preview-top">
+                    <i />
+                    <i />
+                    <i />
+                    <span>artifact.html</span>
+                  </div>
+                  <div className="acode-preview-screen">
+                    <b />
+                    <span />
+                    <span />
+                    <div>
+                      <i />
+                      <i />
+                      <i />
+                    </div>
+                  </div>
+                  <div className="acode-preview-code">
+                    <span />
+                    <span />
+                    <span />
+                    <span />
+                  </div>
+                </div>
+              </div>
               <AmethystLogo size={78} />
               <div className="acode-empty-orbit" aria-hidden="true">
                 <span />
@@ -558,6 +624,20 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
               <span className="acode-empty-kicker">AI assistant</span>
               <h1>Что строим?</h1>
               <p>Пиши задачу, вставляй ошибку или прикрепляй файл. Сайты, компоненты и web-app прототипы генерируются прямо в чате.</p>
+              <div className="acode-studio-grid">
+                {STUDIO_CARDS.map((card) => (
+                  <button key={card.title} onClick={() => useStarter(card.prompt)}>
+                    <Icon name={card.icon} size={18} />
+                    <strong>{card.title}</strong>
+                    <span>{card.text}</span>
+                  </button>
+                ))}
+              </div>
+              <div className="acode-output-strip" aria-label="Что умеет создавать Amethyst">
+                {OUTPUTS.map((output) => (
+                  <span key={output}>{output}</span>
+                ))}
+              </div>
               <div className="acode-starters">
                 {STARTERS.map((starter) => (
                   <button key={starter} onClick={() => useStarter(starter)}>
