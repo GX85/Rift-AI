@@ -352,6 +352,102 @@
       .section { padding: 58px 0; }
       footer { flex-direction: column; }
     }
+
+    /* Pixel presentation skin */
+    :root {
+      --px-bg: #07070c;
+      --px-panel: #11121a;
+      --px-panel2: #191b26;
+      --px-line: #34384f;
+      --px-hi: #b778ff;
+      --px-cyan: #4de7ff;
+      --px-shadow: 6px 6px 0 #000;
+    }
+
+    body,
+    button,
+    input,
+    textarea {
+      font-family: "Courier New", Consolas, "Lucida Console", monospace !important;
+    }
+
+    body {
+      background:
+        linear-gradient(rgba(77,231,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(183,120,255,.04) 1px, transparent 1px),
+        radial-gradient(760px 380px at 50% -120px, rgba(183,120,255,.18), transparent 70%),
+        var(--px-bg) !important;
+      background-size: 20px 20px, 20px 20px, auto, auto !important;
+    }
+
+    img,
+    .visual,
+    .mock,
+    .card {
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+
+    .nav,
+    .card,
+    .visual,
+    .mock,
+    .cta,
+    .ghost,
+    .eyebrow,
+    .mock-card,
+    .qr img {
+      border-radius: 0 !important;
+      border: 2px solid var(--px-line) !important;
+      box-shadow: var(--px-shadow) !important;
+      backdrop-filter: none !important;
+    }
+
+    .nav,
+    .card,
+    .mock {
+      background:
+        linear-gradient(135deg, rgba(255,255,255,.055), transparent 44%),
+        var(--px-panel) !important;
+    }
+
+    .cta {
+      background: linear-gradient(135deg, var(--px-cyan), var(--px-hi)) !important;
+      color: #07070c !important;
+      border-color: #e9ddff !important;
+    }
+
+    .ghost,
+    .eyebrow {
+      background: var(--px-panel2) !important;
+    }
+
+    h1,
+    h2 {
+      text-shadow: 3px 3px 0 #000 !important;
+    }
+
+    .accent,
+    .violet {
+      color: var(--px-cyan) !important;
+    }
+
+    .visual::before {
+      border-radius: 0 !important;
+      border: 2px solid var(--px-hi) !important;
+      background: rgba(183,120,255,.15) !important;
+    }
+
+    .brand img,
+    .visual img {
+      image-rendering: pixelated;
+      border-radius: 0 !important;
+    }
+
+    .line {
+      border-radius: 0 !important;
+      background: var(--px-cyan) !important;
+    }
   </style>
 </head>
 <body>
