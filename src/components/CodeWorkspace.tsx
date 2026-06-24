@@ -42,7 +42,7 @@ function titleFrom(text: string) {
 }
 
 function buildSystem() {
-  return `Ты — Amethyst Code, coding assistant на базе Gemini.
+  return `Ты — Amethyst, coding assistant на базе Gemini.
 
 Главная роль: помогать с разработкой, как Codex/Claude for code.
 
@@ -247,7 +247,7 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
         <div className="acode-brand">
           <button className="acode-logo" onClick={onHome} title="На главный экран">
             <AmethystLogo size={34} />
-            <span>Amethyst Code</span>
+            <span>Amethyst</span>
           </button>
           <button className="acode-icon mobile-only" onClick={() => setSidebarOpen(false)} title="Закрыть">
             <Icon name="x" size={16} />
@@ -304,7 +304,7 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
           <div className="acode-model">
             <AmethystLogo size={30} />
             <div>
-              <strong>Amethyst Code</strong>
+              <strong>Amethyst</strong>
               <span>{messages.length ? active.title : 'Gemini-powered coding assistant'}</span>
             </div>
           </div>
@@ -317,7 +317,7 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
           {messages.length === 0 ? (
             <div className="acode-empty">
               <AmethystLogo size={78} />
-              <span className="acode-empty-kicker">Code assistant</span>
+              <span className="acode-empty-kicker">AI assistant</span>
               <h1>Что строим?</h1>
               <p>Пиши задачу, вставляй ошибку или прикрепляй файл. Сайты, компоненты и web-app прототипы генерируются прямо в чате.</p>
               <div className="acode-starters">

@@ -3,14 +3,14 @@ import { supabase } from '../lib/supabase';
 import { Icon } from './Icons';
 import { AmethystLogo } from './Gems';
 
-// Возможности Amethyst Code для главного экрана.
+// Возможности Amethyst для главного экрана.
 const PLUS_PERKS = [
   { icon: 'attach', title: 'Разбор файлов', text: 'Прикрепляй код, ошибки и логи — Amethyst найдёт причину и даст фикс.' },
   { icon: 'models', title: 'Генерация приложений', text: 'Описываешь web-app — получаешь рабочий HTML-прототип с UI и логикой.' },
   { icon: 'search', title: 'Code review', text: 'Проверка TypeScript, React, архитектуры, edge cases и плохих состояний.' },
   { icon: 'memory', title: 'Контекст проекта', text: 'Amethyst помнит стек, цели и важные решения внутри проекта.' },
   { icon: 'globe', title: 'Frontend ready', text: 'Компоненты, адаптив, состояния загрузки, ошибок и пустых списков.' },
-  { icon: 'star', title: 'Gemini внутри', text: 'Gemini как модель, Amethyst Code как интерфейс и правила для разработки.' },
+  { icon: 'star', title: 'Gemini внутри', text: 'Gemini как модель, Amethyst как интерфейс и правила для разработки.' },
 ];
 
 const ACCESS_CODES = ['itsamethyst', 'amethystai', 'amethystplus'];
@@ -62,7 +62,7 @@ export function PlatformChoice({
         <div className="platform-logo" aria-hidden>
           <AmethystLogo size={96} />
         </div>
-        <p className="platform-kicker">Amethyst Code</p>
+        <p className="platform-kicker">Amethyst</p>
         <h1>Выбери вход</h1>
         <p className="platform-sub">
           Укажи, откуда заходишь. Amethyst откроет подходящую версию платформы.
@@ -72,7 +72,7 @@ export function PlatformChoice({
           <i />
           <span>Главный экран</span>
           <i />
-          <span>Code chat</span>
+          <span>AI chat</span>
         </div>
         <div className="platform-detect">
           Сейчас похоже на: <b>{phoneLike ? 'телефон / планшет' : 'компьютер'}</b>
@@ -147,7 +147,7 @@ export function Landing({ onEnter }: { onEnter?: () => void }) {
         <div className="hero-logo">
           <AmethystLogo size={34} />
           <span className="hero-logo-text">
-            Amethyst<span>Code</span>
+            Amethyst
           </span>
         </div>
         <div className="hero-links">
@@ -170,7 +170,7 @@ export function Landing({ onEnter }: { onEnter?: () => void }) {
         </div>
 
         <h1 className="hero-h1">
-          Amethyst Code для <span>разработки</span>
+          Amethyst для <span>разработки</span>
           <br />
           приложений
         </h1>
@@ -211,7 +211,7 @@ export function Landing({ onEnter }: { onEnter?: () => void }) {
         </form>
 
         <div className="hero-platforms" aria-label="Основные возможности">
-          <span>Code</span>
+          <span>Код</span>
           <span>Apps</span>
           <span>React</span>
           <span>Landing</span>
@@ -222,14 +222,14 @@ export function Landing({ onEnter }: { onEnter?: () => void }) {
         {message && <p className="message hero-msg">{message}</p>}
       </header>
 
-      {/* Amethyst Code — возможности */}
+      {/* Amethyst — возможности */}
       <section className="features" id="plus">
         <div className="plus-head">
           <span className="plus-chip">
-            <Icon name="star" size={14} /> Amethyst Code
+            <Icon name="star" size={14} /> Amethyst
           </span>
           <h2 className="features-h">Кодовый режим без лишнего</h2>
-          <p className="plus-sub">Amethyst Code сфокусирован на разработке: код, файлы, ошибки, архитектура и приложения.</p>
+          <p className="plus-sub">Amethyst сфокусирован на разработке: код, файлы, ошибки, архитектура и приложения.</p>
         </div>
         <div className="features-grid">
           {PLUS_PERKS.map((p) => (
@@ -244,7 +244,7 @@ export function Landing({ onEnter }: { onEnter?: () => void }) {
         </div>
       </section>
 
-      <footer className="landing-footer">Amethyst Code · работает на Gemini</footer>
+      <footer className="landing-footer">Amethyst · работает на Gemini</footer>
     </div>
   );
 }
@@ -256,7 +256,7 @@ export function ReviewsPage() {
         <a className="hero-logo" href="/">
           <AmethystLogo size={34} />
           <span className="hero-logo-text">
-            Amethyst<span>Code</span>
+            Amethyst
           </span>
         </a>
         <a className="nav-open" href="/">
@@ -268,7 +268,7 @@ export function ReviewsPage() {
         <div className="hero-pill">
           <span className="dot" /> Отзывы
         </div>
-        <h1 className="reviews-title">Что говорят об Amethyst Code</h1>
+        <h1 className="reviews-title">Что говорят об Amethyst</h1>
         <p className="reviews-sub">
           Публичная страница отзывов: её можно открыть без входа, отправить по ссылке или показать через QR-код.
         </p>

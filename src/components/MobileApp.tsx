@@ -189,7 +189,7 @@ export function MobileQrPage() {
         <div className="mobile-app-icon">
           <AmethystLogo size={38} />
         </div>
-        <p className="mobile-kicker">Amethyst Code Mobile</p>
+        <p className="mobile-kicker">Amethyst Mobile</p>
         <h1>Открой на телефоне</h1>
         <p>Наведи камеру iPhone или Android на QR. Откроется отдельная мобильная версия приложения.</p>
         <QrCode value={url} />
@@ -223,7 +223,7 @@ export function MobileEntry({ onEnter }: MobileEntryProps) {
           <AmethystLogo size={38} />
         </div>
         <p className="mobile-kicker">Mobile app</p>
-        <h1>Amethyst Code</h1>
+        <h1>Amethyst</h1>
         <p>Мобильная версия для кода: чат, ошибки, review, файлы и генерация web-app прототипов.</p>
         <input
           value={code}
