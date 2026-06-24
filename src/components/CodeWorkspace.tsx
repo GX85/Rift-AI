@@ -615,15 +615,6 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
                   </div>
                 </div>
               </div>
-              <AmethystLogo size={78} />
-              <div className="acode-empty-orbit" aria-hidden="true">
-                <span />
-                <span />
-                <span />
-              </div>
-              <span className="acode-empty-kicker">AI assistant</span>
-              <h1>Что строим?</h1>
-              <p>Пиши задачу, вставляй ошибку или прикрепляй файл. Сайты, компоненты и web-app прототипы генерируются прямо в чате.</p>
               <div className="acode-studio-grid">
                 {STUDIO_CARDS.map((card) => (
                   <button key={card.title} onClick={() => useStarter(card.prompt)}>

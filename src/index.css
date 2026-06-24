@@ -11320,3 +11320,146 @@ body {
     padding: 18px !important;
   }
 }
+
+/* Presentation-grade workspace scene */
+.acode-thread {
+  padding-top: 22px !important;
+}
+
+.acode-empty {
+  display: grid !important;
+  gap: 18px !important;
+}
+
+.acode-empty-hero {
+  position: relative !important;
+  overflow: hidden !important;
+  min-height: 360px !important;
+  padding: clamp(28px, 4vw, 48px) !important;
+  border-radius: 34px !important;
+  border: 1px solid rgba(255, 255, 255, .13) !important;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(255, 91, 241, .18), transparent 30%),
+    radial-gradient(circle at 72% 22%, rgba(88, 234, 255, .12), transparent 26%),
+    linear-gradient(135deg, rgba(255,255,255,.07), rgba(255,255,255,.025)),
+    rgba(12, 14, 32, .72) !important;
+  box-shadow:
+    0 34px 100px rgba(0,0,0,.32),
+    inset 0 1px 0 rgba(255,255,255,.1) !important;
+}
+
+.acode-empty-hero::before {
+  content: "" !important;
+  position: absolute !important;
+  right: -90px !important;
+  bottom: -130px !important;
+  width: 520px !important;
+  height: 560px !important;
+  pointer-events: none !important;
+  background:
+    linear-gradient(150deg, transparent 0 22%, rgba(142, 68, 255, .55) 23% 52%, rgba(88,234,255,.14) 53% 56%, rgba(87, 27, 190, .44) 57% 82%, transparent 83%),
+    linear-gradient(74deg, transparent 0 58%, rgba(255,91,241,.24) 59% 70%, transparent 71%) !important;
+  clip-path: polygon(48% 0, 68% 20%, 88% 86%, 58% 100%, 22% 86%, 30% 24%) !important;
+  filter: drop-shadow(0 0 54px rgba(168,85,247,.28)) !important;
+  opacity: .55 !important;
+}
+
+.acode-empty-hero::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  background:
+    radial-gradient(circle, rgba(255,255,255,.18) 0 1px, transparent 1.6px),
+    linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255,255,255,.014) 1px, transparent 1px) !important;
+  background-size: 132px 132px, 24px 24px, 24px 24px !important;
+  opacity: .45 !important;
+}
+
+.acode-empty-copy,
+.acode-live-preview {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.acode-empty-copy > .amlogo {
+  width: 72px !important;
+  height: 72px !important;
+}
+
+.acode-empty-copy h1 {
+  max-width: 780px !important;
+  font-size: clamp(44px, 5vw, 82px) !important;
+}
+
+.acode-live-preview {
+  transform: translateY(4px) !important;
+  border-radius: 28px !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02)),
+    rgba(5, 7, 18, .62) !important;
+  box-shadow:
+    0 28px 80px rgba(0,0,0,.3),
+    0 0 42px rgba(103,232,249,.08),
+    inset 0 1px 0 rgba(255,255,255,.09) !important;
+}
+
+.acode-studio-grid {
+  margin-top: 4px !important;
+}
+
+.acode-studio-grid button {
+  position: relative !important;
+  min-height: 168px !important;
+  border-radius: 26px !important;
+  border: 1px solid rgba(255,255,255,.11) !important;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(255,91,241,.1), transparent 28%),
+    linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.022)),
+    rgba(12, 14, 32, .66) !important;
+  box-shadow:
+    0 24px 70px rgba(0,0,0,.23),
+    inset 0 1px 0 rgba(255,255,255,.08) !important;
+}
+
+.acode-studio-grid button::after {
+  content: "" !important;
+  position: absolute !important;
+  right: 18px !important;
+  top: 18px !important;
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 14px !important;
+  background:
+    linear-gradient(135deg, rgba(255,91,241,.22), rgba(88,234,255,.12)) !important;
+  opacity: .55 !important;
+}
+
+.acode-studio-grid button svg {
+  position: relative !important;
+  z-index: 1 !important;
+  color: #67e8f9 !important;
+}
+
+.acode-studio-grid button strong,
+.acode-studio-grid button span {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.acode-output-strip {
+  margin-top: 2px !important;
+}
+
+.acode-output-strip span,
+.acode-starters button {
+  border-radius: 999px !important;
+}
+
+@media (max-width: 1180px) {
+  .acode-empty-hero {
+    min-height: 0 !important;
+  }
+}
