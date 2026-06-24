@@ -11878,3 +11878,118 @@ body {
     width: 100% !important;
   }
 }
+
+/* Artifact card: show result first, code only on demand */
+.acode-msg-body.artifact-ready {
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+.acode-artifact-card {
+  display: grid !important;
+  gap: 16px !important;
+  padding: 18px !important;
+}
+
+.acode-artifact-head {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  min-width: 0 !important;
+}
+
+.acode-artifact-head strong,
+.acode-artifact-head span {
+  display: block !important;
+  min-width: 0 !important;
+}
+
+.acode-artifact-head strong {
+  color: #fff !important;
+  font-size: 18px !important;
+  letter-spacing: -0.02em !important;
+}
+
+.acode-artifact-head span {
+  color: rgba(221,226,246,.66) !important;
+  margin-top: 2px !important;
+}
+
+.acode-artifact-preview {
+  position: relative !important;
+  min-height: 180px !important;
+  border-radius: 22px !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(255,255,255,.1) !important;
+  background:
+    radial-gradient(circle at 22% 24%, rgba(255,91,241,.18), transparent 30%),
+    radial-gradient(circle at 76% 24%, rgba(103,232,249,.16), transparent 28%),
+    linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,.025)),
+    rgba(7,9,21,.78) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08) !important;
+}
+
+.acode-artifact-preview::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 18px !important;
+  border-radius: 18px !important;
+  border: 1px solid rgba(255,255,255,.13) !important;
+  background:
+    linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255,255,255,.055) 1px, transparent 1px),
+    rgba(255,255,255,.035) !important;
+  background-size: 24px 24px, 24px 24px, auto !important;
+}
+
+.acode-artifact-preview i,
+.acode-artifact-preview span,
+.acode-artifact-preview b {
+  position: absolute !important;
+  z-index: 1 !important;
+  display: block !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,.7) !important;
+}
+
+.acode-artifact-preview i:nth-child(1) { left: 38px !important; top: 34px !important; width: 72px !important; height: 10px !important; }
+.acode-artifact-preview i:nth-child(2) { left: 38px !important; top: 58px !important; width: 138px !important; height: 10px !important; opacity: .5 !important; }
+.acode-artifact-preview i:nth-child(3) { left: 38px !important; top: 82px !important; width: 104px !important; height: 10px !important; opacity: .35 !important; }
+.acode-artifact-preview span:nth-child(4) { right: 42px !important; top: 38px !important; width: 112px !important; height: 86px !important; border-radius: 18px !important; background: linear-gradient(135deg, rgba(168,85,247,.52), rgba(103,232,249,.2)) !important; }
+.acode-artifact-preview span:nth-child(5) { left: 38px !important; bottom: 34px !important; width: calc(100% - 76px) !important; height: 12px !important; opacity: .28 !important; }
+.acode-artifact-preview b { left: 38px !important; bottom: 58px !important; width: 180px !important; height: 38px !important; border-radius: 14px !important; background: linear-gradient(135deg, #8b5cf6, #67e8f9) !important; }
+
+.acode-artifact-code {
+  border-radius: 18px !important;
+  border: 1px solid rgba(255,255,255,.1) !important;
+  background: rgba(5,7,18,.68) !important;
+  overflow: hidden !important;
+}
+
+.acode-artifact-code summary {
+  min-height: 44px !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 14px !important;
+  cursor: pointer !important;
+  color: rgba(247,248,255,.82) !important;
+  font-weight: 850 !important;
+}
+
+.acode-artifact-code pre {
+  max-height: 320px !important;
+  margin: 0 !important;
+  padding: 14px !important;
+  overflow: auto !important;
+  border-top: 1px solid rgba(255,255,255,.08) !important;
+}
+
+.acode-artifact-code code {
+  display: block !important;
+  min-width: max-content !important;
+  white-space: pre !important;
+  font-family: "JetBrains Mono", "Fira Code", Consolas, monospace !important;
+  font-size: 12.5px !important;
+  line-height: 1.55 !important;
+  color: #dfe7ff !important;
+}

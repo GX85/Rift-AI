@@ -640,22 +640,54 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
           ) : (
             messages.map((message) => {
               const htmlArtifact = message.role === 'assistant' ? extractHtmlArtifact(message.content) : '';
+              const isHtmlResult = Boolean(htmlArtifact);
               return (
                 <article key={message.id} className={`acode-msg ${message.role}`}>
                   <div className="acode-msg-avatar">
                     {message.role === 'assistant' ? <AmethystLogo size={24} /> : <span>{name.slice(0, 1).toUpperCase()}</span>}
                   </div>
-                  <div className="acode-msg-body">
-                    {message.content ? <Markdown text={message.content} /> : <span className="acode-dots">Amethyst думает...</span>}
+                  <div className={`acode-msg-body ${isHtmlResult ? 'artifact-ready' : ''}`}>
+                    {isHtmlResult ? (
+                      <div className="acode-artifact-card">
+                        <div className="acode-artifact-head">
+                          <AmethystLogo size={28} />
+                          <div>
+                            <strong>HTML artifact готов</strong>
+                            <span>Сайт собран. Скачай файл или скопируй код.</span>
+                          </div>
+                        </div>
+                        <div className="acode-artifact-preview" aria-hidden="true">
+                          <i />
+                          <i />
+                          <i />
+                          <span />
+                          <span />
+                          <b />
+                        </div>
+                        <details className="acode-artifact-code">
+                          <summary>Показать код</summary>
+                          <pre><code>{htmlArtifact}</code></pre>
+                        </details>
+                      </div>
+                    ) : message.content ? (
+                      <Markdown text={message.content} />
+                    ) : (
+                      <span className="acode-dots">Amethyst думает...</span>
+                    )}
                     {message.content && (
                       <div className="acode-msg-actions">
                         <button className="acode-copy" onClick={() => copyMessage(message)}>
                           {copiedId === message.id ? 'скопировано' : 'копировать'}
                         </button>
                         {htmlArtifact && (
-                          <button className="acode-copy acode-download" onClick={() => downloadText(htmlFilename(message.content), htmlArtifact)}>
-                            скачать HTML
-                          </button>
+                          <>
+                            <button className="acode-copy" onClick={() => void navigator.clipboard?.writeText(htmlArtifact)}>
+                              копировать HTML
+                            </button>
+                            <button className="acode-copy acode-download" onClick={() => downloadText(htmlFilename(message.content), htmlArtifact)}>
+                              скачать HTML
+                            </button>
+                          </>
                         )}
                       </div>
                     )}
