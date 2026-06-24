@@ -3,332 +3,220 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Amethyst AI — презентация</title>
+  <title>Amethyst AI — Pitch Deck</title>
   <style>
     :root {
-      --bg: #05060a;
-      --panel: rgba(255, 255, 255, 0.07);
-      --line: rgba(255, 255, 255, 0.12);
+      color-scheme: dark;
+      --bg: #07080d;
+      --panel: #11131c;
+      --panel2: #171a25;
+      --line: rgba(255,255,255,.11);
       --text: #f8fafc;
-      --muted: #aeb8d4;
+      --muted: #aab4cc;
+      --soft: #dbe3f7;
       --cyan: #22d3ee;
-      --violet: #a855f7;
-      --pink: #e879f9;
+      --violet: #a78bfa;
       --green: #34d399;
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
-    html,
+    * { box-sizing: border-box; }
+    html, body { margin: 0; width: 100%; min-height: 100%; overflow: hidden; }
     body {
-      width: 100%;
-      min-height: 100%;
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      overflow: hidden;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: -20%;
-      pointer-events: none;
       background:
-        radial-gradient(circle at 18% 20%, rgba(34, 211, 238, 0.22), transparent 28%),
-        radial-gradient(circle at 78% 12%, rgba(168, 85, 247, 0.26), transparent 30%),
-        radial-gradient(circle at 50% 86%, rgba(232, 121, 249, 0.16), transparent 32%),
-        linear-gradient(135deg, #05060a 0%, #101425 52%, #090a12 100%);
-      filter: saturate(1.1);
-      animation: aurora 16s ease-in-out infinite alternate;
+        radial-gradient(900px 520px at 50% -160px, rgba(124,58,237,.24), transparent 70%),
+        linear-gradient(180deg, #0a0b12, var(--bg));
+      color: var(--text);
     }
 
-    button,
-    a {
-      font: inherit;
-    }
-
-    .deck {
-      position: relative;
-      z-index: 1;
-      width: 100vw;
-      height: 100vh;
-      overflow: hidden;
-    }
-
+    .deck { width: 100vw; height: 100vh; overflow: hidden; }
     .slides {
       height: 100%;
       display: flex;
-      transform: translateX(calc(var(--slide, 0) * -100vw));
-      transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+      transform: translate3d(calc(var(--slide, 0) * -100vw), 0, 0);
+      transition: transform .55s cubic-bezier(.22, 1, .36, 1);
     }
 
     .slide {
-      position: relative;
       flex: 0 0 100vw;
-      min-width: 0;
       height: 100vh;
-      padding: clamp(28px, 4vw, 62px);
+      padding: clamp(28px, 4vw, 56px);
       display: grid;
       grid-template-rows: auto minmax(0, 1fr) auto;
-      gap: clamp(18px, 3vw, 34px);
-      overflow: hidden;
+      gap: 28px;
     }
 
-    .slide::after {
-      content: "";
-      position: absolute;
-      inset: auto -10% -32% 18%;
-      height: 38%;
-      pointer-events: none;
-      background: radial-gradient(circle, rgba(168, 85, 247, 0.22), transparent 68%);
-      filter: blur(34px);
-    }
-
-    .topbar,
-    .foot {
-      position: relative;
-      z-index: 2;
+    .top, .bottom {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 16px;
+      gap: 18px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 750;
     }
 
     .brand {
       display: inline-flex;
       align-items: center;
       gap: 12px;
+      color: #fff;
       font-weight: 950;
-      letter-spacing: 0;
+      font-size: 18px;
     }
 
     .brand img {
       width: 42px;
       height: 42px;
-      border-radius: 14px;
-      box-shadow: 0 18px 48px rgba(168, 85, 247, 0.28);
+      border-radius: 12px;
       image-rendering: pixelated;
+      box-shadow: 0 18px 42px rgba(124,58,237,.26);
     }
 
-    .badge {
+    .tag {
       min-height: 34px;
       display: inline-flex;
       align-items: center;
-      gap: 8px;
       padding: 0 12px;
-      border: 1px solid var(--line);
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.06);
-      color: #dbeafe;
-      font-size: 13px;
-      font-weight: 850;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.055);
+      color: var(--soft);
       white-space: nowrap;
-      backdrop-filter: blur(18px);
     }
 
     .content {
-      position: relative;
-      z-index: 2;
       min-height: 0;
       display: grid;
       align-content: center;
-      gap: clamp(18px, 3vw, 34px);
+      gap: 24px;
     }
 
-    .two {
-      grid-template-columns: minmax(0, 1.03fr) minmax(300px, 0.97fr);
+    .split {
+      grid-template-columns: minmax(0, 1.05fr) minmax(330px, .95fr);
       align-items: center;
+      gap: 34px;
     }
 
-    .three {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
+    .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+    .grid4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
 
-    h1,
-    h2,
-    p {
-      margin: 0;
-    }
+    h1, h2, h3, p { margin: 0; letter-spacing: 0; }
+    h1 { max-width: 980px; font-size: clamp(58px, 8vw, 118px); line-height: .9; }
+    h2 { max-width: 940px; font-size: clamp(42px, 5.4vw, 78px); line-height: .96; }
+    h3 { font-size: clamp(20px, 2vw, 28px); }
+    .accent { color: var(--cyan); }
+    .violet { color: #ddd6fe; }
+    .lead { max-width: 820px; color: var(--muted); font-size: clamp(19px, 2vw, 27px); line-height: 1.5; }
+    .small { color: var(--muted); line-height: 1.5; }
 
-    h1 {
-      max-width: 980px;
-      font-size: clamp(52px, 8.8vw, 124px);
-      line-height: 0.9;
-      letter-spacing: 0;
-    }
-
-    h2 {
-      max-width: 900px;
-      font-size: clamp(38px, 5.4vw, 82px);
-      line-height: 0.95;
-      letter-spacing: 0;
-    }
-
-    .accent {
-      color: var(--cyan);
-      text-shadow: 0 0 34px rgba(34, 211, 238, 0.24);
-    }
-
-    .violet {
-      color: #d8b4fe;
-    }
-
-    .lead {
-      max-width: 790px;
-      color: var(--muted);
-      font-size: clamp(18px, 2.1vw, 28px);
-      line-height: 1.48;
-    }
-
-    .small {
-      color: rgba(226, 232, 240, 0.72);
-      font-size: 14px;
-      line-height: 1.55;
-    }
-
-    .panel {
-      position: relative;
-      min-height: 160px;
-      padding: clamp(18px, 2.2vw, 28px);
+    .card {
+      min-height: 166px;
+      padding: 22px;
+      border-radius: 22px;
       border: 1px solid var(--line);
-      border-radius: 24px;
-      background: linear-gradient(145deg, rgba(255, 255, 255, 0.09), rgba(255, 255, 255, 0.035));
-      box-shadow: 0 24px 90px rgba(0, 0, 0, 0.3);
-      overflow: hidden;
-      backdrop-filter: blur(24px);
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.075), rgba(255,255,255,.032)),
+        rgba(17,19,28,.86);
+      box-shadow: 0 24px 80px rgba(0,0,0,.26);
     }
 
-    .panel::before {
+    .card p { margin-top: 10px; color: var(--muted); font-size: 16px; line-height: 1.55; }
+    .metric strong { display: block; font-size: clamp(34px, 4vw, 58px); line-height: 1; }
+    .metric span { display: block; margin-top: 10px; color: var(--muted); line-height: 1.45; }
+
+    .device {
+      position: relative;
+      min-height: 420px;
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      background: #0d1018;
+      box-shadow: 0 30px 120px rgba(0,0,0,.48);
+      overflow: hidden;
+    }
+
+    .device::before {
       content: "";
       position: absolute;
       inset: 0;
-      pointer-events: none;
-      background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.12) 42%, transparent 58%);
-      transform: translateX(-120%);
-      animation: sheen 5.8s ease-in-out infinite;
-    }
-
-    .panel h3 {
-      position: relative;
-      margin: 0 0 10px;
-      font-size: clamp(20px, 2vw, 28px);
-    }
-
-    .panel p,
-    .panel li {
-      position: relative;
-      color: #bdc7df;
-      font-size: clamp(15px, 1.25vw, 18px);
-      line-height: 1.55;
-    }
-
-    .grid {
-      display: grid;
-      gap: 14px;
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
-    }
-
-    .metric {
-      display: grid;
-      gap: 7px;
-      padding: 18px;
-      border-radius: 20px;
-      background: rgba(255, 255, 255, 0.055);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .metric strong {
-      font-size: clamp(26px, 3.4vw, 48px);
-      line-height: 1;
-      color: #fff;
-    }
-
-    .metric span {
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.45;
-    }
-
-    .hero-art {
-      position: relative;
-      min-height: min(54vh, 520px);
-      display: grid;
-      place-items: center;
-    }
-
-    .crystal {
-      position: relative;
-      width: min(42vw, 430px);
-      aspect-ratio: 1;
-      display: grid;
-      place-items: center;
-      perspective: 900px;
-    }
-
-    .crystal img {
-      position: relative;
-      z-index: 2;
-      width: 44%;
-      image-rendering: pixelated;
-      filter: drop-shadow(0 28px 62px rgba(34, 211, 238, 0.25));
-      animation: float 4.4s ease-in-out infinite;
-    }
-
-    .crystal span {
-      position: absolute;
-      width: 54%;
-      height: 54%;
-      border-radius: 26px;
-      border: 1px solid rgba(255, 255, 255, 0.13);
       background:
-        linear-gradient(135deg, rgba(34, 211, 238, 0.18), rgba(168, 85, 247, 0.26)),
-        rgba(255, 255, 255, 0.04);
-      transform: rotate(45deg);
-      animation: orbit 9s linear infinite;
+        radial-gradient(420px 240px at 50% 0%, rgba(124,58,237,.24), transparent 70%),
+        linear-gradient(180deg, rgba(255,255,255,.06), transparent 40%);
     }
 
-    .crystal span:nth-child(2) {
-      width: 76%;
-      height: 76%;
-      opacity: 0.48;
-      animation-duration: 13s;
-      animation-direction: reverse;
+    .mock-top {
+      position: relative;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 18px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 800;
     }
 
-    .crystal span:nth-child(3) {
-      width: 104%;
-      height: 104%;
-      opacity: 0.24;
-      animation-duration: 18s;
-    }
+    .dot { width: 10px; height: 10px; border-radius: 999px; background: #ef4444; }
+    .dot:nth-child(2) { background: #f59e0b; }
+    .dot:nth-child(3) { background: #22c55e; }
 
-    .list {
+    .mock-body {
+      position: relative;
       display: grid;
-      gap: 12px;
-      padding: 0;
-      margin: 0;
-      list-style: none;
+      gap: 14px;
+      padding: 26px;
     }
 
+    .line {
+      height: 14px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(34,211,238,.26), rgba(167,139,250,.28));
+      animation: scan 2.2s ease-in-out infinite;
+    }
+    .line.big { width: 70%; height: 34px; }
+    .line.mid { width: 88%; }
+    .line.short { width: 52%; }
+
+    .mock-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 10px; }
+    .mock-card {
+      height: 94px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.055);
+      animation: float 4s ease-in-out infinite;
+    }
+    .mock-card:nth-child(2) { animation-delay: .2s; }
+    .mock-card:nth-child(3) { animation-delay: .4s; }
+
+    .logo-art {
+      display: grid;
+      place-items: center;
+      min-height: 420px;
+      border-radius: 30px;
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(260px 220px at 50% 40%, rgba(124,58,237,.28), transparent 70%),
+        rgba(255,255,255,.04);
+    }
+
+    .logo-art img {
+      width: min(260px, 48vw);
+      image-rendering: pixelated;
+      filter: drop-shadow(0 34px 74px rgba(124,58,237,.42));
+      animation: float 4.5s ease-in-out infinite;
+    }
+
+    .list { display: grid; gap: 14px; padding: 0; margin: 0; list-style: none; }
     .list li {
       display: grid;
-      grid-template-columns: 28px minmax(0, 1fr);
+      grid-template-columns: 30px minmax(0, 1fr);
       gap: 12px;
-      align-items: start;
-      color: #dbe4f8;
-      font-size: clamp(17px, 1.7vw, 22px);
+      color: var(--soft);
+      font-size: clamp(18px, 1.6vw, 23px);
       line-height: 1.45;
     }
-
     .list li::before {
       content: "";
       width: 20px;
@@ -336,422 +224,205 @@
       margin-top: 5px;
       border-radius: 7px;
       background: linear-gradient(135deg, var(--cyan), var(--violet));
-      box-shadow: 0 0 28px rgba(34, 211, 238, 0.24);
-    }
-
-    .flow {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .step {
-      min-height: 210px;
-      padding: 22px;
-      border-radius: 24px;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid var(--line);
-      display: grid;
-      align-content: space-between;
-      gap: 16px;
-    }
-
-    .step b {
-      width: 40px;
-      height: 40px;
-      display: grid;
-      place-items: center;
-      border-radius: 14px;
-      background: linear-gradient(135deg, var(--cyan), var(--violet));
-      color: #020617;
-      font-weight: 950;
-    }
-
-    .step strong {
-      font-size: 22px;
-    }
-
-    .step span {
-      color: var(--muted);
-      line-height: 1.5;
-    }
-
-    .qr {
-      display: grid;
-      place-items: center;
-      gap: 16px;
-      text-align: center;
     }
 
     .qr img {
-      width: min(36vw, 300px);
-      border-radius: 30px;
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      box-shadow: 0 26px 80px rgba(0, 0, 0, 0.42);
-    }
-
-    .quote {
-      font-size: clamp(26px, 3.4vw, 48px);
-      line-height: 1.08;
-      font-weight: 900;
+      width: min(320px, 42vw);
+      border-radius: 28px;
+      border: 1px solid var(--line);
+      box-shadow: 0 30px 100px rgba(0,0,0,.38);
     }
 
     .nav {
       position: fixed;
       z-index: 5;
       left: 50%;
-      bottom: 18px;
+      bottom: 20px;
       transform: translateX(-50%);
-      display: inline-flex;
+      display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       padding: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
       border-radius: 999px;
-      background: rgba(6, 7, 12, 0.72);
-      backdrop-filter: blur(18px);
+      border: 1px solid var(--line);
+      background: rgba(8,9,14,.78);
+      backdrop-filter: blur(20px);
     }
-
-    .nav button,
-    .open-app {
-      min-width: 42px;
+    .nav button, .nav a {
       height: 42px;
-      display: inline-grid;
-      place-items: center;
+      min-width: 42px;
       border: 0;
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.08);
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,.08);
       color: #fff;
       text-decoration: none;
       cursor: pointer;
+      font-weight: 900;
     }
+    .nav a { padding: 0 16px; background: linear-gradient(135deg, var(--cyan), var(--violet)); color: #020617; }
+    .count { min-width: 62px; text-align: center; color: var(--muted); font-size: 13px; font-weight: 850; }
+    .progress { position: fixed; z-index: 6; inset: 0 0 auto; height: 3px; background: rgba(255,255,255,.07); }
+    .progress i { display: block; width: calc(((var(--slide, 0) + 1) / 8) * 100%); height: 100%; background: linear-gradient(90deg, var(--cyan), var(--violet)); transition: width .45s ease; }
 
-    .open-app {
-      width: auto;
-      padding: 0 16px;
-      background: linear-gradient(135deg, var(--cyan), var(--violet));
-      color: #020617;
-      font-weight: 950;
-    }
-
-    .counter {
-      min-width: 64px;
-      text-align: center;
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 850;
-    }
-
-    .progress {
-      position: fixed;
-      z-index: 5;
-      inset: 0 0 auto;
-      height: 3px;
-      background: rgba(255, 255, 255, 0.08);
-    }
-
-    .progress i {
-      display: block;
-      width: calc(((var(--slide, 0) + 1) / 10) * 100%);
-      height: 100%;
-      background: linear-gradient(90deg, var(--cyan), var(--violet), var(--pink));
-      transition: width 0.45s ease;
-    }
-
-    @keyframes aurora {
-      from { transform: translate3d(-2%, -1%, 0) rotate(0deg) scale(1); }
-      to { transform: translate3d(2%, 1%, 0) rotate(4deg) scale(1.04); }
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0) scale(1); }
-      50% { transform: translateY(-14px) scale(1.03); }
-    }
-
-    @keyframes orbit {
-      from { transform: rotate(45deg) rotateX(0deg) rotateY(0deg); }
-      to { transform: rotate(405deg) rotateX(360deg) rotateY(180deg); }
-    }
-
-    @keyframes sheen {
-      0%, 38% { transform: translateX(-120%); opacity: 0; }
-      46% { opacity: 1; }
-      68%, 100% { transform: translateX(120%); opacity: 0; }
-    }
+    @keyframes scan { 0%,100% { opacity: .42; transform: translateX(0); } 50% { opacity: 1; transform: translateX(10px); } }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
     @media (max-width: 900px) {
-      body {
-        overflow: auto;
-      }
-
-      .deck,
-      .slide {
-        height: auto;
-        min-height: 100svh;
-      }
-
-      .slides {
-        display: block;
-        transform: none !important;
-      }
-
-      .slide {
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      }
-
-      .two,
-      .three,
-      .flow,
-      .cards {
-        grid-template-columns: 1fr;
-      }
-
-      .hero-art {
-        min-height: 300px;
-      }
-
-      .crystal {
-        width: min(72vw, 360px);
-      }
-
-      .qr img {
-        width: min(72vw, 280px);
-      }
-
-      .nav,
-      .progress {
-        display: none;
-      }
-    }
-
-    @media print {
-      body {
-        overflow: visible;
-        background: #05060a;
-      }
-
-      .deck,
-      .slides,
-      .slide {
-        display: block;
-        width: 100%;
-        height: auto;
-        min-height: 100vh;
-        transform: none !important;
-        page-break-after: always;
-      }
-
-      .nav,
-      .progress {
-        display: none;
-      }
+      html, body { overflow: auto; }
+      .deck, .slide { height: auto; min-height: 100svh; }
+      .slides { display: block; transform: none !important; }
+      .slide { border-bottom: 1px solid var(--line); }
+      .split, .grid2, .grid3, .grid4 { grid-template-columns: 1fr; }
+      .device, .logo-art { min-height: 300px; }
+      .nav, .progress { display: none; }
+      .top, .bottom { align-items: flex-start; }
+      .tag { white-space: normal; }
     }
   </style>
 </head>
 <body>
   <div class="progress" aria-hidden="true"><i></i></div>
-  <main class="deck" aria-label="Презентация Amethyst AI">
+  <main class="deck">
     <div class="slides">
       <section class="slide">
-        <div class="topbar">
-          <div class="brand"><img src="/amethyst-logo-pixel.png" alt="" /> Amethyst AI</div>
-          <span class="badge">Gemini-powered code & business assistant</span>
-        </div>
-        <div class="content two">
-          <div class="grid">
-            <h1>Gemini для <span class="accent">кода</span>, MVP и бизнеса</h1>
-            <p class="lead">Amethyst превращает идею в рабочий прототип: пишет код, собирает сайты, игры, чатботов, помогает с ошибками и бизнес-планом.</p>
+        <div class="top"><div class="brand"><img src="/amethyst-logo-pixel.png" alt="" />Amethyst AI</div><span class="tag">Gemini-powered product studio</span></div>
+        <div class="content split">
+          <div>
+            <h1>AI для <span class="accent">кода</span>, MVP и бизнеса</h1>
+            <p class="lead">Amethyst помогает не просто получить ответ, а собрать рабочий результат: сайт, приложение, игру, bug fix или бизнес-структуру.</p>
           </div>
-          <div class="hero-art">
-            <div class="crystal" aria-hidden="true">
-              <span></span><span></span><span></span>
-              <img src="/amethyst-logo-pixel.png" alt="" />
+          <div class="logo-art"><img src="/amethyst-logo-pixel.png" alt="Amethyst logo" /></div>
+        </div>
+        <div class="bottom"><span>Pitch deck</span><span>2026</span></div>
+      </section>
+
+      <section class="slide">
+        <div class="top"><div class="brand"><img src="/amethyst-logo-pixel.png" alt="" />Problem</div><span class="tag">Проблема</span></div>
+        <div class="content split">
+          <div><h2>AI-чат часто даёт текст, но пользователю нужен <span class="violet">готовый артефакт</span></h2><p class="lead">Ученику, разработчику и стартапу нужен короткий путь от идеи к demo: код, UI, логика, проверка и файл, который можно открыть.</p></div>
+          <div class="grid2">
+            <div class="card"><h3>Слишком много ручной сборки</h3><p>Нужно самому просить структуру, HTML, CSS, JS, адаптив и проверку.</p></div>
+            <div class="card"><h3>Нет продуктового контекста</h3><p>Код без MVP, оффера, сценариев и бизнес-логики не помогает запустить идею.</p></div>
+          </div>
+        </div>
+        <div class="bottom"><span>Фокус Amethyst: от промпта к результату.</span></div>
+      </section>
+
+      <section class="slide">
+        <div class="top"><div class="brand"><img src="/amethyst-logo-pixel.png" alt="" />Solution</div><span class="tag">Решение</span></div>
+        <div class="content">
+          <h2>Один интерфейс для разработки и запуска идеи</h2>
+          <div class="grid3">
+            <div class="card"><h3>Code</h3><p>React, TypeScript, HTML, CSS, review, debugging и объяснение ошибок.</p></div>
+            <div class="card"><h3>Build</h3><p>Лендинги, web-app MVP, playable games и HTML artifacts для скачивания.</p></div>
+            <div class="card"><h3>Business</h3><p>Оффер, структура продукта, план продаж, презентация и первые шаги запуска.</p></div>
+          </div>
+        </div>
+        <div class="bottom"><span>Gemini как модель. Amethyst как продуктовый слой.</span></div>
+      </section>
+
+      <section class="slide">
+        <div class="top"><div class="brand"><img src="/amethyst-logo-pixel.png" alt="" />Product</div><span class="tag">Две платформы</span></div>
+        <div class="content grid2">
+          <div class="card metric"><strong>Desktop</strong><span>Полная студия: чат, файлы, история, генерация сайтов, игр, приложений и скачивание HTML.</span></div>
+          <div class="card metric"><strong>Mobile</strong><span>Телефонный UX: быстрые режимы, QR-вход, адаптивный composer и работа с задачами на ходу.</span></div>
+          <div class="card metric"><strong>Artifacts</strong><span>Amethyst старается возвращать не только совет, а рабочий файл или код.</span></div>
+          <div class="card metric"><strong>Gemini</strong><span>AI вызывается через Supabase Edge Function, ключ не хранится на фронте.</span></div>
+        </div>
+        <div class="bottom"><span>Stack: Vite + React + TypeScript + Supabase + Vercel</span></div>
+      </section>
+
+      <section class="slide">
+        <div class="top"><div class="brand"><img src="/amethyst-logo-pixel.png" alt="" />Demo</div><span class="tag">Live scenarios</span></div>
+        <div class="content split">
+          <ul class="list">
+            <li>Создать лендинг одним HTML-файлом.</li>
+            <li>Собрать web-app MVP с mock data и localStorage.</li>
+            <li>Сделать браузерную игру с touch-управлением.</li>
+            <li>Найти ошибку в React/TypeScript и дать точный фикс.</li>
+          </ul>
+          <div class="device" aria-hidden="true">
+            <div class="mock-top"><i class="dot"></i><i class="dot"></i><i class="dot"></i><span>artifact.html</span></div>
+            <div class="mock-body">
+              <span class="line big"></span><span class="line mid"></span><span class="line short"></span>
+              <div class="mock-cards"><i class="mock-card"></i><i class="mock-card"></i><i class="mock-card"></i></div>
+              <span class="line mid"></span><span class="line short"></span>
             </div>
           </div>
         </div>
-        <div class="foot"><span class="small">Проект для предложения Google / Gemini ecosystem</span><span class="small">2026</span></div>
+        <div class="bottom"><span>Демо должно показать: “написал идею → получил рабочий результат”.</span></div>
       </section>
 
       <section class="slide">
-        <div class="topbar"><div class="brand"><img src="/amethyst-logo-pixel.png" alt="" /> Problem</div><span class="badge">Почему это нужно</span></div>
-        <div class="content two">
-          <div>
-            <h2>У людей есть идеи, но нет быстрого пути до <span class="violet">рабочего продукта</span></h2>
-            <p class="lead">Обычный AI-чат часто даёт текст. Разработчику, ученику или стартапу нужен результат: файл, интерфейс, логика, ошибки, понятный next step.</p>
-          </div>
-          <div class="grid">
-            <div class="panel"><h3>Слишком много ручной сборки</h3><p>Нужно самому просить HTML, CSS, JS, адаптив, состояния, проверку и запуск.</p></div>
-            <div class="panel"><h3>Код без продуктового контекста</h3><p>AI может написать компонент, но не всегда понимает MVP, клиента, оффер и презентацию.</p></div>
+        <div class="top"><div class="brand"><img src="/amethyst-logo-pixel.png" alt="" />Google</div><span class="tag">Why Gemini ecosystem</span></div>
+        <div class="content split">
+          <div><h2>Amethyst показывает практический сценарий для Gemini</h2><p class="lead">Это может быть образовательный и product-builder кейс: Gemini помогает ученикам, junior-разработчикам и small business быстрее строить MVP.</p></div>
+          <div class="grid2">
+            <div class="card"><h3>Adoption</h3><p>Делает Gemini ближе к людям, которые хотят создавать проекты.</p></div>
+            <div class="card"><h3>Education</h3><p>Подходит для обучения программированию и демонстрации AI workflow.</p></div>
           </div>
         </div>
-        <div class="foot"><span class="small">Amethyst решает это как продуктовый слой над Gemini.</span></div>
+        <div class="bottom"><span>Это независимый учебный проект, который хочет показать демо и получить feedback.</span></div>
       </section>
 
       <section class="slide">
-        <div class="topbar"><div class="brand"><img src="/amethyst-logo-pixel.png" alt="" /> Solution</div><span class="badge">Что делает Amethyst</span></div>
+        <div class="top"><div class="brand"><img src="/amethyst-logo-pixel.png" alt="" />Roadmap</div><span class="tag">Next build</span></div>
         <div class="content">
-          <h2>Один чат, который понимает задачи разработки и бизнеса</h2>
-          <div class="three">
-            <div class="panel"><h3>Код</h3><p>React, TypeScript, HTML, CSS, отладка, code review, объяснение ошибок и готовые файлы.</p></div>
-            <div class="panel"><h3>Прототипы</h3><p>Лендинги, web-app MVP, игры, чатботы и интерактивные HTML-результаты для скачивания.</p></div>
-            <div class="panel"><h3>Бизнес</h3><p>Офферы, структура продукта, план продаж, презентация и формулировки для запуска.</p></div>
+          <h2>Что дальше улучшать</h2>
+          <div class="grid4">
+            <div class="card"><h3>Live Preview</h3><p>Просмотр HTML artifacts прямо внутри приложения.</p></div>
+            <div class="card"><h3>Project Memory</h3><p>Память проекта: стек, бренд, цели и решения.</p></div>
+            <div class="card"><h3>Export</h3><p>ZIP/export для сайтов, игр и прототипов.</p></div>
+            <div class="card"><h3>Safety</h3><p>Проверки кода, ошибок и небезопасных инструкций.</p></div>
           </div>
         </div>
-        <div class="foot"><span class="small">Фокус: не просто ответ, а usable artifact.</span></div>
+        <div class="bottom"><span>Цель: сделать Amethyst полноценной студией для создания MVP.</span></div>
       </section>
 
       <section class="slide">
-        <div class="topbar"><div class="brand"><img src="/amethyst-logo-pixel.png" alt="" /> Product</div><span class="badge">Все платформы</span></div>
-        <div class="content two">
-          <ul class="list">
-            <li>Desktop web app: полноценный чат для кода, файлов, истории и скачивания HTML.</li>
-            <li>Mobile app mode: быстрые действия, адаптивный composer, QR-вход и режимы Code / Sites / Apps / Games.</li>
-            <li>Public pages: QR, отзывы, landing, platform choice и презентационный файл.</li>
-            <li>AI-функция через Supabase Edge Function с Gemini API на сервере.</li>
-          </ul>
-          <div class="cards">
-            <div class="metric"><strong>1 чат</strong><span>для кода, сайтов, игр, ботов и MVP</span></div>
-            <div class="metric"><strong>HTML</strong><span>результаты можно скачать и открыть</span></div>
-            <div class="metric"><strong>Mobile</strong><span>подготовлен отдельный телефонный UX</span></div>
-            <div class="metric"><strong>Gemini</strong><span>модель Google как AI-движок</span></div>
-          </div>
-        </div>
-        <div class="foot"><span class="small">Vite + React + TypeScript + Supabase + Vercel</span></div>
-      </section>
-
-      <section class="slide">
-        <div class="topbar"><div class="brand"><img src="/amethyst-logo-pixel.png" alt="" /> Workflow</div><span class="badge">Как работает</span></div>
-        <div class="content">
-          <h2>Путь от идеи до демо</h2>
-          <div class="flow">
-            <div class="step"><b>1</b><strong>Пишешь идею</strong><span>Например: “сделай сайт”, “создай игру”, “исправь баг”.</span></div>
-            <div class="step"><b>2</b><strong>Amethyst уточняет формат</strong><span>Внутри добавляет quality brief: адаптив, состояния, рабочая логика.</span></div>
-            <div class="step"><b>3</b><strong>Gemini генерирует</strong><span>Ответ идет через защищенную Supabase Edge Function.</span></div>
-            <div class="step"><b>4</b><strong>Получаешь artifact</strong><span>Код, HTML-файл, план проверки и скачивание результата.</span></div>
-          </div>
-        </div>
-        <div class="foot"><span class="small">Главное отличие: Amethyst направляет модель к продуктово полезному результату.</span></div>
-      </section>
-
-      <section class="slide">
-        <div class="topbar"><div class="brand"><img src="/amethyst-logo-pixel.png" alt="" /> Demo</div><span class="badge">Что показать</span></div>
-        <div class="content two">
-          <div>
-            <h2>Демо-сценарии для питча</h2>
-            <ul class="list">
-              <li>“Создай лендинг для AI-продукта одним HTML-файлом”.</li>
-              <li>“Сделай браузерную игру с touch-управлением”.</li>
-              <li>“Найди ошибку в React-компоненте и объясни фикс”.</li>
-              <li>“Собери MVP web-app с mock data и localStorage”.</li>
-            </ul>
-          </div>
-          <div class="panel">
-            <h3>Питч в одну фразу</h3>
-            <p class="quote">Amethyst — это Gemini, который не просто отвечает, а помогает построить продукт.</p>
-          </div>
-        </div>
-        <div class="foot"><span class="small">Подходит для школьников, indie makers, small business и junior developers.</span></div>
-      </section>
-
-      <section class="slide">
-        <div class="topbar"><div class="brand"><img src="/amethyst-logo-pixel.png" alt="" /> Why Google</div><span class="badge">Предложение</span></div>
-        <div class="content two">
-          <div>
-            <h2>Почему это может быть интересно Google</h2>
-            <p class="lead">Amethyst показывает прикладной сценарий Gemini: образование, разработка, small business и быстрый путь к прототипам.</p>
-          </div>
-          <div class="grid">
-            <div class="panel"><h3>Gemini adoption</h3><p>Продукт делает Gemini ближе к людям, которые хотят строить проекты, а не только спрашивать.</p></div>
-            <div class="panel"><h3>Education angle</h3><p>Проект родился в учебной среде и хорошо ложится на обучение программированию.</p></div>
-            <div class="panel"><h3>Builder workflow</h3><p>Amethyst может стать примером Gemini-powered coding and business assistant.</p></div>
-          </div>
-        </div>
-        <div class="foot"><span class="small">Важно: это предложение о партнерстве/демо, не заявление о связи с Google.</span></div>
-      </section>
-
-      <section class="slide">
-        <div class="topbar"><div class="brand"><img src="/amethyst-logo-pixel.png" alt="" /> Roadmap</div><span class="badge">Что дальше</span></div>
-        <div class="content">
-          <h2>План развития</h2>
-          <div class="three">
-            <div class="panel"><h3>1. Artifact Studio</h3><p>Превью HTML прямо внутри приложения, версионирование и экспорт ZIP.</p></div>
-            <div class="panel"><h3>2. Project Memory</h3><p>Память проекта в Supabase: цели, стек, бренд, пользователи, история решений.</p></div>
-            <div class="panel"><h3>3. Multi-platform</h3><p>PWA, desktop build, mobile-first UX, QR onboarding и презентационный режим.</p></div>
-          </div>
-        </div>
-        <div class="foot"><span class="small">Следующий большой шаг: live preview + better artifact editor.</span></div>
-      </section>
-
-      <section class="slide">
-        <div class="topbar"><div class="brand"><img src="/amethyst-logo-pixel.png" alt="" /> Ask</div><span class="badge">Что просим</span></div>
-        <div class="content two">
-          <div>
-            <h2>Что нужно от Google / Gemini team</h2>
-            <ul class="list">
-              <li>Обратная связь по позиционированию Gemini-powered product.</li>
-              <li>Рекомендации по quality/safety для генерации кода и приложений.</li>
-              <li>Возможность показать демо и получить guidance по развитию.</li>
-              <li>Потенциальная поддержка как учебного AI-проекта.</li>
-            </ul>
-          </div>
-          <div class="panel">
-            <h3>Почему сейчас</h3>
-            <p>У проекта уже есть интерфейс, мобильный режим, QR, генерация HTML artifacts и рабочая интеграция с Gemini через Supabase Edge Function.</p>
-          </div>
-        </div>
-        <div class="foot"><span class="small">Цель: получить feedback, улучшить продукт и подготовить сильное демо.</span></div>
-      </section>
-
-      <section class="slide">
-        <div class="topbar"><div class="brand"><img src="/amethyst-logo-pixel.png" alt="" /> Try it</div><span class="badge">QR и ссылка</span></div>
-        <div class="content two">
+        <div class="top"><div class="brand"><img src="/amethyst-logo-pixel.png" alt="" />Try</div><span class="tag">QR / Links</span></div>
+        <div class="content split">
           <div>
             <h2>Откройте Amethyst</h2>
-            <p class="lead">Сканируйте QR или откройте приложение на Vercel. Для демо можно показать desktop, mobile app и генерацию HTML-файла.</p>
-            <div class="cards">
-              <div class="metric"><strong>Mobile</strong><span>/mobile</span></div>
-              <div class="metric"><strong>QR</strong><span>/qr</span></div>
-              <div class="metric"><strong>Deck</strong><span>/amethyst-presentation.html</span></div>
-              <div class="metric"><strong>App</strong><span>rift-ai-kzjh.vercel.app</span></div>
+            <p class="lead">Покажите desktop workspace, mobile mode и генерацию HTML artifact.</p>
+            <div class="grid2">
+              <div class="card"><h3>App</h3><p>rift-ai-kzjh.vercel.app</p></div>
+              <div class="card"><h3>Deck</h3><p>/amethyst-presentation.html</p></div>
             </div>
           </div>
-          <div class="qr">
-            <img src="/amethyst-mobile-qr.png" alt="QR code для Amethyst Mobile" />
-            <span class="small">Amethyst AI · powered by Gemini</span>
-            <a class="open-app" href="/">Открыть приложение</a>
-          </div>
+          <div class="qr"><img src="/amethyst-mobile-qr.png" alt="QR code для Amethyst" /></div>
         </div>
-        <div class="foot"><span class="small">Спасибо</span><span class="small">Amethyst AI</span></div>
+        <div class="bottom"><span>Amethyst AI</span><span>Powered by Gemini</span></div>
       </section>
     </div>
   </main>
 
-  <nav class="nav" aria-label="Навигация по презентации">
-    <button id="prev" type="button" aria-label="Предыдущий слайд">←</button>
-    <span class="counter"><span id="current">1</span> / 10</span>
-    <button id="next" type="button" aria-label="Следующий слайд">→</button>
-    <a class="open-app" href="/">App</a>
+  <nav class="nav" aria-label="Навигация">
+    <button id="prev" type="button">←</button>
+    <span class="count"><span id="cur">1</span> / 8</span>
+    <button id="next" type="button">→</button>
+    <a href="/">App</a>
   </nav>
 
   <script>
-    const total = 10;
+    const total = 8;
     let slide = 0;
     const root = document.documentElement;
-    const current = document.getElementById('current');
-
-    function show(next) {
-      slide = Math.max(0, Math.min(total - 1, next));
+    const cur = document.getElementById('cur');
+    function show(n) {
+      slide = Math.max(0, Math.min(total - 1, n));
       root.style.setProperty('--slide', slide);
-      current.textContent = String(slide + 1);
+      cur.textContent = String(slide + 1);
     }
-
-    document.getElementById('prev').addEventListener('click', () => show(slide - 1));
-    document.getElementById('next').addEventListener('click', () => show(slide + 1));
-    window.addEventListener('keydown', (event) => {
-      if (event.key === 'ArrowRight' || event.key === 'PageDown' || event.key === ' ') show(slide + 1);
-      if (event.key === 'ArrowLeft' || event.key === 'PageUp') show(slide - 1);
-      if (event.key === 'Home') show(0);
-      if (event.key === 'End') show(total - 1);
+    document.getElementById('prev').onclick = () => show(slide - 1);
+    document.getElementById('next').onclick = () => show(slide + 1);
+    window.addEventListener('keydown', (e) => {
+      if (['ArrowRight', 'PageDown', ' '].includes(e.key)) show(slide + 1);
+      if (['ArrowLeft', 'PageUp'].includes(e.key)) show(slide - 1);
+      if (e.key === 'Home') show(0);
+      if (e.key === 'End') show(total - 1);
     });
     show(0);
   </script>
