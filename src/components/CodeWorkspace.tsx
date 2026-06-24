@@ -102,6 +102,10 @@ function isArtifactRequest(text: string) {
   return createWords && !questionOnly && !casualWriting;
 }
 
+function isPlainConversation(text: string) {
+  return !isArtifactRequest(text);
+}
+
 function buildTaskBrief(text: string) {
   if (!isArtifactRequest(text)) {
     return `${text}
@@ -160,7 +164,23 @@ function localConversationAnswer(text: string) {
   if (/^(что ты умеешь|что умеешь|помощь|help)[?.!\s]*$/.test(normalized)) {
     return 'Я умею: общаться на разные темы, объяснять код, искать ошибки, писать React/TypeScript, собирать HTML-сайты, простые игры и MVP-приложения с живым превью и скачиванием результата.';
   }
+  if (/(какая|какой|погода|weather|температура)/.test(normalized)) {
+    return 'Я могу обсудить погоду, но у меня нет прямого live-доступа к прогнозу в этом чате. Напиши город, и я подскажу, как лучше одеться по типичному сценарию, либо проверь точный прогноз в погодном сервисе. Код писать для этого не нужно.';
+  }
   return '';
+}
+
+function cleanPlainConversationResponse(request: string, response: string) {
+  if (!isPlainConversation(request)) return response;
+  const hasCodeBlock = /```(?:html|tsx?|jsx?|css|python|json|bash)?\n[\s\S]*?```/i.test(response);
+  const hasRawHtml = /<!doctype html|<html[\s>]|<script[\s>]/i.test(response);
+  if (!hasCodeBlock && !hasRawHtml) return response;
+
+  if (/(погода|weather|температура)/i.test(request)) {
+    return 'Я не буду писать код вместо ответа. По погоде у меня нет live-доступа к прогнозу: напиши город, и я дам общий совет, либо открой погодный сервис для точных градусов и осадков.';
+  }
+
+  return 'Понял вопрос. Отвечаю без кода: я могу помочь с объяснением, идеей, планом, презентацией или обычным разговором. Если нужен именно код, сайт, игра или приложение — напиши это прямо, и я соберу готовый результат.';
 }
 
 function extractHtmlArtifact(content: string) {
@@ -315,7 +335,8 @@ function buildGuaranteedHtmlArtifact(kind: ArtifactKind, request: string) {
 
 function ensureCreatedArtifact(request: string, response: string) {
   const kind = detectArtifactKind(request);
-  if (!kind || extractHtmlArtifact(response)) return response;
+  if (!kind) return cleanPlainConversationResponse(request, response);
+  if (extractHtmlArtifact(response)) return response;
   const fallback = buildGuaranteedHtmlArtifact(kind, request);
   const intro = response.trim()
     ? `${response.trim()}\n\n---\nЯ добавил рабочий HTML-файл, чтобы результат точно можно было скачать и открыть:`
