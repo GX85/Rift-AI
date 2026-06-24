@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Markdown } from './Markdown';
-import { AmethystLogo } from './Gems';
+import { AmethystLogo, AmethystNavigatorStone } from './Gems';
 import { Icon } from './Icons';
 import { streamGemini } from '../lib/gemini';
 import { deleteChatRow, loadChats, saveChat } from '../lib/chatsStore';
@@ -632,19 +632,19 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
       </div>
       <div className="acode-crystal-nav" aria-label="Кристаллы фона">
         <button className="acode-bg-crystal chat" type="button" onClick={focusChat} title="Открыть чат">
-          <AmethystLogo size={54} />
+          <AmethystNavigatorStone size={158} />
           <span>Чат</span>
         </button>
         <button className="acode-bg-crystal create" type="button" onClick={createChat} title="Новый чат">
-          <AmethystLogo size={42} />
+          <AmethystNavigatorStone size={132} />
           <span>Новый</span>
         </button>
         <button className="acode-bg-crystal settings" type="button" onClick={() => setCrystalSettingsOpen(true)} title="Настройки">
-          <AmethystLogo size={48} />
+          <AmethystNavigatorStone size={146} />
           <span>Настройки</span>
         </button>
         <button className="acode-bg-crystal home" type="button" onClick={onHome} title="Главная">
-          <AmethystLogo size={38} />
+          <AmethystNavigatorStone size={122} />
           <span>Дом</span>
         </button>
       </div>

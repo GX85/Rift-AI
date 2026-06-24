@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { Icon } from './Icons';
-import { AmethystLogo } from './Gems';
+import { AmethystLogo, AmethystNavigatorStone } from './Gems';
 
 // Возможности (бесплатно) и привилегии Plus — для главного экрана.
 const PLUS_PERKS = [
@@ -273,7 +273,8 @@ export function Landing({ onEnter }: { onEnter?: () => void }) {
           {PLUS_PERKS.map((p) => (
             <div key={p.title} className="feature-card">
               <div className="feature-gem">
-                <Icon name={p.icon} size={22} />
+                <AmethystNavigatorStone size={74} />
+                <Icon name={p.icon} size={18} />
               </div>
               <div className="feature-title">{p.title}</div>
               <div className="feature-text">{p.text}</div>

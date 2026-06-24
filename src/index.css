@@ -16053,3 +16053,258 @@ code {
     top: 8px !important;
   }
 }
+
+/* Premium cave rebuild: real background asset, no cheap square badges */
+@keyframes amethystCaveDrift {
+  0%, 100% {
+    transform: scale(1.02) translate3d(0, 0, 0);
+    filter: saturate(1.08) brightness(.9);
+  }
+  50% {
+    transform: scale(1.075) translate3d(-18px, -10px, 0);
+    filter: saturate(1.22) brightness(1.02);
+  }
+}
+
+@keyframes amethystGlowPulse {
+  0%, 100% { opacity: .42; transform: translate3d(0, 0, 0); }
+  50% { opacity: .68; transform: translate3d(18px, -12px, 0); }
+}
+
+.hero2,
+.platform-page,
+.reviews-page,
+.mobile-entry,
+.mobile-qr-page,
+.acode {
+  position: relative !important;
+  overflow-x: hidden !important;
+  background-color: #040511 !important;
+  background-image:
+    linear-gradient(180deg, rgba(4, 5, 17, .12), rgba(4, 5, 17, .78)),
+    url('/amethyst-cave-premium.png') !important;
+  background-size: cover, cover !important;
+  background-position: center, center !important;
+  background-attachment: fixed !important;
+}
+
+.hero2::before,
+.platform-page::before,
+.reviews-page::before,
+.mobile-entry::before,
+.mobile-qr-page::before,
+.acode::before {
+  content: '' !important;
+  position: fixed !important;
+  inset: -4vh -4vw !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+  background:
+    linear-gradient(180deg, rgba(4,5,17,.04), rgba(4,5,17,.7)),
+    url('/amethyst-cave-premium.png') center / cover no-repeat !important;
+  opacity: .78 !important;
+  animation: amethystCaveDrift 18s ease-in-out infinite !important;
+  will-change: transform, filter !important;
+}
+
+.hero2::after,
+.platform-page::after,
+.reviews-page::after,
+.mobile-entry::after,
+.mobile-qr-page::after,
+.acode::after {
+  content: '' !important;
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+  background:
+    radial-gradient(520px 360px at 16% 18%, rgba(255, 79, 232, .22), transparent 72%),
+    radial-gradient(620px 420px at 87% 18%, rgba(78, 231, 255, .18), transparent 74%),
+    radial-gradient(520px 420px at 54% 88%, rgba(121, 92, 255, .14), transparent 72%) !important;
+  animation: amethystGlowPulse 9s ease-in-out infinite !important;
+}
+
+.hero2 > *,
+.platform-page > *,
+.reviews-page > *,
+.mobile-entry > *,
+.mobile-qr-page > *,
+.acode > * {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+.amnav-stone {
+  display: inline-grid !important;
+  place-items: center !important;
+  flex: 0 0 auto !important;
+  filter:
+    drop-shadow(0 0 18px rgba(255, 85, 240, .58))
+    drop-shadow(0 0 28px rgba(78, 231, 255, .22)) !important;
+}
+
+.amnav-stone svg {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+}
+
+.acode-bg-crystal::before,
+.acode-bg-crystal::after {
+  display: none !important;
+}
+
+.acode-bg-crystal .amnav-stone {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.acode-bg-crystal {
+  background: transparent !important;
+  border: 0 !important;
+  clip-path: none !important;
+}
+
+.acode-bg-crystal span {
+  top: 76% !important;
+  background: rgba(5, 6, 18, .76) !important;
+  color: #f8f1ff !important;
+  text-shadow: 0 1px 8px rgba(0,0,0,.7) !important;
+}
+
+.feature-gem {
+  width: 92px !important;
+  height: 92px !important;
+  margin: 0 0 18px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  clip-path: none !important;
+}
+
+.feature-gem::before,
+.feature-gem::after {
+  display: none !important;
+}
+
+.feature-gem .amnav-stone {
+  width: 88px !important;
+  height: 96px !important;
+}
+
+.feature-gem > svg,
+.feature-gem > .icon,
+.feature-gem > :not(.amnav-stone) {
+  position: absolute !important;
+  left: 50% !important;
+  top: 48% !important;
+  z-index: 2 !important;
+  transform: translate(-50%, -50%) !important;
+  color: #e9fbff !important;
+  filter: drop-shadow(0 0 8px rgba(80, 231, 255, .8)) !important;
+}
+
+.feature-card,
+.hero-prompt-grid button,
+.acode-studio-grid button,
+.platform-card,
+.acode-new,
+.acode-chat-item,
+.acode-copy,
+.acode-send,
+.composer-cta,
+.google-btn,
+.nav-open {
+  color: #f8f4ff !important;
+  border-color: rgba(220, 199, 255, .24) !important;
+  background:
+    radial-gradient(220px 150px at 18% 6%, rgba(255, 85, 240, .18), transparent 74%),
+    radial-gradient(220px 150px at 92% 16%, rgba(78, 231, 255, .12), transparent 74%),
+    linear-gradient(138deg, rgba(19, 14, 42, .78), rgba(7, 13, 31, .7)) !important;
+  clip-path: polygon(0 20px, 18px 0, calc(100% - 36px) 0, 100% 28px, calc(100% - 10px) calc(100% - 17px), calc(100% - 30px) 100%, 22px 100%, 0 calc(100% - 24px)) !important;
+  box-shadow:
+    0 28px 80px rgba(0,0,0,.32),
+    inset 0 1px 0 rgba(255,255,255,.13),
+    inset 0 -1px 0 rgba(133, 92, 255, .28) !important;
+}
+
+.feature-card::before,
+.feature-card::after,
+.hero-prompt-grid button::before,
+.hero-prompt-grid button::after {
+  content: '' !important;
+  position: absolute !important;
+  pointer-events: none !important;
+  display: block !important;
+}
+
+.feature-card::before,
+.hero-prompt-grid button::before {
+  right: 18px !important;
+  bottom: 16px !important;
+  top: auto !important;
+  width: 38px !important;
+  height: 46px !important;
+  opacity: .58 !important;
+  background: linear-gradient(138deg, #fff, #ff60ee 28%, #8b5cf6 58%, #55e7ff) !important;
+  clip-path: polygon(50% 0, 88% 24%, 76% 76%, 50% 100%, 24% 76%, 12% 24%) !important;
+  filter: drop-shadow(0 0 16px rgba(255, 92, 240, .38)) !important;
+}
+
+.feature-card::after,
+.hero-prompt-grid button::after {
+  inset: 0 !important;
+  opacity: .36 !important;
+  background:
+    linear-gradient(132deg, transparent 0 18%, rgba(255,255,255,.11) 18.4% 19%, transparent 19.4% 100%),
+    linear-gradient(37deg, transparent 0 64%, rgba(78,231,255,.13) 64.4% 66.4%, transparent 67% 100%) !important;
+}
+
+.hero-prompt-grid button,
+.hero-prompt-grid button span,
+.feature-title,
+.feature-text {
+  color: #f8f4ff !important;
+}
+
+.feature-text,
+.hero-p {
+  color: rgba(232, 228, 255, .78) !important;
+}
+
+.hero-prompt-grid button svg {
+  color: #77efff !important;
+  filter: drop-shadow(0 0 8px rgba(78, 231, 255, .6)) !important;
+}
+
+@media (max-width: 900px) {
+  .hero2,
+  .platform-page,
+  .reviews-page,
+  .mobile-entry,
+  .mobile-qr-page,
+  .acode {
+    background-attachment: scroll !important;
+  }
+
+  .hero2::before,
+  .platform-page::before,
+  .reviews-page::before,
+  .mobile-entry::before,
+  .mobile-qr-page::before,
+  .acode::before {
+    animation-duration: 24s !important;
+  }
+
+  .feature-gem {
+    width: 76px !important;
+    height: 78px !important;
+  }
+
+  .feature-gem .amnav-stone {
+    width: 72px !important;
+    height: 80px !important;
+  }
+}
