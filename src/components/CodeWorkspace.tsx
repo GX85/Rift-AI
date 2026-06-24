@@ -74,6 +74,20 @@ const STUDIO_CARDS = [
 
 const OUTPUTS = ['HTML artifact', 'React/TS code', 'Bug fix', 'Business brief', 'Game prototype'];
 
+const TOP_BADGES = [
+  { icon: 'spark', label: 'Gemini 2.5 Flash' },
+  { icon: 'code', label: 'Artifacts' },
+  { icon: 'globe', label: 'Mobile-ready' },
+];
+
+const HERO_METRICS = [
+  { value: 'HTML', label: 'single-file sites' },
+  { value: 'TS', label: 'typed code' },
+  { value: 'MVP', label: 'app logic' },
+];
+
+const PIPELINE_STEPS = ['Brief', 'UI', 'Logic', 'Export'];
+
 function newChat(): Chat {
   return { id: crypto.randomUUID(), title: 'Новый чат', messages: [], updatedAt: Date.now() };
 }
@@ -561,6 +575,14 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
               <span>{messages.length ? active.title : 'Gemini-powered coding assistant'}</span>
             </div>
           </div>
+          <div className="acode-status" aria-label="Amethyst capabilities">
+            {TOP_BADGES.map((badge) => (
+              <span key={badge.label}>
+                <Icon name={badge.icon} size={13} />
+                {badge.label}
+              </span>
+            ))}
+          </div>
           <button className="acode-icon" onClick={createChat} title="Новый чат">
             <Icon name="plus" size={16} />
           </button>
@@ -589,6 +611,14 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
                   <span className="acode-empty-kicker">AI product studio</span>
                   <h1>Собери продукт, а не просто ответ</h1>
                   <p>Выбери режим или напиши задачу. Amethyst генерирует сайты, web-app MVP, игры, исправления кода и бизнес-структуру прямо в чате.</p>
+                  <div className="acode-hero-metrics" aria-label="Product outputs">
+                    {HERO_METRICS.map((metric) => (
+                      <span key={metric.value}>
+                        <b>{metric.value}</b>
+                        <small>{metric.label}</small>
+                      </span>
+                    ))}
+                  </div>
                 </div>
                 <div className="acode-live-preview" aria-hidden="true">
                   <div className="acode-preview-top">
@@ -612,6 +642,11 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
                     <span />
                     <span />
                     <span />
+                  </div>
+                  <div className="acode-pipeline">
+                    {PIPELINE_STEPS.map((step) => (
+                      <span key={step}>{step}</span>
+                    ))}
                   </div>
                 </div>
               </div>
