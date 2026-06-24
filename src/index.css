@@ -10752,3 +10752,426 @@ body {
     grid-template-columns: 1fr !important;
   }
 }
+
+/* Premium app workspace: smooth pixel crystal, no debug boxes */
+.acode {
+  min-height: 100svh !important;
+  background:
+    radial-gradient(circle at 18% 8%, rgba(168, 85, 247, .22), transparent 26%),
+    radial-gradient(circle at 78% 12%, rgba(103, 232, 249, .12), transparent 28%),
+    radial-gradient(circle at 54% 82%, rgba(76, 29, 149, .18), transparent 34%),
+    linear-gradient(135deg, #070915 0%, #0d1023 52%, #071a2c 100%) !important;
+  color: #f7f8ff !important;
+  overflow: hidden !important;
+}
+
+.acode::before {
+  background:
+    radial-gradient(circle, rgba(255,255,255,.24) 0 1px, transparent 1.5px),
+    radial-gradient(circle, rgba(255,91,241,.16) 0 1px, transparent 1.7px),
+    linear-gradient(90deg, rgba(255,255,255,.014) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255,255,255,.012) 1px, transparent 1px) !important;
+  background-size: 164px 164px, 232px 232px, 28px 28px, 28px 28px !important;
+  opacity: .3 !important;
+}
+
+.acode-side,
+.acode-top,
+.acode-compose,
+.acode-empty-hero,
+.acode-live-preview,
+.acode-studio-grid button,
+.acode-starters button,
+.acode-chat-item,
+.acode-new,
+.acode-icon,
+.acode-mobile-actions button,
+.acode-file,
+.acode-error,
+.acode-msg-body,
+.acode-msg.user .acode-msg-body {
+  border-radius: 18px !important;
+  border: 1px solid rgba(255,255,255,.105) !important;
+  outline: 0 !important;
+  background: rgba(13, 15, 32, .62) !important;
+  box-shadow:
+    0 18px 54px rgba(0,0,0,.22),
+    inset 0 1px 0 rgba(255,255,255,.065) !important;
+  backdrop-filter: blur(18px) saturate(130%) !important;
+}
+
+.acode-side {
+  width: 400px !important;
+  padding: 24px !important;
+  border-radius: 0 !important;
+  border-width: 0 1px 0 0 !important;
+  background: rgba(9, 11, 25, .72) !important;
+  box-shadow: 18px 0 70px rgba(0,0,0,.18), inset -1px 0 0 rgba(255,255,255,.04) !important;
+}
+
+.acode-brand {
+  margin-bottom: 18px !important;
+}
+
+.acode-logo {
+  gap: 14px !important;
+  color: #fff !important;
+  font-size: 24px !important;
+  font-weight: 950 !important;
+  letter-spacing: -0.025em !important;
+}
+
+.acode-logo .amlogo,
+.acode-model .amlogo {
+  flex: 0 0 auto !important;
+}
+
+.acode-new {
+  min-height: 58px !important;
+  margin-bottom: 26px !important;
+  justify-content: flex-start !important;
+  padding-inline: 18px !important;
+  background: rgba(255,255,255,.06) !important;
+}
+
+.acode-new:hover,
+.acode-chat-item:hover,
+.acode-chat-item.active {
+  transform: translateY(-1px) !important;
+  border-color: rgba(177, 126, 255, .44) !important;
+  background: rgba(168, 85, 247, .12) !important;
+  box-shadow: 0 18px 48px rgba(0,0,0,.24), 0 0 26px rgba(168,85,247,.12) !important;
+}
+
+.acode-side-title {
+  margin: 4px 2px 12px !important;
+  color: rgba(221,226,246,.58) !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  letter-spacing: .08em !important;
+  text-transform: uppercase !important;
+}
+
+.acode-chat-list {
+  gap: 10px !important;
+  padding-right: 2px !important;
+}
+
+.acode-chat-item {
+  min-height: 58px !important;
+  padding: 0 16px !important;
+  color: rgba(247,248,255,.8) !important;
+  box-shadow: none !important;
+}
+
+.acode-chat-item span {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.acode-user {
+  border-radius: 20px !important;
+  border-top: 1px solid rgba(255,255,255,.08) !important;
+  padding-top: 16px !important;
+}
+
+.acode-main {
+  min-width: 0 !important;
+  overflow: hidden !important;
+  background: transparent !important;
+}
+
+.acode-top {
+  min-height: 82px !important;
+  margin: 18px 20px 0 !important;
+  padding: 0 20px !important;
+  background: rgba(9, 11, 25, .68) !important;
+}
+
+.acode-model {
+  gap: 13px !important;
+}
+
+.acode-model strong {
+  color: #fff !important;
+  font-size: 20px !important;
+  letter-spacing: -0.02em !important;
+}
+
+.acode-model span {
+  color: rgba(221,226,246,.62) !important;
+}
+
+.acode-thread {
+  width: 100% !important;
+  max-width: none !important;
+  padding: 28px 20px 20px !important;
+  overflow-x: hidden !important;
+}
+
+.acode-empty {
+  width: min(1180px, 100%) !important;
+  margin: 0 auto !important;
+  padding-inline: 0 !important;
+  overflow: hidden !important;
+}
+
+.acode-empty-hero {
+  width: 100% !important;
+  min-height: 0 !important;
+  margin: 0 auto 22px !important;
+  padding: 30px !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.1fr) minmax(320px, .9fr) !important;
+  gap: 26px !important;
+  border-radius: 28px !important;
+  background:
+    radial-gradient(circle at 18% 16%, rgba(168,85,247,.18), transparent 30%),
+    rgba(13, 15, 32, .55) !important;
+}
+
+.acode-empty-copy {
+  min-width: 0 !important;
+}
+
+.acode-empty-copy > .amlogo,
+.acode-empty > .amlogo {
+  width: 64px !important;
+  height: 64px !important;
+  margin-bottom: 18px !important;
+}
+
+.acode-empty-kicker {
+  display: inline-flex !important;
+  width: fit-content !important;
+  min-height: 34px !important;
+  padding: 0 14px !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,.075) !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  color: rgba(247,248,255,.86) !important;
+  box-shadow: none !important;
+}
+
+.acode-empty-copy h1,
+.acode-empty h1 {
+  max-width: 720px !important;
+  margin: 16px 0 12px !important;
+  color: #fff !important;
+  font-size: clamp(42px, 5.2vw, 74px) !important;
+  line-height: .96 !important;
+  letter-spacing: -0.04em !important;
+  text-shadow: 0 20px 60px rgba(0,0,0,.28) !important;
+}
+
+.acode-empty-copy p,
+.acode-empty p {
+  max-width: 680px !important;
+  color: rgba(221,226,246,.68) !important;
+  font-size: 17px !important;
+  line-height: 1.55 !important;
+}
+
+.acode-live-preview {
+  min-width: 0 !important;
+  align-self: stretch !important;
+  border-radius: 24px !important;
+  overflow: hidden !important;
+  background: rgba(7, 9, 22, .66) !important;
+}
+
+.acode-studio-grid {
+  width: 100% !important;
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  margin: 20px 0 16px !important;
+}
+
+.acode-studio-grid button {
+  min-width: 0 !important;
+  min-height: 150px !important;
+  padding: 22px !important;
+  border-radius: 22px !important;
+  text-align: left !important;
+  overflow: hidden !important;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)),
+    rgba(13,15,32,.58) !important;
+  box-shadow: 0 18px 48px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.07) !important;
+}
+
+.acode-studio-grid button strong,
+.acode-studio-grid button span {
+  display: block !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.acode-studio-grid button strong {
+  color: #fff !important;
+  font-size: 18px !important;
+  margin-top: 20px !important;
+}
+
+.acode-studio-grid button span {
+  color: rgba(221,226,246,.62) !important;
+  line-height: 1.45 !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+}
+
+.acode-output-strip,
+.acode-starters {
+  width: 100% !important;
+  overflow: hidden !important;
+}
+
+.acode-output-strip {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+}
+
+.acode-output-strip span {
+  border-radius: 999px !important;
+  background: rgba(255,255,255,.06) !important;
+  border: 1px solid rgba(255,255,255,.1) !important;
+  box-shadow: none !important;
+}
+
+.acode-starters {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+}
+
+.acode-starters button {
+  min-width: 0 !important;
+  min-height: 58px !important;
+  padding: 0 18px !important;
+  border-radius: 18px !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: normal !important;
+  text-align: left !important;
+  background: rgba(255,255,255,.055) !important;
+  box-shadow: 0 14px 34px rgba(0,0,0,.16) !important;
+}
+
+.acode-compose-wrap {
+  padding: 10px 20px 20px !important;
+  background: linear-gradient(180deg, transparent, rgba(7,9,21,.72) 34%) !important;
+}
+
+.acode-compose {
+  width: min(1180px, 100%) !important;
+  margin: 0 auto !important;
+  padding: 14px !important;
+  border-radius: 24px !important;
+  background: rgba(12, 14, 31, .78) !important;
+}
+
+.acode-compose textarea {
+  min-height: 54px !important;
+  max-height: 180px !important;
+  padding: 14px 16px !important;
+  border-radius: 16px !important;
+  background: rgba(255,255,255,.035) !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  color: #fff !important;
+  overflow-x: hidden !important;
+}
+
+.acode-compose-actions {
+  padding-top: 12px !important;
+}
+
+.acode-send {
+  width: 52px !important;
+  height: 52px !important;
+  border-radius: 16px !important;
+  background: linear-gradient(135deg, #8b5cf6, #6d5dfc) !important;
+  border: 0 !important;
+  box-shadow: 0 16px 42px rgba(109,93,252,.24) !important;
+}
+
+.acode-icon {
+  border-radius: 14px !important;
+  background: rgba(255,255,255,.055) !important;
+  box-shadow: none !important;
+}
+
+.acode-msg {
+  max-width: min(920px, 100%) !important;
+}
+
+.acode-msg-body {
+  border-radius: 20px !important;
+  overflow: hidden !important;
+}
+
+@media (max-width: 1180px) {
+  .acode-side {
+    width: 340px !important;
+  }
+
+  .acode-empty-hero {
+    grid-template-columns: 1fr !important;
+  }
+
+  .acode-live-preview {
+    display: none !important;
+  }
+
+  .acode-studio-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 820px) {
+  .acode {
+    overflow: hidden !important;
+  }
+
+  .acode-side {
+    width: min(86vw, 340px) !important;
+    padding: 18px !important;
+  }
+
+  .acode-top {
+    margin: 10px 10px 0 !important;
+    min-height: 66px !important;
+    border-radius: 18px !important;
+  }
+
+  .acode-thread {
+    padding: 18px 10px 12px !important;
+  }
+
+  .acode-empty-hero {
+    padding: 20px !important;
+    border-radius: 22px !important;
+  }
+
+  .acode-empty-copy h1,
+  .acode-empty h1 {
+    font-size: clamp(34px, 10vw, 48px) !important;
+  }
+
+  .acode-studio-grid,
+  .acode-starters {
+    grid-template-columns: 1fr !important;
+  }
+
+  .acode-compose-wrap {
+    padding: 8px 10px 12px !important;
+  }
+
+  .acode-compose {
+    border-radius: 20px !important;
+  }
+}
