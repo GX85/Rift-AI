@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Amethyst AI — презентация продукта</title>
+  <meta name="description" content="Amethyst AI — Gemini-powered студия для кода, MVP, сайтов, игр и бизнес-задач." />
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #07080d;
+      --panel: rgba(255,255,255,.065);
+      --panel-strong: rgba(255,255,255,.095);
+      --line: rgba(255,255,255,.11);
+      --text: #f8fafc;
+      --muted: #aeb8cf;
+      --soft: #dbe4f7;
+      --cyan: #22d3ee;
+      --violet: #a78bfa;
+      --green: #34d399;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(900px 520px at 50% -220px, rgba(124,58,237,.25), transparent 70%),
+        radial-gradient(700px 480px at 100% 18%, rgba(34,211,238,.1), transparent 65%),
+        linear-gradient(180deg, #0a0b12, var(--bg) 42%, #05060a);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    a, button { font: inherit; }
+    a { color: inherit; text-decoration: none; }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding: 14px clamp(18px, 4vw, 54px);
+      background: rgba(7,8,13,.78);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(22px);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 950;
+      font-size: 18px;
+    }
+
+    .brand img {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      image-rendering: pixelated;
+      box-shadow: 0 16px 42px rgba(124,58,237,.28);
+    }
+
+    .links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .cta {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 18px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--cyan), var(--violet));
+      color: #020617;
+      font-weight: 950;
+      box-shadow: 0 18px 48px rgba(34,211,238,.16);
+    }
+
+    .section {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: clamp(54px, 8vw, 112px) 0;
+    }
+
+    .hero {
+      min-height: calc(100vh - 72px);
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(340px, .95fr);
+      align-items: center;
+      gap: 42px;
+      padding-top: 34px;
+    }
+
+    .eyebrow {
+      width: max-content;
+      max-width: 100%;
+      min-height: 34px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(216,180,254,.18);
+      background: rgba(168,85,247,.11);
+      color: #ddd6fe;
+      font-size: 12px;
+      font-weight: 950;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3, p { margin: 0; letter-spacing: 0; }
+    h1 {
+      margin-top: 18px;
+      max-width: 900px;
+      font-size: clamp(58px, 8.4vw, 126px);
+      line-height: .88;
+    }
+
+    h2 {
+      max-width: 880px;
+      font-size: clamp(38px, 5vw, 76px);
+      line-height: .96;
+    }
+
+    h3 { font-size: 22px; }
+    .accent { color: var(--cyan); }
+    .violet { color: #ddd6fe; }
+
+    .lead {
+      margin-top: 22px;
+      max-width: 760px;
+      color: var(--muted);
+      font-size: clamp(18px, 2vw, 25px);
+      line-height: 1.55;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .ghost {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 18px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.055);
+      color: var(--soft);
+      font-weight: 900;
+    }
+
+    .visual {
+      position: relative;
+      min-height: 480px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 34px;
+      background:
+        radial-gradient(320px 260px at 50% 42%, rgba(124,58,237,.28), transparent 70%),
+        linear-gradient(145deg, rgba(255,255,255,.075), rgba(255,255,255,.028));
+      box-shadow: 0 32px 120px rgba(0,0,0,.42);
+      overflow: hidden;
+    }
+
+    .visual::before {
+      content: "";
+      position: absolute;
+      width: 66%;
+      aspect-ratio: 1;
+      border-radius: 38px;
+      border: 1px solid rgba(255,255,255,.13);
+      transform: rotate(45deg);
+      background: rgba(255,255,255,.04);
+      animation: spin 16s linear infinite;
+    }
+
+    .visual img {
+      position: relative;
+      z-index: 1;
+      width: min(260px, 46vw);
+      image-rendering: pixelated;
+      filter: drop-shadow(0 34px 80px rgba(124,58,237,.48));
+      animation: float 4.6s ease-in-out infinite;
+    }
+
+    .grid2, .grid3, .grid4 {
+      display: grid;
+      gap: 14px;
+      margin-top: 28px;
+    }
+    .grid2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+    .card {
+      min-height: 178px;
+      padding: 24px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.075), rgba(255,255,255,.032)),
+        rgba(17,19,28,.86);
+      box-shadow: 0 24px 90px rgba(0,0,0,.24);
+    }
+
+    .card p {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.58;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: clamp(34px, 4vw, 58px);
+      line-height: 1;
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 10px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(340px, .92fr);
+      align-items: center;
+      gap: 34px;
+    }
+
+    .mock {
+      min-height: 430px;
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      background: #0d1018;
+      box-shadow: 0 30px 120px rgba(0,0,0,.44);
+      overflow: hidden;
+    }
+
+    .mock-top {
+      height: 56px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 18px;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .dot { width: 10px; height: 10px; border-radius: 999px; background: #ef4444; }
+    .dot:nth-child(2) { background: #f59e0b; }
+    .dot:nth-child(3) { background: #22c55e; }
+
+    .mock-body { display: grid; gap: 14px; padding: 26px; }
+    .line {
+      height: 14px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(34,211,238,.24), rgba(167,139,250,.28));
+      animation: scan 2.4s ease-in-out infinite;
+    }
+    .line.big { width: 72%; height: 34px; }
+    .line.mid { width: 88%; }
+    .line.short { width: 54%; }
+
+    .mock-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 8px; }
+    .mock-card {
+      height: 96px;
+      border-radius: 18px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.055);
+      animation: float 4.2s ease-in-out infinite;
+    }
+    .mock-card:nth-child(2) { animation-delay: .18s; }
+    .mock-card:nth-child(3) { animation-delay: .36s; }
+
+    .list {
+      display: grid;
+      gap: 14px;
+      margin: 26px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .list li {
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr);
+      gap: 12px;
+      color: var(--soft);
+      font-size: clamp(17px, 1.5vw, 22px);
+      line-height: 1.45;
+    }
+
+    .list li::before {
+      content: "";
+      width: 19px;
+      height: 19px;
+      margin-top: 5px;
+      border-radius: 7px;
+      background: linear-gradient(135deg, var(--cyan), var(--violet));
+    }
+
+    .qr img {
+      width: min(300px, 70vw);
+      border-radius: 28px;
+      border: 1px solid var(--line);
+      box-shadow: 0 28px 100px rgba(0,0,0,.38);
+    }
+
+    footer {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 44px;
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+    }
+
+    @keyframes spin { to { transform: rotate(405deg); } }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    @keyframes scan { 0%,100% { opacity: .42; transform: translateX(0); } 50% { opacity: 1; transform: translateX(10px); } }
+
+    @media (max-width: 900px) {
+      .links { display: none; }
+      .hero, .split, .grid2, .grid3, .grid4 { grid-template-columns: 1fr; }
+      .hero { min-height: auto; }
+      .visual, .mock { min-height: 320px; }
+      .section { padding: 58px 0; }
+      footer { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <a class="brand" href="/"><img src="/amethyst-logo-pixel.png" alt="" />Amethyst AI</a>
+    <div class="links">
+      <a href="#problem">Проблема</a>
+      <a href="#product">Платформы</a>
+      <a href="#demo">Демо</a>
+      <a href="#google">Google</a>
+    </div>
+    <a class="cta" href="/">Открыть App</a>
+  </nav>
+
+  <header class="section hero">
+    <div>
+      <span class="eyebrow">Gemini-powered product studio</span>
+      <h1>AI для <span class="accent">кода</span>, MVP и бизнеса</h1>
+      <p class="lead">Amethyst помогает не просто получить ответ, а собрать рабочий результат: сайт, web-app MVP, игру, bug fix или бизнес-структуру.</p>
+      <div class="actions">
+        <a class="cta" href="/">Попробовать</a>
+        <a class="ghost" href="/amethyst-presentation.html">Открыть deck</a>
+        <a class="ghost" href="/qr">QR для телефона</a>
+      </div>
+    </div>
+    <div class="visual"><img src="/amethyst-logo-pixel.png" alt="Amethyst pixel logo" /></div>
+  </header>
+
+  <section class="section" id="problem">
+    <span class="eyebrow">Problem</span>
+    <h2>Обычный AI-чат часто даёт текст. Пользователю нужен готовый артефакт.</h2>
+    <div class="grid2">
+      <div class="card"><h3>Слишком много ручной сборки</h3><p>Нужно самому просить HTML, CSS, JS, адаптив, состояния, проверку и запуск.</p></div>
+      <div class="card"><h3>Нет продуктового контекста</h3><p>Код без MVP, оффера, сценариев и бизнес-логики плохо помогает запустить идею.</p></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <span class="eyebrow">Solution</span>
+    <h2>Amethyst объединяет разработку и запуск идеи в одном интерфейсе.</h2>
+    <div class="grid3">
+      <div class="card"><h3>Code</h3><p>React, TypeScript, HTML, CSS, review, debugging и объяснение ошибок.</p></div>
+      <div class="card"><h3>Build</h3><p>Лендинги, web-app MVP, playable games и HTML artifacts для скачивания.</p></div>
+      <div class="card"><h3>Business</h3><p>Оффер, структура продукта, план продаж, презентация и первые шаги запуска.</p></div>
+    </div>
+  </section>
+
+  <section class="section" id="product">
+    <span class="eyebrow">Two platforms</span>
+    <h2>Две платформы: desktop studio и mobile mode.</h2>
+    <div class="grid4">
+      <div class="card metric"><strong>Desktop</strong><span>Полная студия: чат, файлы, история, генерация и скачивание HTML.</span></div>
+      <div class="card metric"><strong>Mobile</strong><span>Быстрые режимы, QR-вход, адаптивный composer и работа на телефоне.</span></div>
+      <div class="card metric"><strong>Artifacts</strong><span>Сайты, MVP, игры, компоненты, bug fix и бизнес-brief.</span></div>
+      <div class="card metric"><strong>Gemini</strong><span>AI вызывается через Supabase Edge Function, ключ не на фронте.</span></div>
+    </div>
+  </section>
+
+  <section class="section split" id="demo">
+    <div>
+      <span class="eyebrow">Demo scenarios</span>
+      <h2>Что показать за 2 минуты</h2>
+      <ul class="list">
+        <li>Создать лендинг одним HTML-файлом.</li>
+        <li>Собрать web-app MVP с mock data и localStorage.</li>
+        <li>Сделать браузерную игру с touch-управлением.</li>
+        <li>Найти ошибку в React/TypeScript и дать точный фикс.</li>
+      </ul>
+    </div>
+    <div class="mock" aria-hidden="true">
+      <div class="mock-top"><i class="dot"></i><i class="dot"></i><i class="dot"></i><span>artifact.html</span></div>
+      <div class="mock-body">
+        <span class="line big"></span>
+        <span class="line mid"></span>
+        <span class="line short"></span>
+        <div class="mock-cards"><i class="mock-card"></i><i class="mock-card"></i><i class="mock-card"></i></div>
+        <span class="line mid"></span>
+        <span class="line short"></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section split" id="google">
+    <div>
+      <span class="eyebrow">Why Google / Gemini</span>
+      <h2>Amethyst показывает практический сценарий Gemini.</h2>
+      <p class="lead">Это независимый учебный проект: Gemini помогает ученикам, junior-разработчикам и small business быстрее строить MVP.</p>
+    </div>
+    <div class="grid2">
+      <div class="card"><h3>Adoption</h3><p>Делает Gemini ближе к людям, которые хотят создавать проекты, а не только спрашивать.</p></div>
+      <div class="card"><h3>Education</h3><p>Хорошо подходит для обучения программированию и AI workflow.</p></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <span class="eyebrow">Roadmap</span>
+    <h2>Следующий шаг — превратить Amethyst в полноценную студию MVP.</h2>
+    <div class="grid4">
+      <div class="card"><h3>Live Preview</h3><p>Просмотр HTML artifacts прямо внутри приложения.</p></div>
+      <div class="card"><h3>Project Memory</h3><p>Память проекта: стек, бренд, цели и решения.</p></div>
+      <div class="card"><h3>Export</h3><p>ZIP/export для сайтов, игр и прототипов.</p></div>
+      <div class="card"><h3>Safety</h3><p>Проверки кода, ошибок и небезопасных инструкций.</p></div>
+    </div>
+  </section>
+
+  <section class="section split">
+    <div>
+      <span class="eyebrow">Try it</span>
+      <h2>Откройте Amethyst</h2>
+      <p class="lead">Покажите desktop workspace, mobile mode и генерацию HTML artifact.</p>
+      <div class="actions">
+        <a class="cta" href="/">Открыть приложение</a>
+        <a class="ghost" href="/mobile">Mobile mode</a>
+      </div>
+    </div>
+    <div class="qr"><img src="/amethyst-mobile-qr.png" alt="QR code для Amethyst" /></div>
+  </section>
+
+  <footer>
+    <span>Amethyst AI · powered by Gemini</span>
+    <span>rift-ai-kzjh.vercel.app/presentation/</span>
+  </footer>
+</body>
+</html>
