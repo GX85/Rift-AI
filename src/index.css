@@ -13308,3 +13308,282 @@ body * {
     scroll-behavior: auto !important;
   }
 }
+
+/* Executive clean pass: calmer composition, less clutter, stronger hierarchy */
+:root {
+  --amx-clean-bg: #060915;
+  --amx-clean-panel: rgba(12, 17, 34, .82);
+  --amx-clean-panel-2: rgba(17, 23, 43, .78);
+  --amx-clean-line: rgba(185, 198, 255, .14);
+  --amx-clean-line-2: rgba(126, 226, 255, .24);
+}
+
+.acode {
+  background:
+    radial-gradient(760px 520px at 16% 4%, rgba(119, 73, 248, .22), transparent 62%),
+    radial-gradient(640px 460px at 95% 10%, rgba(34, 211, 238, .14), transparent 58%),
+    linear-gradient(135deg, #050713 0%, #081225 48%, #060916 100%) !important;
+}
+
+.acode::before {
+  opacity: .32 !important;
+  background:
+    linear-gradient(rgba(255,255,255,.026) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px) !important;
+  background-size: 40px 40px, 40px 40px !important;
+}
+
+.acode-side {
+  width: clamp(276px, 20vw, 310px) !important;
+  padding: 24px 18px !important;
+  background:
+    linear-gradient(180deg, rgba(13, 17, 36, .94), rgba(5, 8, 20, .96)) !important;
+  border-right: 1px solid var(--amx-clean-line) !important;
+  box-shadow: 22px 0 70px rgba(0,0,0,.26) !important;
+}
+
+.acode-logo {
+  min-height: 48px !important;
+  padding: 4px !important;
+}
+
+.acode-logo span {
+  font-size: 23px !important;
+  font-weight: 900 !important;
+}
+
+.acode-new,
+.acode-chat-item,
+.acode-icon,
+.acode-copy,
+.acode-mobile-actions button {
+  border-radius: 14px !important;
+  border-color: var(--amx-clean-line) !important;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.055), rgba(255,255,255,.025)),
+    rgba(11, 16, 32, .72) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 10px 28px rgba(0,0,0,.18) !important;
+}
+
+.acode-new,
+.acode-chat-item.active {
+  border-color: rgba(167, 139, 250, .34) !important;
+  background:
+    linear-gradient(135deg, rgba(124, 58, 237, .22), rgba(34, 211, 238, .08)),
+    rgba(18, 22, 44, .8) !important;
+}
+
+.acode-top {
+  width: min(1120px, calc(100% - 48px)) !important;
+  min-height: 70px !important;
+  margin-top: 18px !important;
+  border-radius: 22px !important;
+  border-color: var(--amx-clean-line) !important;
+  background:
+    linear-gradient(135deg, rgba(18, 24, 48, .86), rgba(8, 18, 36, .76)) !important;
+  box-shadow: 0 22px 70px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.07) !important;
+}
+
+.acode-status span {
+  min-height: 32px !important;
+  padding-inline: 10px !important;
+  border-color: rgba(185,198,255,.16) !important;
+  background: rgba(255,255,255,.055) !important;
+  box-shadow: none !important;
+}
+
+.acode-thread {
+  width: min(1120px, calc(100% - 48px)) !important;
+  padding-top: 22px !important;
+}
+
+.acode-empty-hero {
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 420px) !important;
+  min-height: 520px !important;
+  padding: clamp(28px, 4vw, 48px) !important;
+  border-radius: 30px !important;
+  border-color: var(--amx-clean-line) !important;
+  background:
+    radial-gradient(420px 260px at 16% 16%, rgba(124, 58, 237, .18), transparent 72%),
+    linear-gradient(135deg, rgba(14, 20, 41, .86), rgba(7, 14, 29, .76)) !important;
+  box-shadow: 0 32px 90px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.07) !important;
+}
+
+.acode-empty-hero::before,
+.acode-empty-orbit,
+.acode-live-preview::before {
+  display: none !important;
+}
+
+.acode-empty-copy .amlogo {
+  width: 76px !important;
+  height: 76px !important;
+  filter: drop-shadow(0 0 18px rgba(168,85,247,.44)) !important;
+}
+
+.acode-empty-kicker {
+  margin-top: 18px !important;
+  border-radius: 999px !important;
+  border-color: var(--amx-clean-line-2) !important;
+  background: rgba(34, 211, 238, .08) !important;
+  color: #d8fbff !important;
+}
+
+.acode-empty h1 {
+  max-width: 11ch !important;
+  margin-top: 18px !important;
+  font-size: 68px !important;
+  line-height: .96 !important;
+  font-weight: 950 !important;
+  text-shadow: 0 18px 44px rgba(0,0,0,.3) !important;
+}
+
+.acode-empty p {
+  max-width: 640px !important;
+  font-size: 18px !important;
+  color: rgba(222, 229, 255, .72) !important;
+}
+
+.acode-hero-metrics {
+  width: min(500px, 100%) !important;
+  gap: 12px !important;
+}
+
+.acode-hero-metrics span {
+  min-height: 72px !important;
+  border-radius: 18px !important;
+  border-color: var(--amx-clean-line) !important;
+  background: rgba(255,255,255,.055) !important;
+  box-shadow: none !important;
+}
+
+.acode-live-preview {
+  padding: 14px !important;
+  border-radius: 26px !important;
+  border-color: var(--amx-clean-line) !important;
+  background:
+    linear-gradient(rgba(255,255,255,.026) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.02) 1px, transparent 1px),
+    rgba(10, 15, 31, .76) !important;
+  background-size: 28px 28px, 28px 28px, auto !important;
+}
+
+.acode-preview-screen {
+  min-height: 230px !important;
+  border-radius: 20px !important;
+}
+
+.acode-preview-screen::after {
+  opacity: .55 !important;
+}
+
+.acode-pipeline span {
+  min-height: 34px !important;
+  border-radius: 12px !important;
+  background: rgba(103, 232, 249, .065) !important;
+}
+
+.acode-studio-grid {
+  gap: 12px !important;
+  margin-top: 18px !important;
+}
+
+.acode-studio-grid button {
+  min-height: 132px !important;
+  padding: 16px !important;
+  border-radius: 20px !important;
+  border-color: var(--amx-clean-line) !important;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.06), rgba(255,255,255,.025)),
+    rgba(11, 16, 32, .7) !important;
+  box-shadow: 0 18px 50px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.06) !important;
+}
+
+.acode-studio-grid button::after {
+  opacity: .46 !important;
+  width: 74px !important;
+  height: 74px !important;
+}
+
+.acode-studio-grid button strong {
+  margin-top: 14px !important;
+  font-size: 17px !important;
+}
+
+.acode-output-strip {
+  margin-top: 14px !important;
+  border-radius: 18px !important;
+  background: rgba(4, 8, 18, .38) !important;
+}
+
+.acode-output-strip span {
+  border-radius: 14px !important;
+}
+
+.acode-compose {
+  width: min(930px, calc(100% - 48px)) !important;
+  min-height: 112px !important;
+  border-radius: 24px !important;
+  border-color: rgba(185,198,255,.18) !important;
+  background:
+    linear-gradient(135deg, rgba(18, 24, 48, .9), rgba(8, 14, 30, .88)) !important;
+  box-shadow: 0 24px 76px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.07) !important;
+}
+
+.acode-compose textarea {
+  border-radius: 18px !important;
+  background: rgba(255,255,255,.045) !important;
+}
+
+.acode-msg.assistant .acode-msg-body,
+.acode-msg-body.artifact-ready {
+  border-color: rgba(185,198,255,.16) !important;
+  background:
+    linear-gradient(135deg, rgba(17, 23, 44, .82), rgba(8, 15, 31, .78)) !important;
+  box-shadow: 0 22px 66px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.06) !important;
+}
+
+.acode-artifact-card {
+  background:
+    radial-gradient(260px 160px at 16% 12%, rgba(124,58,237,.14), transparent 72%),
+    rgba(10, 15, 31, .74) !important;
+}
+
+@media (max-width: 820px) {
+  .acode-side {
+    width: min(86vw, 320px) !important;
+  }
+
+  .acode-top,
+  .acode-thread,
+  .acode-compose,
+  .acode-mobile-actions {
+    width: calc(100% - 16px) !important;
+  }
+
+  .acode-empty-hero {
+    padding: 20px !important;
+    border-radius: 24px !important;
+  }
+
+  .acode-empty h1 {
+    max-width: 10ch !important;
+    font-size: 42px !important;
+  }
+
+  .acode-empty p {
+    font-size: 15.5px !important;
+  }
+
+  .acode-hero-metrics {
+    grid-template-columns: 1fr !important;
+  }
+
+  .acode-hero-metrics span {
+    min-height: 54px !important;
+  }
+
+  .acode-studio-grid button {
+    min-height: 116px !important;
+  }
+}

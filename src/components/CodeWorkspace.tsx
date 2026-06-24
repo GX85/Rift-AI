@@ -591,7 +591,7 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
             <AmethystLogo size={30} />
             <div>
               <strong>Amethyst</strong>
-              <span>{messages.length ? active.title : 'Gemini-powered coding assistant'}</span>
+              <span>{messages.length ? active.title : 'ИИ-ассистент для кода и продуктов'}</span>
             </div>
           </div>
           <div className="acode-status" aria-label="Amethyst capabilities">
