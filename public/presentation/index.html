@@ -448,6 +448,60 @@
       border-radius: 0 !important;
       background: var(--px-cyan) !important;
     }
+
+    *,
+    *::before,
+    *::after {
+      border-radius: 0 !important;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(rgba(77,231,255,.08) 2px, transparent 2px),
+        linear-gradient(90deg, rgba(183,120,255,.075) 2px, transparent 2px),
+        linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+      background-size: 48px 48px, 48px 48px, 12px 12px, 12px 12px;
+      opacity: .28;
+      mix-blend-mode: screen;
+    }
+
+    .brand,
+    .brand img,
+    .visual img,
+    .qr img {
+      image-rendering: pixelated !important;
+      image-rendering: crisp-edges !important;
+    }
+
+    .card,
+    .visual,
+    .mock,
+    .nav,
+    .cta,
+    .ghost,
+    .eyebrow,
+    .mock-card,
+    .qr img,
+    footer {
+      border: 2px solid var(--px-line) !important;
+      box-shadow: 6px 6px 0 #000 !important;
+      background:
+        linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px),
+        var(--px-panel) !important;
+      background-size: 10px 10px, 10px 10px, auto !important;
+    }
+
+    h1,
+    h2,
+    h3 {
+      text-shadow: 3px 3px 0 #000 !important;
+    }
   </style>
 </head>
 <body>

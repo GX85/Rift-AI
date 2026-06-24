@@ -8859,3 +8859,189 @@ svg,
     box-shadow: 4px 4px 0 #000 !important;
   }
 }
+
+/* Pixel hardening pass: every surface, every corner */
+*,
+*::before,
+*::after {
+  border-radius: 0 !important;
+}
+
+.hero2::before,
+.platform-page::before,
+.reviews-page::before,
+.mobile-entry::before,
+.mobile-qr-page::before,
+.acode::before {
+  content: "" !important;
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+  background:
+    linear-gradient(rgba(77, 231, 255, 0.08) 2px, transparent 2px),
+    linear-gradient(90deg, rgba(183, 120, 255, 0.075) 2px, transparent 2px),
+    linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px) !important;
+  background-size: 48px 48px, 48px 48px, 12px 12px, 12px 12px !important;
+  opacity: 0.34 !important;
+  mix-blend-mode: screen;
+}
+
+.hero2 > *,
+.platform-page > *,
+.reviews-page > *,
+.mobile-entry > *,
+.mobile-qr-page > *,
+.acode > * {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-logo,
+.hero-logo *,
+.platform-kicker,
+.platform-kicker *,
+.acode-logo,
+.acode-logo *,
+.brand,
+.brand *,
+.mobile-app-icon,
+.mobile-app-icon *,
+.amlogo,
+.amlogo *,
+.amlogo img {
+  image-rendering: pixelated !important;
+  image-rendering: crisp-edges !important;
+}
+
+.hero-logo {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+.platform-kicker {
+  gap: 8px !important;
+}
+
+.platform-kicker .amlogo {
+  width: 24px !important;
+  height: 24px !important;
+}
+
+.hero-logo .amlogo {
+  width: 34px !important;
+  height: 34px !important;
+}
+
+.hero-links a,
+.platform-links a,
+.landing-footer,
+.message,
+.hero-msg,
+.cta-note,
+.platform-flow,
+.platform-detect,
+.mobile-url,
+.acode-file,
+.acode-error,
+.acode-msg-body pre,
+.acode-msg-body code,
+.review-person,
+.review-role,
+.review-text,
+.feature-title,
+.feature-text,
+.plus-sub,
+.reviews-sub {
+  border-radius: 0 !important;
+}
+
+.hero-links a,
+.platform-links a,
+.hero-platforms span,
+.platform-flow span,
+.platform-detect,
+.mobile-url,
+.acode-file,
+.acode-error,
+.acode-msg-body pre,
+.review-avatar,
+.review-card,
+.feature-card,
+.feature-gem,
+.platform-card,
+.mobile-entry-card,
+.mobile-qr-card,
+.features,
+.composer,
+.hero-prompt-grid button,
+.acode-mobile-strip span,
+.acode-preview-top,
+.acode-preview-screen i,
+.acode-preview-screen b,
+.acode-preview-screen span,
+.acode-preview-code span {
+  border: 2px solid var(--pixel-line) !important;
+  background:
+    linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px),
+    var(--pixel-panel) !important;
+  background-size: 10px 10px, 10px 10px, auto !important;
+  box-shadow: 4px 4px 0 #000 !important;
+}
+
+.acode-msg-body pre {
+  background:
+    linear-gradient(rgba(77,231,255,.05) 1px, transparent 1px),
+    #090a10 !important;
+  background-size: 12px 12px !important;
+}
+
+.platform-card.recommended,
+.acode-send,
+.google-btn,
+.composer-cta,
+.nav-open,
+.mobile-entry-card button,
+.mobile-qr-actions a,
+.mobile-qr-actions button {
+  background:
+    linear-gradient(135deg, var(--pixel-cyan) 0 48%, var(--pixel-hi) 48% 100%) !important;
+  color: #05060a !important;
+}
+
+.hero-fractal-stage::before,
+.hero-fractal-stage::after,
+.platform-shell::before,
+.mobile-entry-card::before,
+.mobile-qr-card::before,
+.features::before,
+.acode-empty-hero::after {
+  border-radius: 0 !important;
+}
+
+.fractal-cube,
+.fractal-cube span,
+.acode-empty-orbit,
+.acode-empty-orbit span,
+.acode-live-preview,
+.acode-preview-screen,
+.mock,
+.device,
+.visual {
+  transform-style: flat !important;
+}
+
+.spinner,
+.dot,
+.code-dot,
+.google-icon,
+.platform-icon {
+  border-radius: 0 !important;
+}
+
+.spinner {
+  border-width: 3px !important;
+}
