@@ -2,9 +2,33 @@ import { useEffect, useState } from 'react';
 import type { Session } from '@supabase/supabase-js';
 import { supabase } from './lib/supabase';
 import { Landing, PlatformChoice, ReviewsPage } from './components/Auth';
-import { Workspace } from './components/Workspace';
+import { CodeWorkspace } from './components/CodeWorkspace';
 import { FractalBackground } from './components/FractalBackground';
 import { MobileApp, MobileEntry, MobileQrPage } from './components/MobileApp';
+
+const GUEST_KEY = 'amethyst_guest';
+const PLATFORM_PICKED_KEY = 'amethyst_platform_picked';
+const ENTRY_PLATFORM_KEY = 'amethyst_entry_platform';
+const VIEW_KEY = 'amethyst_view';
+type EntryPlatform = 'desktop' | 'phone';
+type AppView = 'app' | 'home';
+
+function readEntryPlatform(): EntryPlatform {
+  return localStorage.getItem(ENTRY_PLATFORM_KEY) === 'phone' ? 'phone' : 'desktop';
+}
+
+function readAppView(): AppView {
+  return localStorage.getItem(VIEW_KEY) === 'home' ? 'home' : 'app';
+}
+
+function rememberPlatform(platform: EntryPlatform) {
+  localStorage.setItem(PLATFORM_PICKED_KEY, '1');
+  localStorage.setItem(ENTRY_PLATFORM_KEY, platform);
+}
+
+function rememberView(view: AppView) {
+  localStorage.setItem(VIEW_KEY, view);
+}
 
 // Достаём из профиля Google имя и аватар (поля могут называться по-разному).
 function profileOf(session: Session) {
@@ -18,11 +42,16 @@ function profileOf(session: Session) {
 export default function App() {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
-  const [guest, setGuest] = useState(() => localStorage.getItem('amethyst_guest') === '1');
-  const [platformPicked, setPlatformPicked] = useState(false);
-  const [entryPlatform, setEntryPlatform] = useState<'desktop' | 'phone'>('desktop');
+  const [guest, setGuest] = useState(() => localStorage.getItem(GUEST_KEY) === '1');
+  const [platformPicked, setPlatformPicked] = useState(() => localStorage.getItem(PLATFORM_PICKED_KEY) === '1' || localStorage.getItem(GUEST_KEY) === '1');
+  const [entryPlatform, setEntryPlatform] = useState<EntryPlatform>(readEntryPlatform);
   // 'app' — чат, 'home' — главный экран (лендинг), доступен и после входа.
-  const [view, setView] = useState<'app' | 'home'>('app');
+  const [view, setViewState] = useState<AppView>(readAppView);
+
+  function setView(viewNext: AppView) {
+    rememberView(viewNext);
+    setViewState(viewNext);
+  }
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -32,12 +61,21 @@ export default function App() {
     const { data: sub } = supabase.auth.onAuthStateChange((_event, s) => {
       setSession(s);
       if (s) {
-        localStorage.removeItem('amethyst_guest');
+        localStorage.removeItem(GUEST_KEY);
         setGuest(false);
+        setPlatformPicked(true);
+        if (localStorage.getItem(PLATFORM_PICKED_KEY) !== '1') rememberPlatform(readEntryPlatform());
       }
     });
     return () => sub.subscription.unsubscribe();
   }, []);
+
+  useEffect(() => {
+    if (!loading && (session || guest) && !platformPicked) {
+      setPlatformPicked(true);
+      rememberPlatform(entryPlatform);
+    }
+  }, [entryPlatform, guest, loading, platformPicked, session]);
 
   // При входе сохраняем/обновляем профиль пользователя в базе данных.
   useEffect(() => {
@@ -78,14 +116,19 @@ export default function App() {
 
   // До входа — полноэкранный маркетинговый лендинг.
   function enterGuest() {
-    localStorage.setItem('amethyst_guest', '1');
+    localStorage.setItem(GUEST_KEY, '1');
+    rememberPlatform(entryPlatform);
     setGuest(true);
     setView('app');
   }
 
   function leaveApp() {
-    localStorage.removeItem('amethyst_guest');
+    localStorage.removeItem(GUEST_KEY);
+    localStorage.removeItem(PLATFORM_PICKED_KEY);
+    localStorage.removeItem(VIEW_KEY);
     setGuest(false);
+    setPlatformPicked(false);
+    setViewState('app');
     supabase.auth.signOut();
   }
 
@@ -102,19 +145,23 @@ export default function App() {
       return;
     }
     setEntryPlatform('phone');
+    rememberPlatform('phone');
     setPlatformPicked(true);
     setView('home');
   }
 
   function chooseDesktop() {
     setEntryPlatform('desktop');
+    rememberPlatform('desktop');
     setPlatformPicked(true);
     setView('home');
   }
 
   function enterSelectedGuest() {
     if (entryPlatform === 'phone') {
-      localStorage.setItem('amethyst_guest', '1');
+      localStorage.setItem(GUEST_KEY, '1');
+      rememberPlatform('phone');
+      rememberView('app');
       setGuest(true);
       window.location.href = '/mobile';
       return;
@@ -175,7 +222,7 @@ export default function App() {
     );
   }
 
-  if (!platformPicked)
+  if (!platformPicked && !session && !guest)
     return (
       <>
         {bg}
@@ -207,7 +254,7 @@ export default function App() {
   return (
     <>
       {bg}
-      <Workspace
+      <CodeWorkspace
         name={p.name}
         email={p.email}
         avatar={p.avatar}

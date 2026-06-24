@@ -29,28 +29,35 @@ type Review = { id: string; name: string; text: string; createdAt: number };
 type PreviewMode = 'desktop' | 'mobile';
 type CreatorPreset = { label: string; prompt: string };
 
-// Единственная модель — Amethyst (мульти-возможности в одной модели).
+// Единственная модель — Amethyst Code (специализация только на разработке).
 const RIFT = {
-  name: 'Amethyst',
-  tagline: 'Умный ИИ для любых задач',
-  temperature: 0.7,
+  name: 'Amethyst Code',
+  tagline: 'ИИ для кода, приложений и отладки',
+  temperature: 0.35,
   persona:
-    'Ты — Amethyst, мощный универсальный ИИ-ассистент уровня эксперта: пишешь код, объясняешь сложное ' +
-    'простыми словами, отлаживаешь баги, рассуждаешь над задачами и придумываешь идеи. ' +
-    'Прежде чем ответить — продумай задачу по шагам про себя, затем дай точный и выверенный ответ.',
+    'Ты — Amethyst Code, специализированный ИИ для программирования в духе Codex: пишешь рабочий код, исправляешь ошибки, ' +
+    'проектируешь приложения, объясняешь сложные места простым языком и помогаешь доводить проект до запуска. ' +
+    'Всегда отвечай как инженер: конкретно, проверяемо, без воды и без выдуманных API.',
   suggests: [
-    'Создай ИИ-агента для моего проекта',
-    'Сделай HTML-игру с управлением',
-    'Напиши рабочий React-компонент',
+    'Создай React + TypeScript компонент',
     'Улучши этот код и найди баги',
+    'Создай адаптивный сайт одним HTML-файлом',
+    'Объясни ошибку и дай фикс',
   ],
 };
 
 const SITE_PRESETS: CreatorPreset[] = [
   { label: 'Лендинг AI', prompt: 'Премиальный лендинг для AI-приложения с hero, тарифами, отзывами и CTA' },
-  { label: 'Магазин', prompt: 'Современный интернет-магазин техники с карточками товаров, фильтрами и корзиной' },
-  { label: 'Портфолио', prompt: 'Портфолио 3D-дизайнера с галереей проектов, услугами и формой заявки' },
-  { label: 'SaaS dashboard', prompt: 'Рабочий SaaS-дашборд с сайдбаром, графиками, таблицей задач и адаптацией под телефон' },
+  { label: 'MVP-лендинг', prompt: 'Лендинг для нового стартапа: проблема, решение, демо, тарифы, отзывы, форма заявки' },
+  { label: 'SaaS', prompt: 'Современный сайт SaaS-продукта для бизнеса с секциями пользы, интеграциями и CTA' },
+  { label: 'Портфолио', prompt: 'Портфолио разработчика с проектами, стеком, услугами и формой заявки' },
+];
+
+const APP_PRESETS: CreatorPreset[] = [
+  { label: 'CRM', prompt: 'Мини-CRM для заявок: список клиентов, статусы, фильтр, карточка сделки и заметки' },
+  { label: 'Dashboard', prompt: 'SaaS dashboard: метрики, графики на CSS/canvas, таблица задач, фильтры и адаптив' },
+  { label: 'Planner', prompt: 'Планировщик задач для стартапа: доска, приоритеты, дедлайны, быстрые действия' },
+  { label: 'AI tool', prompt: 'Интерфейс AI-инструмента: поле запроса, настройки, история результатов и панель предпросмотра' },
 ];
 
 const GAME_PRESETS: CreatorPreset[] = [
@@ -74,21 +81,22 @@ const DESKTOP_NOTE =
 
 const CREATION_RULES = `
 
-Особенно важно для кода и игр:
-• Ты не просто чат-бот, а продуктовый AI-builder. Если пользователь просит создать что-то — проектируй, собирай структуру, давай готовый результат и проверяй его качество.
+Кодовый режим:
+• Твоя главная задача — помогать с кодом. Если запрос не про код, мягко верни пользователя к разработке, архитектуре, автоматизации или продуктовой реализации.
 • Если пользователь просит код — давай рабочее решение, а не общий совет. Пиши полный фрагмент или полный файл, который можно сразу вставить/запустить.
 • Для React/TypeScript используй строгие типы, не используй any, держи компоненты маленькими и понятными.
-• Перед ответом мысленно проверь: импорты, имена переменных, состояние, обработчики событий, edge cases, ошибки TypeScript.
-• Если пользователь просит игру — делай именно playable prototype: старт/рестарт, управление, счёт/цель, проигрыш/победа, понятный игровой цикл.
-• Для HTML-игр используй canvas, requestAnimationFrame, обработку клавиатуры и touch/mobile controls, если это уместно.
-• Игра не должна быть пустой сценой: добавляй игрока, препятствия/врагов/цели, коллизии, баланс скорости и визуальную обратную связь.
-• Генерация игр должна отдавать один готовый HTML-файл: <!doctype html>, <style>, <canvas>, <script>. Без внешних библиотек, CDN и картинок, если пользователь сам их не дал.
-• В каждой игре должны быть: меню старта, короткая подсказка управления, кнопка рестарта, счёт/таймер/уровень, пауза, обработка конца игры.
-• Делай управление удобным: WASD/стрелки/пробел на ПК и touch-кнопки на телефоне. Не заставляй пользователя дописывать управление самому.
-• Добавляй простую физику и баланс: ускорение, гравитацию или инерцию там, где это подходит; сложность должна расти постепенно.
-• Проверяй JS перед выдачей: не должно быть незакрытых скобок, несуществующих переменных, неинициализированного canvas/context и бесконечных ошибок в loop.
-• Если генерируешь один HTML-файл — включай CSS и JS внутрь файла, без скрытых зависимостей и без объяснений вместо кода.
-• После кода кратко пиши, как запустить и что можно улучшить дальше.
+• Перед ответом проверь: импорты, имена переменных, состояние, обработчики событий, edge cases, ошибки TypeScript, адаптивность и доступность.
+• Если пользователь прислал ошибку — сначала назови причину, затем дай точный фикс, затем коротко объясни как проверить.
+• Если данных не хватает — задай максимум один вопрос. Если можно сделать разумное допущение — сделай его и двигайся дальше.
+• Если пользователь просит приложение — делай Claude/Codex-подобный результат: архитектура, готовый UI, состояния, мок-данные, обработчики, пустые/ошибочные состояния и понятный запуск.
+• Для прототипов приложений отдавай один готовый HTML-файл, если пользователь не попросил конкретный фреймворк. Для React/TypeScript отдавай отдельные файлы с именами и кодом.
+• Если пользователь просит сайт или лендинг — генерируй его прямо в основном чате, без ссылки на отдельную вкладку. Давай один полный HTML-файл: <!doctype html>, <html>, <style>, <body>, при необходимости <script>.
+• Сайт должен быть не шаблонной заглушкой, а готовым первым экраном и страницей: nav, hero, CTA, секции пользы, карточки/таблицы только если нужны, footer, responsive mobile layout.
+• Для сайтов добавляй нормальные состояния и качество интерфейса: hover/focus, адаптивные отступы, читаемая типографика, доступные кнопки, без переполнения текста на телефоне.
+• Для сайтов не используй внешние CDN, картинки и библиотеки, если пользователь сам их не дал. Всё должно запускаться открытием одного HTML-файла.
+• Перед выдачей HTML мысленно проверь незакрытые теги, CSS-селекторы, адаптивность, кнопки и отсутствие горизонтального скролла.
+• Не выдумывай несуществующие библиотеки, свойства и API. Если не уверен — предложи безопасный стандартный вариант.
+• После кода кратко пиши: куда вставить, как запустить, как проверить.
 
 ИИ-агенты:
 • Если пользователь просит ИИ-агента — проектируй агента как готовую систему: название, цель, роль, входные данные, инструменты, память, ограничения, пошаговый workflow и критерии качества.
@@ -97,22 +105,12 @@ const CREATION_RULES = `
 • Если пользователь просит “создай агента” без деталей — сам выбери разумную структуру и задай максимум один уточняющий вопрос только если без него нельзя.
 • Делай агентов практичными: чтобы их можно было сразу вставить в AI-функцию, чат-бота или использовать как инструкцию для команды.
 
-Улучшенный чат:
-• Отвечай как сильный помощник: сначала короткий полезный результат, затем детали, если они нужны.
-• Не уходи в длинные рассуждения без запроса. Для простых вопросов отвечай коротко; для сложных — структурно.
-• Если пользователь злится или торопится — не спорь, сразу помогай действием.
-• Если запрос расплывчатый — предложи лучший вариант реализации и двигайся дальше.
-• Запоминай контекст текущего чата: название проекта Amethyst AI, Vite + React + TypeScript, Supabase, Vercel.
-
-Сайты:
-• Если пользователь просит сайт — делай реальный первый экран и рабочий интерфейс, а не заглушку. Включай адаптивность, кнопки, состояния, аккуратный стиль.
-• Для лендингов сразу добавляй hero, CTA, секции пользы, карточки/таблицы только если они нужны, footer и mobile layout.
-• Для web app делай рабочий экран приложения, а не рекламную страницу.
-
-Картинки:
-• Если пользователь просит картинку — сначала улучши prompt: объект, стиль, композиция, свет, фон, детализация, соотношение сторон.
-• Если картинка нужна для сайта/игры — уточняй назначение в самом prompt: hero background, icon, sprite, texture, character, item.
-• Избегай пустых абстрактных prompt; добавляй конкретику, чтобы результат был красивее.
+Формат ответа:
+• Начинай с результата или диагноза, не с длинного вступления.
+• Для кода используй markdown-блоки с языком.
+• Для нескольких файлов пиши путь файла перед каждым блоком.
+• Держи объяснение коротким, если пользователь не просит подробно.
+• Запоминай контекст текущего проекта: Amethyst Code, Vite + React + TypeScript, Supabase, Vercel.
 
 Качество функций:
 • Всегда проверяй, что результат можно использовать сразу: скачать, вставить, запустить, открыть или применить.
@@ -214,7 +212,14 @@ export function Workspace({
   const [memory, setMemoryState] = useState<string[]>(getMemory());
   const [showMemory, setShowMemory] = useState(false);
   const [memInput, setMemInput] = useState('');
-  // Сайты (Plus)
+  // Генераторы (Plus)
+  const [showApp, setShowApp] = useState(false);
+  const [appWish, setAppWish] = useState('');
+  const [appHtml, setAppHtml] = useState('');
+  const [appBusy, setAppBusy] = useState(false);
+  const [appErr, setAppErr] = useState('');
+  const [appPreviewMode, setAppPreviewMode] = useState<PreviewMode>('desktop');
+
   const [showSite, setShowSite] = useState(false);
   const [siteWish, setSiteWish] = useState('');
   const [siteHtml, setSiteHtml] = useState('');
@@ -355,6 +360,11 @@ export function Workspace({
     return `Сделай ${base}. Нужен готовый премиальный адаптивный сайт: hero, понятный CTA, секции пользы, карточки, отзывы, мобильная версия, аккуратные hover/focus состояния и чистый визуальный стиль.`;
   }
 
+  function improveAppPrompt(wish: string) {
+    const base = wish.trim() || 'рабочее приложение для управления задачами стартапа';
+    return `Сделай ${base}. Нужен готовый интерактивный web-app прототип в одном HTML-файле: реальный рабочий экран приложения, навигация, состояния, мок-данные, формы, фильтры/поиск, empty/error/loading states, адаптив под телефон, аккуратный бизнес-интерфейс и чистый JS без внешних библиотек.`;
+  }
+
   function improveGamePrompt(wish: string) {
     const base = wish.trim() || 'аркадную игру с кристаллами';
     return `Сделай ${base}. Нужен готовый playable HTML-прототип на canvas: старт, пауза, рестарт, счет, уровни, проигрыш/победа, клавиатура на ПК и touch-кнопки на телефоне, частицы и плавная анимация.`;
@@ -382,21 +392,37 @@ export function Workspace({
 
   function startAgentBuilder() {
     setInput(
-      'Создай ИИ-агента для моей задачи. Опиши: название, цель, роль, входные данные, инструменты, память, ограничения, workflow, system prompt, формат ответа и 3 примера запросов пользователя.',
+      'Создай coding-agent для моего проекта. Опиши: роль, входные данные, инструменты, правила работы с кодом, workflow, system prompt, формат ответа и 3 примера запросов.',
     );
     setSidebarOpen(false);
     window.setTimeout(() => taRef.current?.focus(), 0);
   }
 
-  async function genHtml(kind: 'site' | 'game', wish: string) {
+  function startCodeReview() {
+    setInput('Проведи code review. Найди баги, TypeScript-ошибки, проблемы архитектуры, edge cases и предложи точные исправления. Код вставлю ниже:\n\n');
+    setSidebarOpen(false);
+    window.setTimeout(() => taRef.current?.focus(), 0);
+  }
+
+  function startBugFix() {
+    setInput('Помоги исправить ошибку. Сначала найди причину, потом дай фикс и способ проверки. Ошибка/код:\n\n');
+    setSidebarOpen(false);
+    window.setTimeout(() => taRef.current?.focus(), 0);
+  }
+
+  async function genHtml(kind: 'site' | 'game' | 'app', wish: string) {
     const sys =
       kind === 'site'
         ? 'You generate premium production-ready websites. Return ONLY one complete HTML document starting with <!DOCTYPE html>. Use embedded CSS and JS only. No markdown. Build a real first screen, navigation, CTA, feature sections, responsive mobile layout, polished spacing, hover/focus states, micro-animations, accessible buttons, and a visual style that matches the user request. No external assets unless generated with CSS/canvas.'
-        : 'You generate premium playable browser games. Return ONLY one complete HTML document starting with <!DOCTYPE html>. Use embedded CSS and JS only. No markdown. The game must include canvas rendering, start menu, pause/restart, score/HUD, increasing difficulty, win/lose state, keyboard controls, touch/mobile controls, particles or visual feedback, and no external libraries/assets.';
+        : kind === 'app'
+          ? 'You generate Claude Artifacts style web app prototypes. Return ONLY one complete HTML document starting with <!DOCTYPE html>. Use embedded CSS and JS only. No markdown. Build a real usable app screen, not a landing page. Include navigation, realistic mock data, CRUD-like interactions where useful, search/filter controls, forms, loading/empty/error states, responsive mobile layout, accessible controls, polished dense business UI, and no external libraries/assets.'
+          : 'You generate premium playable browser games. Return ONLY one complete HTML document starting with <!DOCTYPE html>. Use embedded CSS and JS only. No markdown. The game must include canvas rendering, start menu, pause/restart, score/HUD, increasing difficulty, win/lose state, keyboard controls, touch/mobile controls, particles or visual feedback, and no external libraries/assets.';
     const upgradedWish =
       kind === 'site'
         ? `User website request: ${improveSitePrompt(wish)}\nMake it visually rich, responsive, and ready to download as a single HTML file.`
-        : `User game request: ${improveGamePrompt(wish)}\nMake a complete playable arcade prototype with polished graphics, touch controls, score, restart, and balanced difficulty.`;
+        : kind === 'app'
+          ? `User app request: ${improveAppPrompt(wish)}\nMake a complete app prototype with polished UI, realistic interactions, and clean code ready to preview or download as app.html.`
+          : `User game request: ${improveGamePrompt(wish)}\nMake a complete playable arcade prototype with polished graphics, touch controls, score, restart, and balanced difficulty.`;
     let full = '';
     for await (const chunk of streamGemini({ system: sys, history: [], prompt: upgradedWish, temperature: 0.78, maxTokens: 8192 })) {
       full += chunk;
@@ -404,6 +430,19 @@ export function Workspace({
     full = stripFences(full);
     if (!/<\w/.test(full)) throw new Error('Модель не вернула HTML. Попробуй переформулировать запрос.');
     return full;
+  }
+  async function generateApp() {
+    const w = appWish.trim();
+    if (!w || appBusy) return;
+    setAppBusy(true);
+    setAppHtml('');
+    setAppErr('');
+    try {
+      setAppHtml(await genHtml('app', w));
+    } catch (e) {
+      setAppErr(e instanceof Error ? e.message : 'Ошибка генерации.');
+    }
+    setAppBusy(false);
   }
   async function generateSite() {
     const w = siteWish.trim();
@@ -645,7 +684,7 @@ export function Workspace({
       <textarea
         ref={taRef}
         className="cbox-input"
-        placeholder="Спроси у Amethyst…"
+        placeholder="Спроси про код, вставь ошибку или опиши приложение…"
         value={input}
         onChange={(e) => {
           setInput(e.target.value);
@@ -665,8 +704,8 @@ export function Workspace({
         <button
           type="button"
           className="cbox-attach"
-          title={plus ? 'Прикрепить файл' : 'Файлы — в Amethyst Plus'}
-          onClick={() => (plus ? fileRef.current?.click() : setShowPlus(true))}
+          title="Прикрепить файл с кодом"
+          onClick={() => fileRef.current?.click()}
         >
           <Icon name="attach" size={17} />
         </button>
@@ -708,8 +747,11 @@ export function Workspace({
 
       <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
         <div className="side-top">
-          <button className="hero-logo side-logo" onClick={onHome} title="На главный экран">
-            Amethyst<span>AI</span>
+          <button className="side-logo" onClick={onHome} title="На главный экран">
+            <AmethystLogo size={34} />
+            <span className="side-logo-text">
+              Amethyst<span>AI</span>
+            </span>
           </button>
           <button className="icon-only side-collapse" onClick={() => setCollapsed(true)} title="Свернуть">
             «
@@ -727,34 +769,24 @@ export function Workspace({
           <Icon name="plus" size={17} /> Новый чат
         </button>
         <button className="side-link" onClick={() => setShowMemory(true)}>
-          <Icon name="memory" /> Память ИИ
+          <Icon name="memory" /> Контекст проекта
+        </button>
+        <button className="side-link" onClick={startCodeReview}>
+          <Icon name="search" /> Code review
+        </button>
+        <button className="side-link" onClick={startBugFix}>
+          <Icon name="settings" /> Исправить ошибку
         </button>
         <button className="side-link" onClick={startAgentBuilder}>
-          <Icon name="models" /> ИИ-агент
-        </button>
-        <button className="side-link" onClick={() => (plus ? setShowSite(true) : setShowPlus(true))}>
-          <Icon name="globe" /> Создать сайт {!plus && <span className="lock">PLUS</span>}
-        </button>
-        <button className="side-link" onClick={() => (plus ? setShowGame(true) : setShowPlus(true))}>
-          <Icon name="game" /> Игровая студия {!plus && <span className="lock">PLUS</span>}
-        </button>
-        <button className="side-link" onClick={() => (plus ? setShowImage(true) : setShowPlus(true))}>
-          <Icon name="image" /> Создать картинку {!plus && <span className="lock">PLUS</span>}
+          <Icon name="models" /> Coding agent
         </button>
 
-        <button className="side-link" onClick={() => setShowReviews(true)}>
-          <Icon name="star" /> Отзывы
-        </button>
-        <a className="side-link" href="/qr">
-          <Icon name="globe" /> QR на телефон
-        </a>
-
-        <button className={`plus-banner ${plus ? 'on' : ''}`} onClick={() => setShowPlus(true)}>
+        <button className="plus-banner on" onClick={() => setShowSettings(true)}>
           <div className="plus-banner-title">
-            <Icon name="star" size={15} /> Amethyst Plus
-            {plus && <span className="plus-dot">активен</span>}
+            <Icon name="star" size={15} /> Amethyst Code
+            <span className="plus-dot">Gemini</span>
           </div>
-          <div className="plus-banner-sub">{plus ? 'Все функции открыты' : 'Сайты · игры · память · озвучка'}</div>
+          <div className="plus-banner-sub">Код · отладка · приложения · файлы</div>
         </button>
 
         <div className="side-label">История</div>
@@ -842,7 +874,7 @@ export function Workspace({
               <AmethystLogo size={18} />
             </div>
             <div>
-              <div className="ws-bar-name">Amethyst{plus && <span className="plus-dot"> · Plus</span>}</div>
+              <div className="ws-bar-name">Amethyst Code</div>
               <div className="ws-bar-tag">{hasDesktop() ? 'ПК-агент подключён' : RIFT.tagline}</div>
             </div>
           </div>
@@ -853,21 +885,11 @@ export function Workspace({
 
         {empty ? (
           <div className="hero-chat">
-            <div className="hero-chat-fractal" aria-hidden>
-              <div className="fractal-cube">
-                <span />
-                <span />
-                <span />
-                <span />
-                <span />
-                <span />
-                <span />
-                <span />
-                <span />
-              </div>
+            <div className="hero-chat-logo" aria-hidden>
+              <AmethystLogo size={96} />
             </div>
-            <h1 className="hero-chat-title">Amethyst</h1>
-            <p className="hero-chat-sub">{RIFT.tagline}. Что ты хочешь узнать?</p>
+            <h1 className="hero-chat-title">Amethyst Code</h1>
+            <p className="hero-chat-sub">Опиши задачу, вставь ошибку или прикрепи файл. Я помогу написать, понять и починить код.</p>
             <div className="hero-chat-box">{composer}</div>
             {error && <p className="composer-error">{error}</p>}
             <div className="suggests">
@@ -955,7 +977,7 @@ export function Workspace({
                 </p>
               )}
               {composer}
-              <p className="cbox-hint">Amethyst · работает на Gemini{plus ? ' · Plus' : ''}</p>
+              <p className="cbox-hint">Amethyst Code · работает на Gemini</p>
             </div>
           </>
         )}
@@ -992,16 +1014,16 @@ export function Workspace({
                 <div className="stat-lbl">сообщений</div>
               </div>
               <div className="stat">
-                <div className="stat-num">{plus ? 'Plus' : 'Free'}</div>
-                <div className="stat-lbl">тариф</div>
+                <div className="stat-num">Code</div>
+                <div className="stat-lbl">режим</div>
               </div>
             </div>
 
             <div className="set-label">Настройки</div>
             <button className="set-row" onClick={toggleTts}>
               <div className="set-text">
-                <div className="set-title">Озвучка ответов {!plus && <span className="lock">PLUS</span>}</div>
-                <div className="set-desc">Amethyst читает ответы голосом</div>
+                <div className="set-title">Озвучка ответов</div>
+                <div className="set-desc">Amethyst Code читает ответы голосом</div>
               </div>
               <span className={`switch ${tts && plus ? 'on' : ''}`}>
                 <span className="knob" />
@@ -1009,7 +1031,7 @@ export function Workspace({
             </button>
             <div className="set-row" style={{ cursor: 'default' }}>
               <div className="set-text">
-                <div className="set-title">Цвет темы {!plus && <span className="lock">PLUS</span>}</div>
+                <div className="set-title">Цвет темы</div>
                 <div className="set-desc">Акцент интерфейса</div>
               </div>
               <div className="accent-swatches">
@@ -1028,12 +1050,12 @@ export function Workspace({
               className="set-row"
               onClick={() => {
                 setShowSettings(false);
-                setShowPlus(true);
+                setShowMemory(true);
               }}
             >
               <div className="set-text">
-                <div className="set-title">✦ Amethyst Plus {plus ? '— активен' : ''}</div>
-                <div className="set-desc">{plus ? 'Все функции открыты' : 'Активировать по коду'}</div>
+                <div className="set-title">Контекст проекта</div>
+                <div className="set-desc">Стек, правила и важные решения для coding assistant</div>
               </div>
               <span className="set-arrow">›</span>
             </button>
@@ -1049,7 +1071,7 @@ export function Workspace({
                 ⎋ Выйти из аккаунта
               </button>
             </div>
-            <div className="set-foot">Amethyst AI · работает на Gemini</div>
+            <div className="set-foot">Amethyst Code · работает на Gemini</div>
           </div>
         </div>
       )}
@@ -1136,6 +1158,7 @@ export function Workspace({
             </div>
             <ul className="perks">
               <li><b>Без лимитов</b> — у бесплатного {FREE_LIMIT} сообщений</li>
+              <li><b>Студия приложений</b> — рабочие web-app прототипы как Claude Artifacts</li>
               <li><b>Создание сайтов</b> — генерируй и скачивай сайты</li>
               <li><b>Игровая студия</b> — играбельные игры одним кликом</li>
               <li><b>Генерация картинок</b> — рисует изображения по описанию</li>
@@ -1192,6 +1215,63 @@ export function Workspace({
                 ))
               )}
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Студия приложений */}
+      {showApp && (
+        <div className="modal-scrim" onClick={() => setShowApp(false)}>
+          <div className="modal modal-wide" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-head">
+              <div>
+                <h3>Студия приложений</h3>
+                <p className="reviews-modal-sub">Опиши web-app. Amethyst соберёт рабочий прототип с UI, состояниями и кодом.</p>
+              </div>
+              <button className="icon-only" onClick={() => setShowApp(false)}>
+                ✕
+              </button>
+            </div>
+            <div className="redeem">
+              <input placeholder="Напр. CRM для заявок, dashboard для продаж, AI-инструмент" value={appWish} onChange={(e) => setAppWish(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && generateApp()} disabled={appBusy} />
+              <button onClick={() => setAppWish(improveAppPrompt(appWish))} disabled={appBusy}>
+                Улучшить
+              </button>
+              <button onClick={generateApp} disabled={appBusy || !appWish.trim()}>
+                {appBusy ? '…' : 'Создать'}
+              </button>
+            </div>
+            <div className="prompt-chips" aria-label="Быстрые идеи для приложения">
+              {APP_PRESETS.map((preset) => (
+                <button key={preset.label} className="prompt-chip" onClick={() => setAppWish(preset.prompt)} disabled={appBusy}>
+                  {preset.label}
+                </button>
+              ))}
+            </div>
+            {appBusy && <p className="muted-line">Amethyst собирает приложение…</p>}
+            {appErr && <p className="composer-error">{appErr}</p>}
+            {appHtml && (
+              <>
+                <div className="preview-toolbar">
+                  <div className="preview-segmented" aria-label="Режим предпросмотра">
+                    <button className={appPreviewMode === 'desktop' ? 'active' : ''} onClick={() => setAppPreviewMode('desktop')}>
+                      Desktop
+                    </button>
+                    <button className={appPreviewMode === 'mobile' ? 'active' : ''} onClick={() => setAppPreviewMode('mobile')}>
+                      Mobile
+                    </button>
+                  </div>
+                  <div className="preview-actions">
+                    <button onClick={() => openHtml(appHtml)}>Открыть</button>
+                    <button onClick={() => void copyToClipboard(appHtml)}>Копировать HTML</button>
+                    <button onClick={() => saveFile(appHtml, 'app.html')}>Скачать app.html</button>
+                  </div>
+                </div>
+                <div className={`site-preview ${appPreviewMode === 'mobile' ? 'preview-mobile' : 'preview-desktop'}`}>
+                  <iframe title="app" srcDoc={appHtml} sandbox="allow-scripts" />
+                </div>
+              </>
+            )}
           </div>
         </div>
       )}

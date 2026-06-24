@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
-import { Workspace } from './Workspace';
+import { CodeWorkspace } from './CodeWorkspace';
+import { AmethystLogo } from './Gems';
 
 type MobileAppProps = {
   name: string;
@@ -185,8 +186,10 @@ export function MobileQrPage() {
   return (
     <main className="mobile-qr-page">
       <section className="mobile-qr-card">
-        <div className="mobile-app-icon">A</div>
-        <p className="mobile-kicker">Amethyst AI Mobile</p>
+        <div className="mobile-app-icon">
+          <AmethystLogo size={38} />
+        </div>
+        <p className="mobile-kicker">Amethyst Code Mobile</p>
         <h1>Открой на телефоне</h1>
         <p>Наведи камеру iPhone или Android на QR. Откроется отдельная мобильная версия приложения.</p>
         <QrCode value={url} />
@@ -216,10 +219,12 @@ export function MobileEntry({ onEnter }: MobileEntryProps) {
   return (
     <main className="mobile-entry">
       <section className="mobile-entry-card">
-        <div className="mobile-app-icon">A</div>
+        <div className="mobile-app-icon">
+          <AmethystLogo size={38} />
+        </div>
         <p className="mobile-kicker">Mobile app</p>
-        <h1>Amethyst AI</h1>
-        <p>Отдельная версия под телефон: чат, сайты, игры, картинки, отзывы и Plus-функции.</p>
+        <h1>Amethyst Code</h1>
+        <p>Мобильная версия для кода: чат, ошибки, review, файлы и генерация web-app прототипов.</p>
         <input
           value={code}
           onChange={(e) => setCode(e.target.value)}
@@ -238,7 +243,7 @@ export function MobileEntry({ onEnter }: MobileEntryProps) {
 export function MobileApp(props: MobileAppProps) {
   return (
     <div className="mobile-app-mode">
-      <Workspace {...props} />
+      <CodeWorkspace {...props} />
     </div>
   );
 }

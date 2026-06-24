@@ -1,5 +1,5 @@
-const CACHE_NAME = 'amethyst-mobile-v1';
-const APP_SHELL = ['/', '/mobile', '/qr', '/manifest.webmanifest', '/amethyst-icon.svg'];
+const CACHE_NAME = 'amethyst-mobile-v3-logo-20260623';
+const APP_SHELL = ['/', '/mobile', '/qr', '/manifest.webmanifest', '/amethyst-logo-pixel.png?v=20260623-logo'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)));
