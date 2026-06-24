@@ -68,17 +68,7 @@ export function PlatformChoice({
     <main className="platform-page">
       <section className="platform-shell">
         <div className="hero-fractal-stage platform-gem" aria-hidden>
-          <div className="fractal-cube">
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-          </div>
+          <AmethystLogo size={126} />
         </div>
         <p className="platform-kicker"><AmethystLogo size={24} /> Amethyst AI</p>
         <h1>Выбери вход</h1>
@@ -179,17 +169,7 @@ export function Landing({ onEnter }: { onEnter?: () => void }) {
 
       <header className="hero-center">
         <div className="hero-fractal-stage" aria-hidden>
-          <div className="fractal-cube">
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-          </div>
+          <AmethystLogo size={126} />
         </div>
         <div className="hero-pill">
           <span className="dot" /> Gemini-powered code & business assistant

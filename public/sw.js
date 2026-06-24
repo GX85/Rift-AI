@@ -4,7 +4,7 @@ const APP_SHELL = [
   '/mobile',
   '/qr',
   '/manifest.webmanifest',
-  '/amethyst-logo-pixel.png?v=20260623-logo',
+  '/amethyst-logo-pixel.svg',
   '/amethyst-mobile-qr.png',
 ];
 

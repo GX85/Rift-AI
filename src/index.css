@@ -9234,6 +9234,61 @@ samp,
   filter: drop-shadow(0 0 14px rgba(183, 120, 255, 0.45)) !important;
 }
 
+.amlogo {
+  display: inline-grid !important;
+  place-items: center !important;
+  overflow: visible !important;
+  background: #080812 !important;
+  border: 2px solid rgba(198, 173, 255, 0.72) !important;
+  box-shadow: 3px 3px 0 #000, 0 0 18px rgba(178, 98, 255, 0.34) !important;
+  padding: max(2px, 8%) !important;
+}
+
+.amlogo svg {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  shape-rendering: crispEdges !important;
+  image-rendering: pixelated !important;
+  filter: none !important;
+}
+
+.amlogo .gem-shadow { fill: rgba(0, 0, 0, 0.92); }
+.amlogo .gem-outline { fill: #f4efff; }
+.amlogo .gem-dark { fill: #120528; }
+.amlogo .gem-left { fill: #7a2cff; }
+.amlogo .gem-core { fill: #b85cff; }
+.amlogo .gem-right { fill: #5d23d6; }
+.amlogo .gem-hi { fill: #f0dcff; }
+.amlogo .gem-cyan { fill: #4de7ff; }
+.amlogo .gem-spark { fill: #ffffff; }
+
+.hero-fractal-stage {
+  display: grid !important;
+  place-items: center !important;
+  border: 2px solid rgba(147, 132, 255, 0.48) !important;
+  background:
+    linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px),
+    rgba(8, 9, 18, 0.86) !important;
+  background-size: 12px 12px, 12px 12px, auto !important;
+  box-shadow: 6px 6px 0 #000, 0 0 44px rgba(128, 75, 255, 0.26) !important;
+}
+
+.hero-fractal-stage .amlogo {
+  width: clamp(84px, 10vw, 126px) !important;
+  height: clamp(84px, 10vw, 126px) !important;
+  border-width: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+.hero-fractal-stage::before,
+.hero-fractal-stage::after {
+  content: none !important;
+}
+
 @media (max-width: 820px) {
   .hero-h1 {
     font-size: clamp(38px, 14vw, 58px) !important;
