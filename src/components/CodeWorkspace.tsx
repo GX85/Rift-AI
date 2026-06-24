@@ -36,8 +36,6 @@ const MOBILE_ACTIONS = [
   { label: 'React', prompt: 'Создай React + TypeScript компонент без any, с loading/empty/error состояниями. Задача: ' },
 ];
 
-const MOBILE_ACTION_ICONS = ['globe', 'game', 'bug', 'spark', 'code'];
-
 const MOBILE_CAPABILITIES = [
   { label: 'Код', icon: 'code' },
   { label: 'Сайты', icon: 'globe' },
@@ -73,12 +71,6 @@ const STUDIO_CARDS = [
 ];
 
 const OUTPUTS = ['HTML-сайт', 'React/TS код', 'Исправление багов', 'Бизнес-бриф', 'Игровой прототип'];
-
-const TOP_BADGES = [
-  { icon: 'spark', label: 'Gemini 2.5 Flash' },
-  { icon: 'code', label: 'Готовые артефакты' },
-  { icon: 'globe', label: 'Адаптив под телефон' },
-];
 
 const HERO_METRICS = [
   { value: 'HTML', label: 'сайты одним файлом' },
@@ -611,6 +603,12 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
 
   return (
     <div className="acode">
+      <div className="acode-crystal-field" aria-hidden="true">
+        <span className="ore ore-left" />
+        <span className="ore ore-right" />
+        <span className="ore ore-bottom" />
+        <span className="ore ore-top" />
+      </div>
       <div className="acode-crystal-nav" aria-label="Кристаллы фона">
         <button className="acode-bg-crystal chat" type="button" onClick={focusChat} title="Открыть чат">
           <AmethystLogo size={54} />
@@ -696,17 +694,6 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
               <span>{messages.length ? active.title : 'ИИ-ассистент для кода и продуктов'}</span>
             </div>
           </div>
-          <div className="acode-status" aria-label="Возможности Amethyst">
-            {TOP_BADGES.map((badge) => (
-              <span key={badge.label}>
-                <Icon name={badge.icon} size={13} />
-                {badge.label}
-              </span>
-            ))}
-          </div>
-          <button className="acode-icon" onClick={createChat} title="Новый чат">
-            <Icon name="plus" size={16} />
-          </button>
         </header>
 
         <div className="acode-mobile-strip" aria-hidden="true">
@@ -857,14 +844,6 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
         </section>
 
         <footer className="acode-compose-wrap">
-          <div className="acode-mobile-actions" aria-label="Быстрые команды">
-            {MOBILE_ACTIONS.map((action, index) => (
-              <button key={action.label} type="button" onClick={() => useStarter(action.prompt)}>
-                <Icon name={MOBILE_ACTION_ICONS[index] ?? 'spark'} size={14} />
-                <span>{action.label}</span>
-              </button>
-            ))}
-          </div>
           {error && <div className="acode-error">{error}</div>}
           {attached && (
             <div className="acode-file">

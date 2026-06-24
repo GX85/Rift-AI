@@ -15511,3 +15511,340 @@ code {
     bottom: 46px !important;
   }
 }
+
+/* Visible amethyst ore field: stones are part of the cave, not UI stickers */
+.acode-crystal-field {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+  overflow: hidden !important;
+}
+
+.acode-crystal-field .ore {
+  position: absolute !important;
+  display: block !important;
+  width: 260px !important;
+  height: 320px !important;
+  opacity: .72 !important;
+  filter:
+    drop-shadow(0 0 34px rgba(203, 91, 255, .44))
+    drop-shadow(0 0 26px rgba(84, 226, 255, .18)) !important;
+  background:
+    linear-gradient(138deg, rgba(255,255,255,.76) 0 9%, rgba(255,92,239,.58) 10% 34%, rgba(119,83,255,.48) 35% 68%, rgba(69,211,255,.42) 69% 100%),
+    radial-gradient(circle at 38% 19%, rgba(255,255,255,.7), transparent 10%) !important;
+  clip-path: polygon(48% 0, 70% 14%, 90% 42%, 78% 76%, 52% 100%, 24% 78%, 8% 43%, 23% 13%) !important;
+}
+
+.acode-crystal-field .ore::before,
+.acode-crystal-field .ore::after {
+  content: '' !important;
+  position: absolute !important;
+  inset: 12% 18% !important;
+  background:
+    linear-gradient(90deg, transparent 0 43%, rgba(255,255,255,.55) 44% 49%, transparent 50%),
+    linear-gradient(28deg, transparent 0 54%, rgba(83,225,255,.36) 55% 61%, transparent 62%),
+    linear-gradient(146deg, transparent 0 34%, rgba(255,108,244,.34) 35% 42%, transparent 43%) !important;
+  clip-path: polygon(50% 0, 66% 39%, 86% 48%, 58% 61%, 50% 100%, 40% 61%, 14% 48%, 34% 39%) !important;
+}
+
+.acode-crystal-field .ore::after {
+  inset: auto 8% 0 8% !important;
+  height: 42% !important;
+  opacity: .34 !important;
+  transform: scaleX(1.25) !important;
+  filter: blur(8px) !important;
+}
+
+.acode-crystal-field .ore-left {
+  left: 390px !important;
+  top: 180px !important;
+  width: 150px !important;
+  height: 205px !important;
+  opacity: .36 !important;
+  transform: rotate(-18deg) !important;
+}
+
+.acode-crystal-field .ore-right {
+  right: 16px !important;
+  top: 280px !important;
+  width: 210px !important;
+  height: 290px !important;
+  transform: rotate(14deg) !important;
+}
+
+.acode-crystal-field .ore-bottom {
+  right: 110px !important;
+  bottom: 18px !important;
+  width: 280px !important;
+  height: 220px !important;
+  opacity: .46 !important;
+  transform: rotate(72deg) !important;
+}
+
+.acode-crystal-field .ore-top {
+  right: 360px !important;
+  top: 72px !important;
+  width: 130px !important;
+  height: 185px !important;
+  opacity: .44 !important;
+  transform: rotate(8deg) !important;
+}
+
+.acode-crystal-nav {
+  z-index: 5 !important;
+}
+
+.acode-bg-crystal {
+  opacity: .98 !important;
+}
+
+.acode-bg-crystal span {
+  opacity: .9 !important;
+  font-size: 13px !important;
+}
+
+.acode-top,
+.acode-compose,
+.acode-side,
+.acode-artifact-card,
+.platform-shell {
+  z-index: 3 !important;
+}
+
+@media (max-width: 900px) {
+  .acode-crystal-field .ore-left,
+  .acode-crystal-field .ore-top {
+    display: none !important;
+  }
+
+  .acode-crystal-field .ore-right {
+    right: -72px !important;
+    top: 180px !important;
+    width: 150px !important;
+    height: 210px !important;
+  }
+
+  .acode-crystal-field .ore-bottom {
+    right: 12px !important;
+    bottom: 70px !important;
+    width: 160px !important;
+    height: 140px !important;
+  }
+}
+
+/* Presentation rescue pass: remove circled chrome and make the app feel carved from amethyst */
+.acode-status,
+.acode-mobile-actions,
+.acode-top > .acode-icon:not(.mobile-only),
+.platform-showcase {
+  display: none !important;
+}
+
+.acode-main,
+.platform-page,
+.hero2 {
+  background:
+    radial-gradient(900px 640px at 17% 8%, rgba(125, 41, 148, .52), transparent 72%),
+    radial-gradient(820px 560px at 94% 12%, rgba(28, 95, 129, .34), transparent 70%),
+    radial-gradient(520px 440px at 60% 104%, rgba(100, 56, 190, .32), transparent 74%),
+    linear-gradient(120deg, rgba(11, 9, 28, .96), rgba(7, 17, 35, .97)) !important;
+}
+
+.acode-main::before,
+.platform-page::before,
+.hero2::before {
+  opacity: .78 !important;
+  background:
+    linear-gradient(115deg, transparent 0 7%, rgba(219, 92, 255, .12) 7.3% 8%, transparent 8.3% 100%),
+    linear-gradient(38deg, transparent 0 26%, rgba(87, 226, 255, .1) 26.4% 27.2%, transparent 27.6% 100%),
+    linear-gradient(151deg, transparent 0 65%, rgba(255,255,255,.07) 65.3% 65.9%, transparent 66.3% 100%),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.025) 0 1px, transparent 1px 44px),
+    repeating-linear-gradient(0deg, rgba(255,255,255,.02) 0 1px, transparent 1px 44px) !important;
+}
+
+.acode-top,
+.acode-compose,
+.acode-side,
+.acode-artifact-card,
+.platform-shell,
+.platform-card,
+.platform-detect,
+.platform-flow span,
+.platform-links a {
+  border-radius: 0 !important;
+  clip-path: polygon(0 22px, 22px 0, calc(100% - 34px) 0, 100% 26px, 100% calc(100% - 28px), calc(100% - 24px) 100%, 28px 100%, 0 calc(100% - 30px)) !important;
+  border: 1px solid rgba(214, 188, 255, .28) !important;
+  background:
+    radial-gradient(260px 190px at 12% 0%, rgba(246, 102, 255, .19), transparent 72%),
+    radial-gradient(220px 170px at 92% 18%, rgba(81, 225, 255, .15), transparent 72%),
+    linear-gradient(145deg, rgba(19, 14, 44, .92), rgba(8, 15, 34, .88)) !important;
+  box-shadow:
+    0 26px 68px rgba(0, 0, 0, .38),
+    inset 0 1px 0 rgba(255, 255, 255, .13),
+    inset 0 -18px 42px rgba(41, 18, 82, .28) !important;
+}
+
+.acode-new,
+.acode-chat-item,
+.acode-copy,
+.acode-send,
+.acode-icon,
+.google-btn,
+.composer-cta,
+.nav-open,
+.hero-prompt-grid button,
+.acode-studio-grid button {
+  border-radius: 0 !important;
+  clip-path: polygon(0 14px, 15px 0, calc(100% - 20px) 0, 100% 16px, 100% calc(100% - 14px), calc(100% - 15px) 100%, 16px 100%, 0 calc(100% - 17px)) !important;
+  border-color: rgba(205, 184, 255, .34) !important;
+  background:
+    radial-gradient(70px 48px at 17% 8%, rgba(250, 105, 255, .25), transparent 74%),
+    radial-gradient(72px 50px at 90% 72%, rgba(82, 226, 255, .18), transparent 76%),
+    linear-gradient(145deg, rgba(25, 17, 53, .9), rgba(8, 17, 37, .86)) !important;
+}
+
+.platform-card,
+.platform-card.recommended,
+.platform-card.phone {
+  min-height: 236px !important;
+  padding: 44px 40px 38px !important;
+  align-items: flex-start !important;
+  justify-content: flex-end !important;
+  gap: 16px !important;
+  overflow: hidden !important;
+}
+
+.platform-card.recommended {
+  background:
+    radial-gradient(360px 260px at 16% -8%, rgba(255, 111, 239, .28), transparent 72%),
+    radial-gradient(280px 220px at 88% 4%, rgba(82, 226, 255, .2), transparent 72%),
+    linear-gradient(138deg, rgba(32, 18, 68, .96), rgba(13, 23, 48, .92)) !important;
+}
+
+.platform-card::before,
+.platform-card::after,
+.acode-new::before,
+.acode-chat-item::before,
+.acode-copy::before,
+.acode-send::before,
+.acode-icon::before,
+.google-btn::before,
+.composer-cta::before,
+.nav-open::before,
+.platform-links a::before,
+.hero-prompt-grid button::before,
+.acode-studio-grid button::before {
+  content: '' !important;
+  position: absolute !important;
+  pointer-events: none !important;
+  display: block !important;
+}
+
+.platform-card::before {
+  right: 34px !important;
+  top: 28px !important;
+  width: 124px !important;
+  height: 124px !important;
+  opacity: .86 !important;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.9), rgba(255,92,238,.68) 28%, rgba(112,77,255,.62) 58%, rgba(78,224,255,.58)),
+    radial-gradient(circle at 34% 23%, rgba(255,255,255,.9), transparent 11%) !important;
+  clip-path: polygon(50% 0, 84% 22%, 100% 55%, 72% 100%, 50% 84%, 26% 100%, 0 55%, 16% 22%) !important;
+  filter:
+    drop-shadow(0 0 22px rgba(255, 92, 244, .42))
+    drop-shadow(0 0 28px rgba(81, 224, 255, .22)) !important;
+}
+
+.platform-card::after {
+  inset: 0 !important;
+  opacity: .66 !important;
+  background:
+    linear-gradient(125deg, transparent 0 16%, rgba(255,255,255,.16) 16.4% 17.1%, transparent 17.5% 100%),
+    linear-gradient(36deg, transparent 0 54%, rgba(91,226,255,.16) 54.5% 57.5%, transparent 58% 100%),
+    linear-gradient(151deg, transparent 0 71%, rgba(245,104,255,.18) 71.5% 74.6%, transparent 75.2% 100%) !important;
+}
+
+.acode-new::before,
+.acode-chat-item::before,
+.acode-copy::before,
+.acode-send::before,
+.acode-icon::before,
+.google-btn::before,
+.composer-cta::before,
+.nav-open::before,
+.platform-links a::before,
+.hero-prompt-grid button::before,
+.acode-studio-grid button::before {
+  right: 10px !important;
+  top: 8px !important;
+  width: 28px !important;
+  height: 28px !important;
+  opacity: .52 !important;
+  background: linear-gradient(135deg, #fff, #ff68f2 32%, #7b5cff 62%, #55e5ff) !important;
+  clip-path: polygon(50% 0, 83% 26%, 75% 76%, 50% 100%, 24% 76%, 17% 26%) !important;
+  filter: drop-shadow(0 0 12px rgba(216, 92, 255, .42)) !important;
+}
+
+.platform-icon {
+  display: none !important;
+}
+
+.platform-badge {
+  border-radius: 0 !important;
+  clip-path: polygon(0 10px, 10px 0, calc(100% - 12px) 0, 100% 10px, 100% calc(100% - 10px), calc(100% - 10px) 100%, 10px 100%, 0 calc(100% - 10px)) !important;
+  background: rgba(8, 8, 24, .78) !important;
+  border-color: rgba(255, 226, 255, .28) !important;
+  color: #fff !important;
+}
+
+.acode-crystal-nav {
+  display: block !important;
+}
+
+.acode-bg-crystal {
+  border: 0 !important;
+  background: transparent !important;
+  opacity: .82 !important;
+  filter:
+    drop-shadow(0 0 30px rgba(255, 92, 244, .46))
+    drop-shadow(0 0 26px rgba(82, 226, 255, .22)) !important;
+}
+
+.acode-bg-crystal::before {
+  opacity: .95 !important;
+  transform: rotate(45deg) skew(-6deg, -6deg) !important;
+}
+
+.acode-bg-crystal span {
+  background: rgba(8, 9, 24, .68) !important;
+  border: 1px solid rgba(225, 200, 255, .22) !important;
+  padding: 5px 9px !important;
+  clip-path: polygon(0 8px, 8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px)) !important;
+}
+
+.acode-main[data-empty="false"] .acode-thread {
+  padding-top: 92px !important;
+}
+
+@media (max-width: 900px) {
+  .platform-card {
+    min-height: 176px !important;
+    padding: 32px 24px 28px !important;
+  }
+
+  .platform-card::before {
+    width: 82px !important;
+    height: 82px !important;
+    right: 18px !important;
+    top: 18px !important;
+  }
+
+  .acode-main[data-empty="false"] .acode-thread {
+    padding-top: 82px !important;
+  }
+
+  .acode-bg-crystal span {
+    display: none !important;
+  }
+}
