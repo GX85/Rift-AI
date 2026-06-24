@@ -11175,3 +11175,148 @@ body {
     border-radius: 20px !important;
   }
 }
+
+/* Readability fix: premium graphics with real wrapping */
+.acode,
+.acode * {
+  min-width: 0 !important;
+}
+
+.acode-studio-grid button,
+.acode-starters button,
+.acode-mobile-actions button,
+.hero-prompt-grid button,
+.platform-card,
+.feature-card,
+.review-card,
+.acode-chat-item,
+.acode-output-strip span {
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+  hyphens: auto !important;
+}
+
+.acode-studio-grid button strong,
+.acode-studio-grid button span,
+.acode-starters button,
+.acode-mobile-actions button span,
+.hero-prompt-grid button span,
+.platform-card strong,
+.platform-card small,
+.feature-title,
+.feature-text,
+.review-text,
+.acode-chat-item span {
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  word-break: normal !important;
+  overflow-wrap: anywhere !important;
+}
+
+.acode-studio-grid button {
+  min-height: 176px !important;
+  align-content: start !important;
+  background:
+    radial-gradient(circle at 18% 14%, rgba(255, 91, 241, .12), transparent 32%),
+    radial-gradient(circle at 86% 18%, rgba(88, 234, 255, .1), transparent 30%),
+    linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.026)),
+    rgba(15, 17, 38, .72) !important;
+}
+
+.acode-studio-grid button span {
+  display: block !important;
+  -webkit-line-clamp: unset !important;
+  -webkit-box-orient: initial !important;
+  line-height: 1.42 !important;
+}
+
+.acode-studio-grid button strong {
+  line-height: 1.18 !important;
+}
+
+.acode-starters {
+  align-items: stretch !important;
+}
+
+.acode-starters button {
+  min-height: 70px !important;
+  line-height: 1.35 !important;
+  display: flex !important;
+  align-items: center !important;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.075), rgba(255,255,255,.025)),
+    rgba(14, 16, 36, .68) !important;
+}
+
+.acode-mobile-actions button {
+  min-height: 48px !important;
+  line-height: 1.25 !important;
+}
+
+.hero-prompt-grid button {
+  min-height: 66px !important;
+  align-items: center !important;
+  line-height: 1.28 !important;
+}
+
+.platform-card {
+  min-height: 220px !important;
+  align-content: start !important;
+}
+
+.platform-card small {
+  display: block !important;
+  line-height: 1.45 !important;
+}
+
+.feature-card,
+.review-card {
+  min-height: 190px !important;
+}
+
+.feature-title,
+.feature-text,
+.review-text {
+  line-height: 1.45 !important;
+}
+
+.acode-chat-item {
+  height: auto !important;
+  min-height: 58px !important;
+  align-items: center !important;
+}
+
+.acode-chat-item span {
+  display: block !important;
+  line-height: 1.25 !important;
+  max-height: 2.6em !important;
+  overflow: hidden !important;
+}
+
+.acode-compose textarea,
+.composer-input,
+.hero-code-input {
+  white-space: pre-wrap !important;
+  overflow-wrap: anywhere !important;
+}
+
+@media (max-width: 1180px) {
+  .acode-studio-grid button {
+    min-height: 150px !important;
+  }
+}
+
+@media (max-width: 820px) {
+  .acode-studio-grid button,
+  .acode-starters button,
+  .hero-prompt-grid button,
+  .platform-card {
+    min-height: auto !important;
+  }
+
+  .acode-studio-grid button {
+    padding: 18px !important;
+  }
+}
