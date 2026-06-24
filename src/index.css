@@ -12141,3 +12141,174 @@ body {
     flex: 1 1 132px !important;
   }
 }
+
+/* Proportion pass: balanced workspace layout */
+.acode-side {
+  width: 320px !important;
+  padding: 24px 22px !important;
+}
+
+.acode-logo {
+  font-size: 22px !important;
+}
+
+.acode-logo .amlogo {
+  width: 42px !important;
+  height: 42px !important;
+}
+
+.acode-new {
+  min-height: 56px !important;
+}
+
+.acode-chat-item {
+  min-height: 64px !important;
+}
+
+.acode-main[data-empty="false"] .acode-top,
+.acode-main[data-empty="false"] .acode-thread,
+.acode-main[data-empty="false"] .acode-compose,
+.acode-mobile-actions {
+  width: min(960px, calc(100% - 56px)) !important;
+}
+
+.acode-main[data-empty="false"] .acode-top {
+  min-height: 76px !important;
+  margin-top: 18px !important;
+}
+
+.acode-main[data-empty="false"] .acode-thread {
+  padding-top: 20px !important;
+  padding-bottom: 18px !important;
+}
+
+.acode-msg {
+  margin-bottom: 16px !important;
+}
+
+.acode-msg-body.artifact-ready {
+  border-radius: 24px !important;
+}
+
+.acode-artifact-card {
+  gap: 12px !important;
+  padding: 16px !important;
+}
+
+.acode-artifact-head .amlogo {
+  width: 26px !important;
+  height: 26px !important;
+}
+
+.acode-artifact-head strong {
+  font-size: 17px !important;
+}
+
+.acode-artifact-head span {
+  font-size: 14px !important;
+}
+
+.acode-artifact-preview {
+  min-height: 128px !important;
+  border-radius: 20px !important;
+}
+
+.acode-artifact-preview::before {
+  inset: 14px !important;
+  border-radius: 16px !important;
+  background-size: 22px 22px, 22px 22px, auto !important;
+}
+
+.acode-artifact-preview i:nth-child(1) { left: 34px !important; top: 28px !important; width: 66px !important; height: 9px !important; }
+.acode-artifact-preview i:nth-child(2) { left: 34px !important; top: 50px !important; width: 126px !important; height: 9px !important; }
+.acode-artifact-preview i:nth-child(3) { display: none !important; }
+.acode-artifact-preview span:nth-child(4) { right: 34px !important; top: 28px !important; width: 86px !important; height: 72px !important; }
+.acode-artifact-preview span:nth-child(5) { left: 34px !important; bottom: 26px !important; width: calc(100% - 68px) !important; height: 10px !important; }
+.acode-artifact-preview b { left: 34px !important; bottom: 48px !important; width: 164px !important; height: 34px !important; }
+
+.acode-artifact-code summary {
+  min-height: 40px !important;
+}
+
+.acode-msg-actions {
+  padding: 12px 16px 16px !important;
+}
+
+.acode-copy {
+  min-height: 34px !important;
+  padding-inline: 14px !important;
+}
+
+.acode-mobile-actions {
+  margin-bottom: 8px !important;
+  gap: 8px !important;
+}
+
+.acode-mobile-actions button {
+  min-height: 46px !important;
+  padding-inline: 16px !important;
+}
+
+.acode-compose-wrap {
+  padding: 8px 0 18px !important;
+}
+
+.acode-compose {
+  min-height: 118px !important;
+  padding: 12px !important;
+  border-radius: 24px !important;
+}
+
+.acode-compose textarea {
+  min-height: 52px !important;
+  padding: 13px 16px !important;
+}
+
+.acode-compose-actions {
+  padding-top: 10px !important;
+}
+
+.acode-compose-actions .acode-icon,
+.acode-send {
+  width: 48px !important;
+  height: 48px !important;
+}
+
+@media (min-width: 1500px) {
+  .acode-main[data-empty="false"] .acode-top,
+  .acode-main[data-empty="false"] .acode-thread,
+  .acode-main[data-empty="false"] .acode-compose,
+  .acode-mobile-actions {
+    width: min(1040px, calc(100% - 72px)) !important;
+  }
+}
+
+@media (max-width: 1180px) {
+  .acode-side {
+    width: 300px !important;
+  }
+
+  .acode-main[data-empty="false"] .acode-top,
+  .acode-main[data-empty="false"] .acode-thread,
+  .acode-main[data-empty="false"] .acode-compose,
+  .acode-mobile-actions {
+    width: calc(100% - 32px) !important;
+  }
+}
+
+@media (max-width: 820px) {
+  .acode-main[data-empty="false"] .acode-top,
+  .acode-main[data-empty="false"] .acode-thread,
+  .acode-main[data-empty="false"] .acode-compose,
+  .acode-mobile-actions {
+    width: calc(100% - 20px) !important;
+  }
+
+  .acode-artifact-preview {
+    min-height: 110px !important;
+  }
+
+  .acode-compose {
+    min-height: 112px !important;
+  }
+}
