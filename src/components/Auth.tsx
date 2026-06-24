@@ -119,7 +119,7 @@ export function PlatformChoice({
             {phoneLike && <span className="platform-badge">Рекомендуется</span>}
             <span className="platform-icon">▯</span>
             <strong>Войти с телефона</strong>
-            <small>Если ты на телефоне, откроется mobile app. Если на ПК, появится QR.</small>
+            <small>Если ты на телефоне, откроется мобильное приложение. Если на ПК, появится QR.</small>
           </button>
         </div>
 
@@ -194,7 +194,7 @@ export function Landing({ onEnter }: { onEnter?: () => void }) {
           <AmethystLogo size={126} />
         </div>
         <div className="hero-pill">
-          <span className="dot" /> Gemini-powered code & business assistant
+          <span className="dot" /> ИИ-ассистент для кода, сайтов и бизнеса
         </div>
 
         <h1 className="hero-h1">

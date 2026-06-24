@@ -14954,7 +14954,7 @@ code {
 }
 
 .acode-artifact-live::before {
-  content: 'Live preview' !important;
+  content: 'Живое превью' !important;
   position: absolute !important;
   right: 28px !important;
   top: 26px !important;
@@ -15056,5 +15056,253 @@ code {
   .acode-artifact-live iframe {
     height: 380px !important;
     border-radius: 18px !important;
+  }
+}
+
+/* Demoday hard cleanup: remove circled noise, add real amethyst shard language */
+.acode-status,
+.acode-top > .acode-icon:not(.mobile-only),
+.acode-mobile-actions,
+.platform-showcase {
+  display: none !important;
+}
+
+.acode-top {
+  grid-template-columns: auto 1fr !important;
+  justify-content: start !important;
+  max-width: 1040px !important;
+  min-height: 78px !important;
+  padding-inline: 22px !important;
+}
+
+.acode-main[data-empty="false"] .acode-thread {
+  padding-top: 118px !important;
+}
+
+.acode-compose-wrap {
+  padding-top: 12px !important;
+}
+
+.platform-card::before,
+.platform-card .platform-icon,
+.platform-window-body i {
+  display: none !important;
+}
+
+.platform-card,
+.platform-card.recommended,
+.platform-card.phone,
+.acode-new,
+.acode-chat-item,
+.acode-copy,
+.acode-send,
+.acode-icon,
+.google-btn,
+.composer-cta,
+.nav-open,
+.platform-links a,
+.hero-prompt-grid button,
+.acode-studio-grid button,
+.platform-flow span,
+.platform-detect {
+  position: relative !important;
+  overflow: hidden !important;
+  border-color: rgba(205, 184, 255, .3) !important;
+  background:
+    linear-gradient(135deg, rgba(24, 16, 48, .9), rgba(8, 16, 35, .78)),
+    radial-gradient(140px 80px at 18% 18%, rgba(230, 120, 255, .2), transparent 70%),
+    radial-gradient(120px 80px at 86% 18%, rgba(95, 211, 255, .12), transparent 72%) !important;
+  box-shadow:
+    0 18px 58px rgba(0,0,0,.34),
+    inset 0 1px 0 rgba(255,255,255,.12),
+    inset 0 -1px 0 rgba(115, 83, 255, .18) !important;
+}
+
+.platform-card::after,
+.acode-new::after,
+.acode-chat-item::after,
+.acode-copy::after,
+.acode-send::after,
+.acode-icon::after,
+.google-btn::after,
+.composer-cta::after,
+.nav-open::after,
+.platform-links a::after,
+.hero-prompt-grid button::after,
+.acode-studio-grid button::after {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  opacity: .72 !important;
+  background:
+    linear-gradient(120deg, transparent 0 8%, rgba(255,255,255,.18) 8.5% 9.5%, transparent 10% 100%),
+    linear-gradient(42deg, transparent 0 54%, rgba(156, 92, 255, .24) 54.5% 58%, transparent 58.5% 100%),
+    radial-gradient(18px 20px at 18% 22%, rgba(255, 116, 244, .32), transparent 68%),
+    radial-gradient(22px 18px at 86% 72%, rgba(91, 226, 255, .24), transparent 70%) !important;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%) !important;
+}
+
+.platform-card::before,
+.acode-new::before,
+.acode-chat-item::before,
+.acode-copy::before,
+.acode-send::before,
+.acode-icon::before,
+.google-btn::before,
+.composer-cta::before,
+.nav-open::before,
+.platform-links a::before,
+.hero-prompt-grid button::before,
+.acode-studio-grid button::before {
+  content: '' !important;
+  position: absolute !important;
+  right: 12px !important;
+  top: 10px !important;
+  width: 34px !important;
+  height: 34px !important;
+  pointer-events: none !important;
+  opacity: .62 !important;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.88), rgba(243,92,255,.76) 35%, rgba(111,92,255,.76) 62%, rgba(85,226,255,.72)) !important;
+  clip-path: polygon(50% 0, 86% 26%, 76% 76%, 50% 100%, 24% 76%, 14% 26%) !important;
+  filter: drop-shadow(0 0 12px rgba(202, 92, 255, .45)) !important;
+}
+
+.acode-icon::before,
+.acode-icon::after,
+.acode-send::before,
+.acode-send::after {
+  opacity: .48 !important;
+}
+
+.platform-card strong,
+.platform-card small,
+.acode-new > *,
+.acode-chat-item > *,
+.acode-copy,
+.acode-send > *,
+.acode-icon > *,
+.google-btn > *,
+.composer-cta > *,
+.nav-open > *,
+.hero-prompt-grid button > *,
+.acode-studio-grid button > * {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.platform-card {
+  min-height: 230px !important;
+  border-radius: 30px !important;
+}
+
+.platform-card.recommended {
+  background:
+    radial-gradient(320px 220px at 12% 0%, rgba(255,94,239,.22), transparent 72%),
+    radial-gradient(280px 190px at 92% 6%, rgba(109,226,255,.12), transparent 72%),
+    linear-gradient(135deg, rgba(37,20,70,.94), rgba(13,20,43,.9)) !important;
+}
+
+.platform-badge {
+  background: rgba(9, 8, 22, .78) !important;
+  color: #f7ecff !important;
+  border-color: rgba(225, 198, 255, .26) !important;
+}
+
+.platform-card strong {
+  color: #fff !important;
+  background: none !important;
+  -webkit-background-clip: border-box !important;
+  background-clip: border-box !important;
+}
+
+.platform-card small {
+  color: rgba(235, 226, 255, .76) !important;
+}
+
+.platform-shell {
+  background:
+    radial-gradient(720px 420px at 14% 4%, rgba(238, 92, 255, .18), transparent 72%),
+    radial-gradient(580px 360px at 92% 10%, rgba(91, 226, 255, .11), transparent 70%),
+    rgba(9, 10, 25, .82) !important;
+}
+
+.acode-artifact-live::before {
+  content: 'Живое превью' !important;
+}
+
+.acode-bg-crystal {
+  width: 148px !important;
+  height: 148px !important;
+  opacity: .5 !important;
+  mix-blend-mode: screen !important;
+}
+
+.acode-bg-crystal::before {
+  opacity: .88 !important;
+  background:
+    linear-gradient(132deg, rgba(255,255,255,.8), rgba(243,92,255,.52) 28%, rgba(104,81,255,.34) 58%, rgba(83,225,255,.42)),
+    radial-gradient(circle at 34% 24%, rgba(255,255,255,.5), transparent 12%) !important;
+  filter: drop-shadow(0 0 36px rgba(213, 91, 255, .42)) !important;
+}
+
+.acode-bg-crystal::after {
+  opacity: .78 !important;
+  background:
+    linear-gradient(90deg, transparent 0 44%, rgba(255,255,255,.38) 45% 49%, transparent 50%),
+    linear-gradient(28deg, transparent 0 56%, rgba(105,225,255,.32) 57% 61%, transparent 62%) !important;
+}
+
+.acode-bg-crystal.chat {
+  right: 22px !important;
+  top: 220px !important;
+}
+
+.acode-bg-crystal.settings {
+  left: auto !important;
+  right: 42px !important;
+  bottom: 230px !important;
+}
+
+.acode-bg-crystal.create {
+  right: 170px !important;
+  bottom: 118px !important;
+}
+
+.acode-bg-crystal.home {
+  left: 455px !important;
+  top: 142px !important;
+}
+
+.acode-bg-crystal span {
+  opacity: .18 !important;
+  top: 72% !important;
+  color: rgba(255,255,255,.72) !important;
+}
+
+.acode-bg-crystal:hover span,
+.acode-bg-crystal:focus-visible span {
+  opacity: .95 !important;
+}
+
+@media (max-width: 900px) {
+  .acode-main[data-empty="false"] .acode-thread {
+    padding-top: 86px !important;
+  }
+
+  .acode-bg-crystal {
+    width: 96px !important;
+    height: 96px !important;
+  }
+
+  .acode-bg-crystal.chat {
+    right: -18px !important;
+    top: 104px !important;
+  }
+
+  .acode-bg-crystal.settings {
+    right: -18px !important;
+    bottom: 132px !important;
   }
 }

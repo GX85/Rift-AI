@@ -280,13 +280,13 @@ function buildGuaranteedHtmlArtifact(kind: ArtifactKind, request: string) {
       <nav class="nav"><div class="brand">Amethyst</div><a class="btn" href="#start">Начать</a></nav>
       <section class="hero">
         <div>
-          <div class="eyebrow">${isBot ? 'Chatbot builder' : isApp ? 'Web app prototype' : 'Website builder'}</div>
+          <div class="eyebrow">${isBot ? 'Конструктор чатбота' : isApp ? 'Прототип web-приложения' : 'Конструктор сайта'}</div>
           <h1>${title}</h1>
           <p>${isBot ? 'Готовый прототип чатбота: сценарии, fallback-ответы и мини-интерфейс диалога.' : isApp ? 'Готовый прототип программы с мок-данными, формой, списком и сохранением в браузере.' : 'Готовый адаптивный сайт с hero, секциями, CTA и мобильной версткой.'}</p>
           <div class="grid"><div class="card">Адаптив</div><div class="card">Рабочая логика</div><div class="card">Без внешних CDN</div></div>
         </div>
         <div class="panel app" id="start">
-          <b>${isBot ? 'Amethyst Bot' : isApp ? 'Task Program' : 'Заявка'}</b>
+          <b>${isBot ? 'Бот Amethyst' : isApp ? 'Рабочая программа' : 'Заявка'}</b>
           <div class="list" id="list"></div>
           <form class="row" id="form"><input id="input" placeholder="${isBot ? 'Напиши сообщение...' : 'Новая задача или заявка...'}" /><button class="btn">Добавить</button></form>
         </div>
@@ -321,6 +321,7 @@ function buildSystem() {
 
 Маршрутизация намерений:
 • Если пользователь задаёт обычный вопрос, просит объяснение, спрашивает погоду/факт/совет и НЕ просит создать код, сайт, игру, приложение или компонент — отвечай обычным текстом, без HTML и без code block.
+• Ты можешь спокойно общаться на разные темы: учеба, идеи, бизнес, презентация, тексты, объяснения, планы, код. Не своди всё к программированию.
 • Если вопрос требует live-данных (погода, новости, курсы, расписания), честно скажи, что live-доступа нет, попроси город/источник или дай общий полезный ответ. Не придумывай прогноз и не пиши код вместо ответа.
 • Код и HTML выдавай только когда пользователь явно просит создать, написать, исправить, собрать или проверить код/продукт.
 
@@ -328,6 +329,7 @@ function buildSystem() {
 • Работай как сильный генератор кода и продуктовых прототипов, а не как обычный чат.
 • Для сайта, лендинга, web-app, игры или чатбота почти всегда возвращай один полный HTML-документ в блоке \`\`\`html.
 • HTML должен начинаться с <!doctype html>, содержать <style> и рабочий <script>, если нужна логика.
+• Для игр и сайтов первый экран не должен быть пустым: всегда добавляй видимый hero/меню/сцену, понятные кнопки старта, текстовые подсказки и проверку, что canvas/DOM реально рисует элементы.
 • Не выдавай только план, если пользователь просит создать. Сначала готовый результат, потом короткая проверка.
 • Интерфейсы должны иметь плавные transition/hover/focus, mobile layout, пустые/ошибочные состояния и без горизонтального скролла.
 • Если модель сомневается, выбери разумное решение сам и собери рабочую версию.
@@ -658,7 +660,7 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
               <span>{messages.length ? active.title : 'ИИ-ассистент для кода и продуктов'}</span>
             </div>
           </div>
-          <div className="acode-status" aria-label="Amethyst capabilities">
+          <div className="acode-status" aria-label="Возможности Amethyst">
             {TOP_BADGES.map((badge) => (
               <span key={badge.label}>
                 <Icon name={badge.icon} size={13} />
@@ -694,7 +696,7 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
                   <span className="acode-empty-kicker">Студия ИИ-продуктов</span>
                   <h1>Собери продукт, а не просто ответ</h1>
                   <p>Выбери режим или напиши задачу. Amethyst генерирует сайты, web-app MVP, игры, исправления кода и бизнес-структуру прямо в чате.</p>
-                  <div className="acode-hero-metrics" aria-label="Product outputs">
+                  <div className="acode-hero-metrics" aria-label="Что умеет создавать Amethyst">
                     {HERO_METRICS.map((metric) => (
                       <span key={metric.value}>
                         <b>{metric.value}</b>
