@@ -9497,3 +9497,386 @@ samp,
     padding: 12px !important;
   }
 }
+
+/* Elite pixel direction: premium, disciplined, square */
+:root {
+  --elite-bg: #07080d;
+  --elite-panel: rgba(13, 15, 24, 0.92);
+  --elite-panel-2: rgba(18, 21, 33, 0.94);
+  --elite-line: rgba(151, 137, 255, 0.34);
+  --elite-line-strong: rgba(214, 204, 255, 0.64);
+  --elite-text: #f7f7ff;
+  --elite-muted: #a8aec4;
+  --elite-purple: #9b5cff;
+  --elite-cyan: #55e7ff;
+  --elite-gold: #f7d56b;
+  --elite-shadow: 5px 5px 0 rgba(0, 0, 0, 0.82);
+  --elite-shadow-sm: 3px 3px 0 rgba(0, 0, 0, 0.72);
+}
+
+body {
+  background: var(--elite-bg) !important;
+  color: var(--elite-text) !important;
+}
+
+.hero2,
+.platform-page,
+.reviews-page,
+.mobile-entry,
+.mobile-qr-page,
+.acode {
+  background:
+    linear-gradient(90deg, rgba(85, 231, 255, 0.07) 0 1px, transparent 1px 40px),
+    linear-gradient(0deg, rgba(155, 92, 255, 0.06) 0 1px, transparent 1px 40px),
+    linear-gradient(135deg, #071217 0%, #080912 43%, #130e1e 100%) !important;
+  color: var(--elite-text) !important;
+}
+
+.hero2::before,
+.platform-page::before,
+.reviews-page::before,
+.mobile-entry::before,
+.mobile-qr-page::before,
+.acode::before {
+  background:
+    linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255,255,255,.035) 1px, transparent 1px),
+    linear-gradient(90deg, transparent 0 39px, rgba(85,231,255,.18) 40px),
+    linear-gradient(0deg, transparent 0 39px, rgba(155,92,255,.14) 40px) !important;
+  background-size: 8px 8px, 8px 8px, 40px 40px, 40px 40px !important;
+  opacity: 0.28 !important;
+}
+
+.hero-nav,
+.reviews-nav,
+.acode-topbar,
+.acode-side,
+.platform-shell,
+.features,
+.review-card,
+.feature-card,
+.platform-card,
+.mobile-entry-card,
+.mobile-qr-card,
+.composer,
+.acode-compose,
+.acode-empty-hero,
+.acode-panel {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,0) 42%),
+    var(--elite-panel) !important;
+  border: 1px solid var(--elite-line) !important;
+  outline: 1px solid rgba(255, 255, 255, 0.035) !important;
+  box-shadow: var(--elite-shadow), inset 0 0 0 1px rgba(255,255,255,.025) !important;
+  backdrop-filter: blur(18px) !important;
+}
+
+.hero-nav {
+  width: min(1480px, calc(100% - 48px)) !important;
+  min-height: 78px !important;
+  margin: 20px auto 0 !important;
+  padding: 12px 18px !important;
+  border-color: rgba(214, 204, 255, 0.38) !important;
+}
+
+.hero-logo,
+.acode-logo,
+.side-logo,
+.brand {
+  gap: 12px !important;
+  color: var(--elite-text) !important;
+  font-weight: 950 !important;
+  text-shadow: none !important;
+}
+
+.hero-links a,
+.platform-links a {
+  min-height: 42px !important;
+  padding: 0 18px !important;
+  background: rgba(9, 10, 18, 0.76) !important;
+  border: 1px solid rgba(151, 137, 255, 0.34) !important;
+  color: #dfe3ff !important;
+  box-shadow: 3px 3px 0 rgba(0,0,0,.68) !important;
+  text-shadow: none !important;
+}
+
+.hero-links a:hover,
+.platform-links a:hover {
+  border-color: var(--elite-cyan) !important;
+  color: #fff !important;
+  transform: translate(-1px, -1px) !important;
+  box-shadow: 4px 4px 0 rgba(0,0,0,.76) !important;
+}
+
+.hero-center {
+  padding-top: clamp(36px, 5vw, 72px) !important;
+  gap: 20px !important;
+}
+
+.hero-fractal-stage {
+  width: clamp(104px, 9vw, 146px) !important;
+  height: clamp(104px, 9vw, 146px) !important;
+  background:
+    linear-gradient(90deg, rgba(85,231,255,.08) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(155,92,255,.08) 1px, transparent 1px),
+    rgba(7, 8, 14, 0.94) !important;
+  background-size: 10px 10px, 10px 10px, auto !important;
+  border: 1px solid var(--elite-line-strong) !important;
+  box-shadow:
+    6px 6px 0 rgba(0,0,0,.82),
+    0 0 0 6px rgba(155,92,255,.08),
+    0 0 52px rgba(85,231,255,.14) !important;
+}
+
+.hero-fractal-stage .amlogo {
+  width: 72% !important;
+  height: 72% !important;
+}
+
+.amlogo {
+  background: #080914 !important;
+  border: 1px solid rgba(230, 222, 255, 0.72) !important;
+  box-shadow:
+    3px 3px 0 rgba(0, 0, 0, 0.82),
+    0 0 18px rgba(155, 92, 255, 0.28) !important;
+}
+
+.hero-pill,
+.plus-chip,
+.acode-empty-kicker,
+.platform-kicker,
+.mobile-kicker {
+  min-height: 34px !important;
+  padding: 0 14px !important;
+  background: rgba(9, 10, 18, 0.82) !important;
+  border: 1px solid rgba(85, 231, 255, 0.34) !important;
+  color: #dfe6ff !important;
+  box-shadow: var(--elite-shadow-sm) !important;
+  text-transform: uppercase !important;
+  font-size: 12px !important;
+  letter-spacing: 0.08em !important;
+}
+
+.hero-h1,
+.platform-shell h1,
+.reviews-title,
+.acode-empty-copy h1 {
+  max-width: 1040px !important;
+  font-size: clamp(52px, 7.4vw, 116px) !important;
+  line-height: 0.88 !important;
+  font-weight: 950 !important;
+  color: var(--elite-text) !important;
+  text-shadow:
+    0 2px 0 rgba(0,0,0,.72),
+    0 0 34px rgba(155,92,255,.18) !important;
+}
+
+.hero-h1 span,
+.reviews-title span,
+.features-h span {
+  color: var(--elite-purple) !important;
+  -webkit-text-fill-color: var(--elite-purple) !important;
+  text-shadow:
+    0 2px 0 rgba(0,0,0,.72),
+    0 0 28px rgba(155,92,255,.28) !important;
+}
+
+.hero-p,
+.platform-sub,
+.reviews-sub,
+.plus-sub,
+.feature-text,
+.platform-card small {
+  color: var(--elite-muted) !important;
+  text-shadow: none !important;
+}
+
+.hero-code-input,
+.composer-input,
+.acode-input,
+.auth-card input,
+.auth-card textarea {
+  background:
+    linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(255,255,255,.025) 1px, transparent 1px),
+    rgba(5, 6, 12, 0.9) !important;
+  background-size: 12px 12px, 12px 12px, auto !important;
+  border: 1px solid rgba(151, 137, 255, 0.52) !important;
+  outline: 1px solid rgba(255,255,255,.035) !important;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.55), var(--elite-shadow-sm) !important;
+}
+
+.google-btn,
+.composer-cta,
+.nav-open,
+.mobile-entry-card button,
+.mobile-qr-actions a,
+.mobile-qr-actions button,
+.acode-send {
+  min-height: 58px !important;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,0) 44%),
+    linear-gradient(90deg, #7c3cff, #a96bff) !important;
+  border: 1px solid rgba(246, 242, 255, 0.92) !important;
+  outline: 1px solid rgba(85, 231, 255, 0.28) !important;
+  color: #ffffff !important;
+  box-shadow:
+    inset 0 -7px 0 rgba(25, 6, 59, 0.38),
+    inset 0 0 0 1px rgba(255,255,255,.08),
+    5px 5px 0 rgba(0,0,0,.86),
+    0 0 24px rgba(155, 92, 255, 0.24) !important;
+  text-shadow: 1px 1px 0 rgba(0,0,0,.7) !important;
+}
+
+.google-btn::before,
+.composer-cta::before,
+.nav-open::before,
+.mobile-entry-card button::before,
+.mobile-qr-actions a::before,
+.mobile-qr-actions button::before,
+.acode-send::before {
+  width: 14px !important;
+  height: 4px !important;
+  background: var(--elite-cyan) !important;
+  opacity: 0.9 !important;
+}
+
+.google-btn::after,
+.composer-cta::after,
+.nav-open::after,
+.mobile-entry-card button::after,
+.mobile-qr-actions a::after,
+.mobile-qr-actions button::after,
+.acode-send::after {
+  width: 12px !important;
+  height: 6px !important;
+  right: 7px !important;
+  bottom: 7px !important;
+  background: rgba(247, 213, 107, 0.86) !important;
+}
+
+.google-btn:hover:not(:disabled),
+.composer-cta:hover:not(:disabled),
+.nav-open:hover:not(:disabled),
+.mobile-entry-card button:hover:not(:disabled),
+.mobile-qr-actions a:hover,
+.mobile-qr-actions button:hover:not(:disabled),
+.acode-send:hover:not(:disabled) {
+  transform: translate(-2px, -2px) !important;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.2), rgba(255,255,255,0) 44%),
+    linear-gradient(90deg, #8e55ff, #bc82ff) !important;
+  box-shadow:
+    inset 0 -7px 0 rgba(25, 6, 59, 0.34),
+    inset 0 0 0 1px rgba(255,255,255,.1),
+    7px 7px 0 rgba(0,0,0,.88),
+    0 0 30px rgba(155, 92, 255, 0.32) !important;
+}
+
+.composer {
+  padding: 14px !important;
+  border-color: rgba(151, 137, 255, 0.42) !important;
+}
+
+.composer-input {
+  min-height: 76px !important;
+}
+
+.hero-prompt-grid button,
+.hero-platforms span,
+.platform-flow span,
+.platform-detect,
+.feature-card,
+.review-card,
+.platform-card {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,0) 46%),
+    rgba(13, 15, 24, 0.88) !important;
+  border: 1px solid rgba(151, 137, 255, 0.34) !important;
+  box-shadow: var(--elite-shadow-sm) !important;
+  color: #dfe3ff !important;
+}
+
+.feature-card:hover,
+.review-card:hover,
+.platform-card:hover,
+.hero-prompt-grid button:hover {
+  border-color: rgba(85, 231, 255, 0.54) !important;
+  transform: translate(-2px, -2px) !important;
+  box-shadow: 5px 5px 0 rgba(0,0,0,.82), 0 0 24px rgba(85,231,255,.1) !important;
+}
+
+.features {
+  width: min(1180px, calc(100% - 40px)) !important;
+  margin-inline: auto !important;
+}
+
+.feature-gem,
+.review-avatar,
+.platform-icon {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,0) 52%),
+    #17132a !important;
+  border: 1px solid rgba(214, 204, 255, 0.42) !important;
+  color: var(--elite-cyan) !important;
+  box-shadow: 3px 3px 0 rgba(0,0,0,.76) !important;
+}
+
+.hero-platforms {
+  gap: 10px !important;
+}
+
+.hero-platforms span {
+  color: #d8dcff !important;
+  font-weight: 850 !important;
+}
+
+@media (max-width: 820px) {
+  .hero2,
+  .platform-page,
+  .reviews-page,
+  .mobile-entry,
+  .mobile-qr-page,
+  .acode {
+    background-size: 32px 32px, 32px 32px, auto !important;
+  }
+
+  .hero-nav {
+    width: calc(100% - 20px) !important;
+    min-height: 64px !important;
+    margin-top: 10px !important;
+    padding: 10px !important;
+    box-shadow: 3px 3px 0 rgba(0,0,0,.8) !important;
+  }
+
+  .hero-center {
+    padding-top: 28px !important;
+    gap: 16px !important;
+  }
+
+  .hero-fractal-stage {
+    width: 96px !important;
+    height: 96px !important;
+  }
+
+  .hero-h1,
+  .platform-shell h1,
+  .reviews-title,
+  .acode-empty-copy h1 {
+    font-size: clamp(38px, 13vw, 58px) !important;
+    line-height: 0.94 !important;
+  }
+
+  .hero-prompt-grid,
+  .hero-platforms {
+    width: 100% !important;
+  }
+
+  .hero-prompt-grid button {
+    min-height: 54px !important;
+  }
+
+  .features {
+    width: calc(100% - 24px) !important;
+  }
+}
