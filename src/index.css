@@ -6632,3 +6632,129 @@ input:hover:not(:focus), textarea:hover:not(:focus) { border-color: var(--line-s
     animation: none !important;
   }
 }
+
+/* Mobile quality pass */
+html,
+body,
+#root {
+  width: 100%;
+  min-width: 0;
+  overflow-x: hidden;
+}
+
+.mobile-app-mode,
+.mobile-app-mode .acode {
+  width: 100%;
+  min-width: 0;
+}
+
+.acode-msg-body,
+.acode-msg-body *,
+.acode-starters button,
+.acode-chat-item span,
+.mobile-entry-card,
+.mobile-qr-card,
+.platform-card {
+  overflow-wrap: anywhere;
+}
+
+.acode-msg-body pre,
+.acode-msg-body code {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.acode-msg-body a {
+  color: #c4b5fd;
+}
+
+@media (max-width: 820px) {
+  .mobile-app-mode {
+    height: 100dvh;
+    overflow: hidden;
+    background: #07080d;
+  }
+
+  .acode-main {
+    min-height: 100dvh !important;
+    height: 100dvh !important;
+    overflow: hidden !important;
+  }
+
+  .acode-top {
+    position: sticky !important;
+    top: 0;
+    z-index: 5 !important;
+  }
+
+  .acode-thread {
+    min-height: 0 !important;
+    padding-bottom: 16px !important;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .acode-compose-wrap {
+    position: sticky !important;
+    bottom: 0;
+    z-index: 6 !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  .acode-mobile-actions {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+
+  .acode-mobile-actions button {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .acode-compose {
+    max-width: 100% !important;
+  }
+
+  .acode-compose textarea {
+    font-size: 16px !important;
+    min-height: 42px !important;
+    max-height: min(132px, 28dvh) !important;
+  }
+
+  .acode-msg {
+    width: 100% !important;
+  }
+
+  .acode-msg.user .acode-msg-body {
+    max-width: min(92%, 620px) !important;
+  }
+
+  .acode-msg.assistant .acode-msg-body {
+    max-width: 100% !important;
+  }
+
+  .acode-starters button {
+    min-height: 48px !important;
+  }
+
+  .mobile-entry,
+  .mobile-qr-page,
+  .platform-page {
+    min-height: 100dvh !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .acode-model span {
+    max-width: 150px !important;
+  }
+
+  .acode-mobile-actions button {
+    font-size: 10.5px !important;
+  }
+
+  .acode-compose-actions {
+    gap: 6px !important;
+  }
+}
