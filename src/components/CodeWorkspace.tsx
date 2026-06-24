@@ -333,6 +333,7 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
   const [error, setError] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [crystalSettingsOpen, setCrystalSettingsOpen] = useState(false);
 
   const fileRef = useRef<HTMLInputElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -393,6 +394,7 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
     setAttached(null);
     setError('');
     setSidebarOpen(false);
+    setCrystalSettingsOpen(false);
     window.setTimeout(() => inputRef.current?.focus(), 0);
   }
 
@@ -525,8 +527,32 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
     window.setTimeout(() => inputRef.current?.focus(), 0);
   }
 
+  function focusChat() {
+    setCrystalSettingsOpen(false);
+    setSidebarOpen(false);
+    window.setTimeout(() => inputRef.current?.focus(), 0);
+  }
+
   return (
     <div className="acode">
+      <div className="acode-crystal-nav" aria-label="Кристаллы фона">
+        <button className="acode-bg-crystal chat" type="button" onClick={focusChat} title="Открыть чат">
+          <AmethystLogo size={54} />
+          <span>Чат</span>
+        </button>
+        <button className="acode-bg-crystal create" type="button" onClick={createChat} title="Новый чат">
+          <AmethystLogo size={42} />
+          <span>Новый</span>
+        </button>
+        <button className="acode-bg-crystal settings" type="button" onClick={() => setCrystalSettingsOpen(true)} title="Настройки">
+          <AmethystLogo size={48} />
+          <span>Настройки</span>
+        </button>
+        <button className="acode-bg-crystal home" type="button" onClick={onHome} title="Главная">
+          <AmethystLogo size={38} />
+          <span>Дом</span>
+        </button>
+      </div>
       {sidebarOpen && <button className="acode-scrim" aria-label="Закрыть меню" onClick={() => setSidebarOpen(false)} />}
 
       <aside className={`acode-side ${sidebarOpen ? 'open' : ''}`}>
@@ -816,6 +842,56 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
           </form>
         </footer>
       </main>
+
+      {crystalSettingsOpen && (
+        <div className="acode-crystal-settings" role="dialog" aria-modal="true" aria-label="Настройки Amethyst">
+          <button className="acode-crystal-settings-backdrop" type="button" onClick={() => setCrystalSettingsOpen(false)} aria-label="Закрыть" />
+          <section className="acode-crystal-settings-card">
+            <div className="acode-crystal-settings-head">
+              <AmethystLogo size={46} />
+              <div>
+                <strong>Настройки Amethyst</strong>
+                <span>Gemini 2.5 Flash, код, сайты, игры и MVP в одном чате.</span>
+              </div>
+              <button className="acode-icon" type="button" onClick={() => setCrystalSettingsOpen(false)} title="Закрыть">
+                <Icon name="x" size={16} />
+              </button>
+            </div>
+            <div className="acode-crystal-settings-grid">
+              <div>
+                <b>Модель</b>
+                <span>Gemini 2.5 Flash</span>
+              </div>
+              <div>
+                <b>Режим</b>
+                <span>готовые HTML/React/TS артефакты</span>
+              </div>
+              <div>
+                <b>Интерфейс</b>
+                <span>кристаллическая тема без пикселей</span>
+              </div>
+              <div>
+                <b>Фокус</b>
+                <span>код, продукт, бизнес и запуск MVP</span>
+              </div>
+            </div>
+            <div className="acode-crystal-settings-actions">
+              <button type="button" onClick={createChat}>
+                <Icon name="plus" size={16} />
+                Новый чат
+              </button>
+              <button type="button" onClick={focusChat}>
+                <Icon name="send" size={16} />
+                Вернуться в чат
+              </button>
+              <button type="button" onClick={onSignOut}>
+                <Icon name="logout" size={16} />
+                Выйти
+              </button>
+            </div>
+          </section>
+        </div>
+      )}
     </div>
   );
 }

@@ -14368,3 +14368,359 @@ code {
     max-width: 100% !important;
   }
 }
+
+/* Full crystal UI pass: no pixels, background crystals are real controls */
+.amlogo {
+  display: inline-grid !important;
+  place-items: center !important;
+  border-radius: 50% !important;
+  overflow: visible !important;
+  background: transparent !important;
+}
+
+.amlogo img {
+  display: none !important;
+}
+
+.amlogo svg {
+  width: 100% !important;
+  height: 100% !important;
+  display: block !important;
+  image-rendering: auto !important;
+}
+
+.acode,
+.hero2,
+.platform-page,
+.reviews-page,
+.mobile-shell,
+.qr-page {
+  image-rendering: auto !important;
+}
+
+.acode * {
+  image-rendering: auto !important;
+}
+
+.acode {
+  isolation: isolate !important;
+}
+
+.acode::before {
+  content: '' !important;
+  position: fixed !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  background:
+    radial-gradient(420px 280px at 76% 22%, rgba(255,79,232,.16), transparent 72%),
+    radial-gradient(380px 260px at 24% 70%, rgba(78,231,255,.11), transparent 72%),
+    linear-gradient(180deg, rgba(4, 6, 16, .24), rgba(4, 6, 16, .78)) !important;
+}
+
+.acode-side,
+.acode-main,
+.acode-crystal-nav,
+.acode-crystal-settings {
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+.acode-side,
+.acode-top,
+.acode-compose,
+.acode-empty-hero,
+.acode-studio-grid button,
+.acode-msg-body,
+.acode-artifact-card,
+.acode-live-preview {
+  border-radius: 24px !important;
+  border-color: rgba(181, 205, 255, .18) !important;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.105), rgba(255,255,255,.035)),
+    radial-gradient(320px 180px at 12% 0%, rgba(255,79,232,.11), transparent 74%),
+    rgba(6, 9, 24, .72) !important;
+  box-shadow:
+    0 24px 80px rgba(0,0,0,.34),
+    inset 0 1px 0 rgba(255,255,255,.11) !important;
+  backdrop-filter: blur(18px) saturate(1.25) !important;
+}
+
+.acode-icon,
+.acode-new,
+.acode-chat-item,
+.acode-mobile-actions button,
+.acode-copy,
+.acode-send,
+.acode-mode-pill,
+.hero-platforms span,
+.platform-links a {
+  border-radius: 18px !important;
+  border-color: rgba(181, 205, 255, .2) !important;
+  background:
+    linear-gradient(135deg, rgba(78,231,255,.11), rgba(255,79,232,.12)),
+    rgba(8, 12, 31, .7) !important;
+  color: #f8fbff !important;
+}
+
+.acode-icon svg,
+.acode-new svg,
+.acode-chat-item svg,
+.acode-mobile-actions button svg,
+.acode-copy svg,
+.acode-send svg {
+  color: #82efff !important;
+  filter: drop-shadow(0 0 8px rgba(78,231,255,.22)) !important;
+}
+
+.acode-crystal-nav {
+  position: fixed !important;
+  inset: 0 !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+}
+
+.acode-bg-crystal {
+  position: absolute !important;
+  pointer-events: auto !important;
+  width: 92px !important;
+  height: 92px !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 50% !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #ffffff !important;
+  cursor: pointer !important;
+  transform: translateZ(0) !important;
+}
+
+.acode-bg-crystal::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 13px !important;
+  border-radius: 50% !important;
+  background:
+    radial-gradient(circle, rgba(255,79,232,.24), transparent 66%),
+    radial-gradient(circle, rgba(78,231,255,.16), transparent 72%) !important;
+  filter: blur(10px) !important;
+  opacity: .78 !important;
+  transition: opacity .24s ease, transform .24s ease !important;
+}
+
+.acode-bg-crystal .amlogo {
+  position: relative !important;
+  z-index: 1 !important;
+  transition: transform .24s ease, filter .24s ease !important;
+}
+
+.acode-bg-crystal span {
+  position: absolute !important;
+  left: 50% !important;
+  top: calc(100% - 4px) !important;
+  transform: translateX(-50%) translateY(4px) !important;
+  min-width: max-content !important;
+  padding: 6px 10px !important;
+  border: 1px solid rgba(197, 214, 255, .22) !important;
+  border-radius: 999px !important;
+  background: rgba(5, 8, 21, .68) !important;
+  color: rgba(245,248,255,.88) !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  opacity: 0 !important;
+  transition: opacity .2s ease, transform .2s ease !important;
+  backdrop-filter: blur(12px) !important;
+}
+
+.acode-bg-crystal:hover::before,
+.acode-bg-crystal:focus-visible::before {
+  opacity: 1 !important;
+  transform: scale(1.18) !important;
+}
+
+.acode-bg-crystal:hover .amlogo,
+.acode-bg-crystal:focus-visible .amlogo {
+  transform: translateY(-3px) scale(1.08) !important;
+  filter:
+    drop-shadow(0 0 18px rgba(255,79,232,.8))
+    drop-shadow(0 0 28px rgba(78,231,255,.36)) !important;
+}
+
+.acode-bg-crystal:hover span,
+.acode-bg-crystal:focus-visible span {
+  opacity: 1 !important;
+  transform: translateX(-50%) translateY(0) !important;
+}
+
+.acode-bg-crystal.chat {
+  right: clamp(18px, 5vw, 70px) !important;
+  top: clamp(112px, 18vh, 170px) !important;
+}
+
+.acode-bg-crystal.create {
+  right: clamp(110px, 14vw, 220px) !important;
+  bottom: clamp(138px, 22vh, 230px) !important;
+}
+
+.acode-bg-crystal.settings {
+  left: clamp(310px, 24vw, 440px) !important;
+  bottom: clamp(104px, 18vh, 190px) !important;
+}
+
+.acode-bg-crystal.home {
+  left: clamp(320px, 28vw, 520px) !important;
+  top: clamp(88px, 14vh, 138px) !important;
+}
+
+.acode-crystal-settings {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 20 !important;
+  display: grid !important;
+  place-items: center !important;
+  padding: 22px !important;
+}
+
+.acode-crystal-settings-backdrop {
+  position: absolute !important;
+  inset: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: rgba(2, 4, 12, .56) !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+.acode-crystal-settings-card {
+  position: relative !important;
+  width: min(620px, 100%) !important;
+  border: 1px solid rgba(199, 213, 255, .22) !important;
+  border-radius: 30px !important;
+  padding: 22px !important;
+  background:
+    radial-gradient(420px 240px at 18% 0%, rgba(255,79,232,.18), transparent 74%),
+    radial-gradient(360px 220px at 90% 10%, rgba(78,231,255,.16), transparent 72%),
+    rgba(8, 12, 30, .9) !important;
+  box-shadow: 0 36px 120px rgba(0,0,0,.52), inset 0 1px 0 rgba(255,255,255,.12) !important;
+  backdrop-filter: blur(22px) saturate(1.2) !important;
+}
+
+.acode-crystal-settings-head {
+  display: flex !important;
+  align-items: center !important;
+  gap: 14px !important;
+}
+
+.acode-crystal-settings-head div {
+  min-width: 0 !important;
+  flex: 1 !important;
+}
+
+.acode-crystal-settings-head strong {
+  display: block !important;
+  color: #ffffff !important;
+  font-size: 24px !important;
+  font-weight: 950 !important;
+}
+
+.acode-crystal-settings-head span,
+.acode-crystal-settings-grid span {
+  display: block !important;
+  margin-top: 4px !important;
+  color: rgba(224, 232, 255, .72) !important;
+  line-height: 1.45 !important;
+}
+
+.acode-crystal-settings-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  margin-top: 18px !important;
+}
+
+.acode-crystal-settings-grid div {
+  min-height: 112px !important;
+  padding: 16px !important;
+  border: 1px solid rgba(181,205,255,.16) !important;
+  border-radius: 22px !important;
+  background: rgba(255,255,255,.055) !important;
+}
+
+.acode-crystal-settings-grid b {
+  color: #ffffff !important;
+  font-size: 15px !important;
+}
+
+.acode-crystal-settings-actions {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+  margin-top: 18px !important;
+}
+
+.acode-crystal-settings-actions button {
+  min-height: 44px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 0 16px !important;
+}
+
+@media (max-width: 900px) {
+  .acode-bg-crystal.home,
+  .acode-bg-crystal.create {
+    display: none !important;
+  }
+
+  .acode-bg-crystal.chat {
+    width: 70px !important;
+    height: 70px !important;
+    right: 14px !important;
+    top: 88px !important;
+  }
+
+  .acode-bg-crystal.settings {
+    width: 70px !important;
+    height: 70px !important;
+    left: auto !important;
+    right: 14px !important;
+    bottom: 128px !important;
+  }
+
+  .acode-bg-crystal span {
+    display: none !important;
+  }
+
+  .acode-crystal-settings-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .acode-bg-crystal {
+    opacity: .72 !important;
+  }
+
+  .acode-bg-crystal.chat {
+    top: 78px !important;
+  }
+
+  .acode-bg-crystal.settings {
+    bottom: 112px !important;
+  }
+
+  .acode-crystal-settings {
+    padding: 12px !important;
+  }
+
+  .acode-crystal-settings-card {
+    border-radius: 24px !important;
+    padding: 16px !important;
+  }
+
+  .acode-crystal-settings-actions button {
+    flex: 1 !important;
+    justify-content: center !important;
+  }
+}
