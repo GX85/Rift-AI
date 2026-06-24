@@ -272,11 +272,11 @@ export function Landing({ onEnter }: { onEnter?: () => void }) {
         <div className="features-grid">
           {PLUS_PERKS.map((p) => (
             <div key={p.title} className="feature-card">
-              <div className="feature-gem">
-                <AmethystNavigatorStone size={74} />
+              <AmethystNavigatorStone size={118} />
+              <div className="feature-content">
+                <div className="feature-title">{p.title}</div>
+                <div className="feature-text">{p.text}</div>
               </div>
-              <div className="feature-title">{p.title}</div>
-              <div className="feature-text">{p.text}</div>
             </div>
           ))}
         </div>
