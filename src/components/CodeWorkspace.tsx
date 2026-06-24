@@ -36,6 +36,15 @@ const MOBILE_ACTIONS = [
   { label: 'React', prompt: 'Создай React + TypeScript компонент без any, с loading/empty/error состояниями. Задача: ' },
 ];
 
+const MOBILE_ACTION_ICONS = ['globe', 'game', 'bug', 'spark', 'code'];
+
+const MOBILE_CAPABILITIES = [
+  { label: 'Code', icon: 'code' },
+  { label: 'Sites', icon: 'globe' },
+  { label: 'Apps', icon: 'models' },
+  { label: 'Games', icon: 'game' },
+];
+
 function newChat(): Chat {
   return { id: crypto.randomUUID(), title: 'Новый чат', messages: [], updatedAt: Date.now() };
 }
@@ -272,6 +281,22 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
   const messages = active?.messages ?? [];
 
   useEffect(() => {
+    const viewport = window.visualViewport;
+    const setAppHeight = () => {
+      document.documentElement.style.setProperty('--amethyst-app-height', `${viewport?.height ?? window.innerHeight}px`);
+    };
+
+    setAppHeight();
+    viewport?.addEventListener('resize', setAppHeight);
+    window.addEventListener('orientationchange', setAppHeight);
+
+    return () => {
+      viewport?.removeEventListener('resize', setAppHeight);
+      window.removeEventListener('orientationchange', setAppHeight);
+    };
+  }, []);
+
+  useEffect(() => {
     let alive = true;
     loadChats().then((stored) => {
       if (!alive || stored.length === 0) return;
@@ -495,7 +520,7 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
         </div>
       </aside>
 
-      <main className="acode-main">
+      <main className="acode-main" data-empty={messages.length === 0 ? 'true' : 'false'} data-busy={busy ? 'true' : 'false'}>
         <header className="acode-top">
           <button className="acode-icon mobile-only" onClick={() => setSidebarOpen(true)} title="Меню">
             <Icon name="menu" size={17} />
@@ -512,10 +537,24 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
           </button>
         </header>
 
+        <div className="acode-mobile-strip" aria-hidden="true">
+          {MOBILE_CAPABILITIES.map((item) => (
+            <span key={item.label}>
+              <Icon name={item.icon} size={13} />
+              {item.label}
+            </span>
+          ))}
+        </div>
+
         <section className="acode-thread" ref={scrollRef}>
           {messages.length === 0 ? (
             <div className="acode-empty">
               <AmethystLogo size={78} />
+              <div className="acode-empty-orbit" aria-hidden="true">
+                <span />
+                <span />
+                <span />
+              </div>
               <span className="acode-empty-kicker">AI assistant</span>
               <h1>Что строим?</h1>
               <p>Пиши задачу, вставляй ошибку или прикрепляй файл. Сайты, компоненты и web-app прототипы генерируются прямо в чате.</p>
@@ -558,9 +597,10 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
 
         <footer className="acode-compose-wrap">
           <div className="acode-mobile-actions" aria-label="Быстрые команды">
-            {MOBILE_ACTIONS.map((action) => (
+            {MOBILE_ACTIONS.map((action, index) => (
               <button key={action.label} type="button" onClick={() => useStarter(action.prompt)}>
-                {action.label}
+                <Icon name={MOBILE_ACTION_ICONS[index] ?? 'spark'} size={14} />
+                <span>{action.label}</span>
               </button>
             ))}
           </div>

@@ -22,6 +22,31 @@ const P: Record<string, JSX.Element> = {
     </>
   ),
   stop: <rect x="7" y="7" width="10" height="10" rx="2" />,
+  code: (
+    <>
+      <polyline points="8 17 3 12 8 7" />
+      <polyline points="16 7 21 12 16 17" />
+      <line x1="14" y1="4" x2="10" y2="20" />
+    </>
+  ),
+  bug: (
+    <>
+      <rect x="8" y="7" width="8" height="12" rx="4" />
+      <path d="M9 7a3 3 0 0 1 6 0" />
+      <line x1="3" y1="13" x2="8" y2="13" />
+      <line x1="16" y1="13" x2="21" y2="13" />
+      <line x1="4" y1="8" x2="8" y2="10" />
+      <line x1="20" y1="8" x2="16" y2="10" />
+      <line x1="4" y1="18" x2="8" y2="16" />
+      <line x1="20" y1="18" x2="16" y2="16" />
+    </>
+  ),
+  spark: (
+    <>
+      <path d="M12 2l1.8 5.2L19 9l-5.2 1.8L12 16l-1.8-5.2L5 9l5.2-1.8L12 2z" />
+      <path d="M19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15z" />
+    </>
+  ),
   models: (
     <>
       <polygon points="12 2 2 7 12 12 22 7 12 2" />
