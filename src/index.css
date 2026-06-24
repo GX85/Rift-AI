@@ -14862,3 +14862,199 @@ code {
     bottom: 116px !important;
   }
 }
+
+/* Demoday polish: live artifact preview + deeper amethyst presentation */
+.acode-main {
+  background:
+    radial-gradient(760px 520px at 72% 8%, rgba(78,231,255,.1), transparent 70%),
+    radial-gradient(680px 480px at 30% 20%, rgba(255,79,232,.11), transparent 72%),
+    rgba(3, 5, 14, .2) !important;
+}
+
+.acode-top {
+  width: min(1220px, calc(100% - 56px)) !important;
+  border-radius: 30px !important;
+  border-color: rgba(207, 221, 255, .22) !important;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.14), rgba(255,255,255,.045)),
+    rgba(7, 12, 30, .74) !important;
+}
+
+.acode-side {
+  background:
+    linear-gradient(180deg, rgba(35, 19, 62, .82), rgba(7, 10, 25, .88)),
+    radial-gradient(300px 440px at 12% 0%, rgba(255,79,232,.18), transparent 72%) !important;
+}
+
+.acode-logo .amlogo {
+  width: 52px !important;
+  height: 52px !important;
+}
+
+.acode-model .amlogo {
+  width: 38px !important;
+  height: 38px !important;
+}
+
+.acode-msg.assistant {
+  max-width: min(100%, 1160px) !important;
+}
+
+.acode-msg.assistant .acode-msg-body.artifact-ready {
+  padding: 0 !important;
+  overflow: hidden !important;
+  border-radius: 30px !important;
+  background:
+    linear-gradient(135deg, rgba(255,255,255,.1), rgba(255,255,255,.035)),
+    rgba(6, 10, 25, .78) !important;
+}
+
+.acode-artifact-card {
+  padding: 0 !important;
+  border-radius: 30px !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(194, 213, 255, .2) !important;
+  background:
+    radial-gradient(580px 300px at 8% 0%, rgba(255,79,232,.15), transparent 72%),
+    radial-gradient(520px 280px at 90% 8%, rgba(78,231,255,.13), transparent 72%),
+    rgba(5, 8, 22, .9) !important;
+  box-shadow:
+    0 34px 120px rgba(0,0,0,.48),
+    0 0 46px rgba(111, 92, 255, .12),
+    inset 0 1px 0 rgba(255,255,255,.12) !important;
+}
+
+.acode-artifact-head {
+  min-height: 74px !important;
+  padding: 18px 20px !important;
+  border-bottom: 1px solid rgba(194,213,255,.14) !important;
+  background: rgba(255,255,255,.045) !important;
+}
+
+.acode-artifact-head strong {
+  font-size: 18px !important;
+  color: #ffffff !important;
+}
+
+.acode-artifact-head span {
+  color: rgba(225,233,255,.7) !important;
+}
+
+.acode-artifact-live {
+  position: relative !important;
+  width: 100% !important;
+  min-height: 460px !important;
+  padding: 14px !important;
+  background:
+    linear-gradient(rgba(255,255,255,.032) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.024) 1px, transparent 1px),
+    radial-gradient(360px 190px at 12% 8%, rgba(255,79,232,.12), transparent 70%),
+    rgba(4, 7, 18, .72) !important;
+  background-size: 32px 32px, 32px 32px, auto, auto !important;
+}
+
+.acode-artifact-live::before {
+  content: 'Live preview' !important;
+  position: absolute !important;
+  right: 28px !important;
+  top: 26px !important;
+  z-index: 2 !important;
+  padding: 7px 11px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(78,231,255,.32) !important;
+  background: rgba(5,10,22,.72) !important;
+  color: #dffcff !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  backdrop-filter: blur(10px) !important;
+}
+
+.acode-artifact-live iframe {
+  width: 100% !important;
+  height: 520px !important;
+  display: block !important;
+  border: 1px solid rgba(216, 228, 255, .2) !important;
+  border-radius: 24px !important;
+  background: #ffffff !important;
+  box-shadow: 0 24px 80px rgba(0,0,0,.34) !important;
+}
+
+.acode-artifact-code {
+  border-top: 1px solid rgba(194,213,255,.12) !important;
+  background: rgba(4, 7, 18, .72) !important;
+}
+
+.acode-artifact-code summary {
+  min-height: 52px !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 20px !important;
+  color: #f8fbff !important;
+  font-weight: 950 !important;
+}
+
+.acode-msg-actions {
+  padding-top: 12px !important;
+}
+
+.acode-open {
+  min-width: 118px !important;
+  background:
+    linear-gradient(135deg, rgba(78,231,255,.86), rgba(255,79,232,.72)) !important;
+  color: #06101e !important;
+}
+
+.acode-bg-crystal {
+  opacity: .3 !important;
+  filter: blur(.2px) saturate(1.15) !important;
+}
+
+.acode-bg-crystal .amlogo {
+  display: none !important;
+}
+
+.acode-bg-crystal::before {
+  opacity: .7 !important;
+  filter: blur(0) drop-shadow(0 0 38px rgba(154, 92, 255, .38)) !important;
+  clip-path: polygon(50% 0%, 86% 24%, 78% 72%, 50% 100%, 22% 72%, 14% 24%) !important;
+}
+
+.acode-bg-crystal::after {
+  opacity: .62 !important;
+  clip-path: polygon(50% 0%, 64% 42%, 50% 100%, 36% 42%) !important;
+}
+
+.acode-bg-crystal:hover,
+.acode-bg-crystal:focus-visible {
+  opacity: .82 !important;
+}
+
+.acode-empty-hero {
+  background:
+    radial-gradient(620px 340px at 20% 0%, rgba(255,79,232,.16), transparent 70%),
+    radial-gradient(540px 300px at 88% 8%, rgba(78,231,255,.14), transparent 70%),
+    linear-gradient(135deg, rgba(255,255,255,.09), rgba(255,255,255,.026)),
+    rgba(5, 8, 22, .72) !important;
+}
+
+.acode-studio-grid button {
+  min-height: 154px !important;
+  border-radius: 26px !important;
+}
+
+@media (max-width: 900px) {
+  .acode-top {
+    width: calc(100% - 16px) !important;
+    border-radius: 24px !important;
+  }
+
+  .acode-artifact-live {
+    min-height: 330px !important;
+    padding: 10px !important;
+  }
+
+  .acode-artifact-live iframe {
+    height: 380px !important;
+    border-radius: 18px !important;
+  }
+}

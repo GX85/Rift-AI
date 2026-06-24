@@ -774,13 +774,12 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
                             <span>Сайт собран. Скачай файл или скопируй код.</span>
                           </div>
                         </div>
-                        <div className="acode-artifact-preview" aria-hidden="true">
-                          <i />
-                          <i />
-                          <i />
-                          <span />
-                          <span />
-                          <b />
+                        <div className="acode-artifact-live">
+                          <iframe
+                            title="Amethyst artifact preview"
+                            srcDoc={htmlArtifact}
+                            sandbox="allow-scripts allow-forms allow-pointer-lock allow-popups"
+                          />
                         </div>
                         <details className="acode-artifact-code">
                           <summary>Показать код</summary>
