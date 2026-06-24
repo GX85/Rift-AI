@@ -14,6 +14,14 @@ const P: Record<string, JSX.Element> = {
       <line x1="5" y1="12" x2="19" y2="12" />
     </>
   ),
+  menu: (
+    <>
+      <line x1="4" y1="7" x2="20" y2="7" />
+      <line x1="4" y1="12" x2="20" y2="12" />
+      <line x1="4" y1="17" x2="20" y2="17" />
+    </>
+  ),
+  stop: <rect x="7" y="7" width="10" height="10" rx="2" />,
   models: (
     <>
       <polygon points="12 2 2 7 12 12 22 7 12 2" />

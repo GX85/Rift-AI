@@ -498,7 +498,7 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
       <main className="acode-main">
         <header className="acode-top">
           <button className="acode-icon mobile-only" onClick={() => setSidebarOpen(true)} title="Меню">
-            ☰
+            <Icon name="menu" size={17} />
           </button>
           <div className="acode-model">
             <AmethystLogo size={30} />
@@ -608,7 +608,7 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
               <span />
               {busy ? (
                 <button type="button" className="acode-send stop" onClick={stop}>
-                  ■
+                  <Icon name="stop" size={15} />
                 </button>
               ) : (
                 <button type="submit" className="acode-send" disabled={!input.trim()}>
