@@ -791,7 +791,7 @@ export function Workspace({
           <Icon name="memory" /> Контекст проекта
         </button>
         <button className="side-link" onClick={startCodeReview}>
-          <Icon name="search" /> Code review
+          <Icon name="search" /> Ревью кода
         </button>
         <button className="side-link" onClick={startBugFix}>
           <Icon name="settings" /> Исправить ошибку
@@ -1033,7 +1033,7 @@ export function Workspace({
                 <div className="stat-lbl">сообщений</div>
               </div>
               <div className="stat">
-                <div className="stat-num">Code</div>
+                <div className="stat-num">Код</div>
                 <div className="stat-lbl">режим</div>
               </div>
             </div>

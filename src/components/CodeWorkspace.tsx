@@ -39,10 +39,10 @@ const MOBILE_ACTIONS = [
 const MOBILE_ACTION_ICONS = ['globe', 'game', 'bug', 'spark', 'code'];
 
 const MOBILE_CAPABILITIES = [
-  { label: 'Code', icon: 'code' },
-  { label: 'Sites', icon: 'globe' },
-  { label: 'Apps', icon: 'models' },
-  { label: 'Games', icon: 'game' },
+  { label: 'Код', icon: 'code' },
+  { label: 'Сайты', icon: 'globe' },
+  { label: 'Приложения', icon: 'models' },
+  { label: 'Игры', icon: 'game' },
 ];
 
 const STUDIO_CARDS = [
@@ -54,7 +54,7 @@ const STUDIO_CARDS = [
   },
   {
     icon: 'models',
-    title: 'Web-app MVP',
+    title: 'MVP приложения',
     text: 'Интерфейс, mock data, формы, пустые состояния и localStorage.',
     prompt: 'Собери web-app MVP одним HTML-файлом: dashboard, mock data, формы, фильтры, empty/error states, localStorage. Идея: ',
   },
@@ -66,7 +66,7 @@ const STUDIO_CARDS = [
   },
   {
     icon: 'bug',
-    title: 'Fix & review',
+    title: 'Фикс и ревью',
     text: 'Разбор ошибки, точный фикс, объяснение причины и как проверить.',
     prompt: MOBILE_ACTIONS[2].prompt,
   },
@@ -98,6 +98,11 @@ function titleFrom(text: string) {
 
 function buildTaskBrief(text: string) {
   const normalized = text.toLowerCase();
+  const artifactRules = [
+    'Если создаёшь сайт, приложение, игру или бота, обязательно верни готовый результат в fenced-блоке ```html ... ```.',
+    'Не ограничивайся объяснением: результат должен быть скачиваемым, открываемым и рабочим без дополнительных файлов.',
+    'Для UI добавляй плавные hover/focus/transition состояния, адаптив под телефон и отсутствие горизонтального скролла.',
+  ];
   const rules: string[] = [
     'Сначала определи тип задачи и выбери самый полезный формат результата.',
     'Если просишь код, возвращай рабочий код без пустых заглушек.',
@@ -126,7 +131,7 @@ function buildTaskBrief(text: string) {
     );
   }
 
-  return `${text}\n\n--- Amethyst quality brief ---\n${rules.map((rule) => `- ${rule}`).join('\n')}`;
+  return `${text}\n\n--- Amethyst quality brief ---\n${[...rules, ...artifactRules].map((rule) => `- ${rule}`).join('\n')}`;
 }
 
 function extractHtmlArtifact(content: string) {
@@ -136,7 +141,13 @@ function extractHtmlArtifact(content: string) {
     const code = match[2].trim().toLowerCase();
     return lang === 'html' || code.startsWith('<!doctype html') || code.startsWith('<html');
   });
-  return html?.[2].trim() ?? '';
+  if (html) return html[2].trim();
+
+  const rawStart = content.search(/<!doctype html|<html[\s>]/i);
+  if (rawStart === -1) return '';
+  const raw = content.slice(rawStart).trim();
+  const end = raw.search(/<\/html>/i);
+  return end === -1 ? raw : raw.slice(0, end + '</html>'.length).trim();
 }
 
 function downloadText(filename: string, text: string) {
@@ -273,7 +284,15 @@ function ensureCreatedArtifact(request: string, response: string) {
 }
 
 function buildSystem() {
-  return `Ты — Amethyst, coding assistant на базе Gemini.
+  return `Ты — Amethyst, coding assistant на базе Gemini 2.5 Flash.
+
+КРИТИЧЕСКИЙ РЕЖИМ:
+• Работай как сильный генератор кода и продуктовых прототипов, а не как обычный чат.
+• Для сайта, лендинга, web-app, игры или чатбота почти всегда возвращай один полный HTML-документ в блоке \`\`\`html.
+• HTML должен начинаться с <!doctype html>, содержать <style> и рабочий <script>, если нужна логика.
+• Не выдавай только план, если пользователь просит создать. Сначала готовый результат, потом короткая проверка.
+• Интерфейсы должны иметь плавные transition/hover/focus, mobile layout, пустые/ошибочные состояния и без горизонтального скролла.
+• Если модель сомневается, выбери разумное решение сам и собери рабочую версию.
 
 Главная роль: помогать с разработкой, как Codex/Claude for code.
 

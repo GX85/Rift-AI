@@ -32,6 +32,18 @@ type AiResponse = {
 };
 
 type ChunkHandler = (chunk: string) => void;
+type InvokeOptions = {
+  temperature?: number;
+  maxTokens?: number;
+  history?: ChatMessage[];
+};
+
+function normalizeHistory(messages?: ChatMessage[]) {
+  return messages?.map((message) => ({
+    role: message.role,
+    text: message.content ?? message.text ?? '',
+  }));
+}
 
 function polishedLocalFallback(prompt: string, system: string): string {
   const text = `${system}\n${prompt}`.toLowerCase();
@@ -256,7 +268,7 @@ async function invokeAi(
   prompt: string,
   system: string,
   signal?: AbortSignal,
-  options?: { temperature?: number; maxTokens?: number },
+  options?: InvokeOptions,
 ): Promise<string> {
   if (signal?.aborted) throw new DOMException('Запрос отменён', 'AbortError');
 
@@ -264,6 +276,7 @@ async function invokeAi(
     body: {
       prompt,
       system,
+      history: normalizeHistory(options?.history),
       temperature: options?.temperature,
       maxTokens: options?.maxTokens,
     },
@@ -313,7 +326,7 @@ export async function* streamGemini(
       signal,
       typeof input === 'string'
         ? undefined
-        : { temperature: input.temperature, maxTokens: input.maxTokens },
+        : { temperature: input.temperature, maxTokens: input.maxTokens, history: input.history ?? input.messages },
     );
   } catch {
     text = localFallback(base.prompt, system);
@@ -340,7 +353,7 @@ export async function runAgent(
       typeof input !== 'string' ? input.signal : undefined,
       typeof input === 'string'
         ? undefined
-        : { temperature: input.temperature, maxTokens: input.maxTokens },
+        : { temperature: input.temperature, maxTokens: input.maxTokens, history: input.history ?? input.messages },
     );
   } catch {
     return localFallback(base.prompt, system);
