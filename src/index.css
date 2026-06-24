@@ -8109,3 +8109,222 @@ body,
     animation: none !important;
   }
 }
+
+/* Executive workspace polish */
+@media (min-width: 821px) {
+  .acode {
+    grid-template-columns: 320px minmax(0, 1fr) !important;
+    background: #08090e !important;
+  }
+
+  .acode-side {
+    padding: 20px !important;
+    gap: 16px !important;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.032), transparent 34%),
+      #0d0f16 !important;
+    border-right: 1px solid rgba(255, 255, 255, 0.075) !important;
+  }
+
+  .acode-logo {
+    font-size: 18px !important;
+  }
+
+  .acode-logo .amlogo,
+  .acode-model .amlogo {
+    border-radius: 12px !important;
+  }
+
+  .acode-new {
+    min-height: 52px !important;
+    border-radius: 14px !important;
+    background: rgba(255, 255, 255, 0.055) !important;
+  }
+
+  .acode-chat-item {
+    min-height: 48px !important;
+    border-radius: 14px !important;
+  }
+
+  .acode-main {
+    background:
+      radial-gradient(680px 340px at 58% -150px, rgba(168, 85, 247, 0.12), transparent 70%),
+      linear-gradient(180deg, #0b0d14 0%, #08090e 50%, #07080c 100%) !important;
+  }
+
+  .acode-main::before,
+  .acode-main::after {
+    opacity: 0.38 !important;
+  }
+
+  .acode-top {
+    min-height: 72px !important;
+    padding: 14px 28px !important;
+    background: rgba(9, 11, 17, 0.92) !important;
+  }
+
+  .acode-model strong {
+    font-size: 15.5px !important;
+  }
+
+  .acode-model span {
+    color: rgba(175, 184, 210, 0.74) !important;
+    font-size: 12.5px !important;
+  }
+
+  .acode-thread {
+    padding: 28px 34px 26px !important;
+  }
+
+  .acode-empty {
+    width: min(1180px, 100%) !important;
+    gap: 14px !important;
+    margin: 0 auto !important;
+  }
+
+  .acode-empty-hero {
+    grid-template-columns: minmax(0, 1fr) 390px !important;
+    gap: 28px !important;
+    min-height: 282px !important;
+    padding: 28px 30px !important;
+    border-radius: 20px !important;
+    background:
+      linear-gradient(145deg, rgba(255, 255, 255, 0.065), rgba(255, 255, 255, 0.028)),
+      rgba(12, 14, 22, 0.86) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    box-shadow:
+      0 24px 80px rgba(0, 0, 0, 0.26),
+      0 0 0 1px rgba(255, 255, 255, 0.025) inset !important;
+  }
+
+  .acode-empty-hero::after {
+    opacity: 0.34 !important;
+  }
+
+  .acode-empty-copy {
+    gap: 10px !important;
+  }
+
+  .acode-empty-copy > .amlogo {
+    width: 56px !important;
+    height: 56px !important;
+    border-radius: 14px !important;
+  }
+
+  .acode-empty-copy .acode-empty-orbit {
+    opacity: 0.28 !important;
+    filter: blur(0) drop-shadow(0 18px 42px rgba(124, 58, 237, 0.14)) !important;
+  }
+
+  .acode-empty-copy h1 {
+    max-width: 720px !important;
+    font-size: clamp(42px, 4.5vw, 66px) !important;
+    line-height: 0.98 !important;
+  }
+
+  .acode-empty-copy p {
+    max-width: 650px !important;
+    color: rgba(203, 213, 225, 0.78) !important;
+    font-size: 16px !important;
+  }
+
+  .acode-live-preview {
+    min-height: 230px !important;
+    border-radius: 18px !important;
+    background: rgba(5, 7, 14, 0.82) !important;
+    box-shadow:
+      0 18px 64px rgba(0, 0, 0, 0.36),
+      0 0 0 1px rgba(255, 255, 255, 0.025) inset !important;
+  }
+
+  .acode-studio-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  .acode-studio-grid button {
+    min-height: 126px !important;
+    padding: 16px !important;
+    border-radius: 16px !important;
+    background: rgba(255, 255, 255, 0.045) !important;
+    border-color: rgba(255, 255, 255, 0.085) !important;
+  }
+
+  .acode-studio-grid button svg {
+    width: 34px !important;
+    height: 34px !important;
+    border-radius: 12px !important;
+    background: rgba(168, 85, 247, 0.11) !important;
+    color: #ddd6fe !important;
+  }
+
+  .acode-studio-grid button strong {
+    font-size: 15px !important;
+  }
+
+  .acode-studio-grid button span {
+    font-size: 12.5px !important;
+  }
+
+  .acode-output-strip {
+    gap: 7px !important;
+  }
+
+  .acode-output-strip span {
+    min-height: 30px !important;
+    background: rgba(255, 255, 255, 0.04) !important;
+    color: rgba(203, 213, 225, 0.76) !important;
+  }
+
+  .acode-starters {
+    width: 100% !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    margin-top: 0 !important;
+  }
+
+  .acode-starters button {
+    min-height: 46px !important;
+    padding: 10px 12px !important;
+    border-radius: 14px !important;
+    color: rgba(226, 232, 240, 0.76) !important;
+    font-size: 12.5px !important;
+    background: rgba(255, 255, 255, 0.035) !important;
+  }
+
+  .acode-mobile-actions {
+    width: min(1180px, 100%) !important;
+    justify-content: flex-start !important;
+  }
+
+  .acode-compose,
+  .acode-error,
+  .acode-file {
+    width: min(1180px, 100%) !important;
+  }
+
+  .acode-compose {
+    border-radius: 18px !important;
+    background: rgba(17, 19, 28, 0.96) !important;
+    box-shadow:
+      0 18px 64px rgba(0, 0, 0, 0.34),
+      0 0 0 1px rgba(255, 255, 255, 0.03) inset !important;
+  }
+}
+
+@media (max-width: 820px) {
+  .acode-empty-hero {
+    background:
+      linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.025)),
+      rgba(12, 14, 22, 0.92) !important;
+  }
+
+  .acode-empty-copy > .amlogo {
+    width: 52px !important;
+    height: 52px !important;
+  }
+
+  .acode-starters {
+    display: none !important;
+  }
+}
