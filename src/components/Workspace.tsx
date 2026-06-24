@@ -28,14 +28,34 @@ type Chat = { id: string; title: string; messages: Message[]; updatedAt: number 
 type Review = { id: string; name: string; text: string; createdAt: number };
 type PreviewMode = 'desktop' | 'mobile';
 type CreatorPreset = { label: string; prompt: string };
+type SpeechRecognitionEventLike = {
+  results: {
+    [resultIndex: number]: {
+      [alternativeIndex: number]: {
+        transcript: string;
+      };
+    };
+  };
+};
+type SpeechRecognitionLike = {
+  lang: string;
+  interimResults: boolean;
+  onresult: ((event: SpeechRecognitionEventLike) => void) | null;
+  start: () => void;
+};
+type SpeechRecognitionConstructor = new () => SpeechRecognitionLike;
+type SpeechWindow = Window & {
+  webkitSpeechRecognition?: SpeechRecognitionConstructor;
+  SpeechRecognition?: SpeechRecognitionConstructor;
+};
 
-// Единственная модель — Amethyst Code (специализация только на разработке).
+// Единственная модель — Amethyst (специализация только на разработке).
 const RIFT = {
-  name: 'Amethyst Code',
+  name: 'Amethyst',
   tagline: 'ИИ для кода, приложений и отладки',
   temperature: 0.35,
   persona:
-    'Ты — Amethyst Code, специализированный ИИ для программирования в духе Codex: пишешь рабочий код, исправляешь ошибки, ' +
+    'Ты — Amethyst, специализированный ИИ для программирования в духе Codex: пишешь рабочий код, исправляешь ошибки, ' +
     'проектируешь приложения, объясняешь сложные места простым языком и помогаешь доводить проект до запуска. ' +
     'Всегда отвечай как инженер: конкретно, проверяемо, без воды и без выдуманных API.',
   suggests: [
@@ -110,7 +130,7 @@ const CREATION_RULES = `
 • Для кода используй markdown-блоки с языком.
 • Для нескольких файлов пиши путь файла перед каждым блоком.
 • Держи объяснение коротким, если пользователь не просит подробно.
-• Запоминай контекст текущего проекта: Amethyst Code, Vite + React + TypeScript, Supabase, Vercel.
+• Запоминай контекст текущего проекта: Amethyst, Vite + React + TypeScript, Supabase, Vercel.
 
 Качество функций:
 • Всегда проверяй, что результат можно использовать сразу: скачать, вставить, запустить, открыть или применить.
@@ -657,8 +677,8 @@ export function Workspace({
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: 'smooth' });
   }
   function startVoice() {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const SR = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
+    const speechWindow = window as SpeechWindow;
+    const SR = speechWindow.webkitSpeechRecognition || speechWindow.SpeechRecognition;
     if (!SR) {
       setError('Голосовой ввод не поддерживается (попробуй Chrome/Edge).');
       return;
@@ -666,8 +686,7 @@ export function Workspace({
     const r = new SR();
     r.lang = 'ru-RU';
     r.interimResults = false;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    r.onresult = (e: any) => setInput((v) => (v ? v + ' ' : '') + (e.results[0][0].transcript as string));
+    r.onresult = (e) => setInput((v) => (v ? v + ' ' : '') + e.results[0][0].transcript);
     r.start();
   }
 
@@ -783,7 +802,7 @@ export function Workspace({
 
         <button className="plus-banner on" onClick={() => setShowSettings(true)}>
           <div className="plus-banner-title">
-            <Icon name="star" size={15} /> Amethyst Code
+            <Icon name="star" size={15} /> Amethyst
             <span className="plus-dot">Gemini</span>
           </div>
           <div className="plus-banner-sub">Код · отладка · приложения · файлы</div>
@@ -874,7 +893,7 @@ export function Workspace({
               <AmethystLogo size={18} />
             </div>
             <div>
-              <div className="ws-bar-name">Amethyst Code</div>
+              <div className="ws-bar-name">Amethyst</div>
               <div className="ws-bar-tag">{hasDesktop() ? 'ПК-агент подключён' : RIFT.tagline}</div>
             </div>
           </div>
@@ -888,7 +907,7 @@ export function Workspace({
             <div className="hero-chat-logo" aria-hidden>
               <AmethystLogo size={96} />
             </div>
-            <h1 className="hero-chat-title">Amethyst Code</h1>
+            <h1 className="hero-chat-title">Amethyst</h1>
             <p className="hero-chat-sub">Опиши задачу, вставь ошибку или прикрепи файл. Я помогу написать, понять и починить код.</p>
             <div className="hero-chat-box">{composer}</div>
             {error && <p className="composer-error">{error}</p>}
@@ -977,7 +996,7 @@ export function Workspace({
                 </p>
               )}
               {composer}
-              <p className="cbox-hint">Amethyst Code · работает на Gemini</p>
+              <p className="cbox-hint">Amethyst · работает на Gemini</p>
             </div>
           </>
         )}
@@ -1023,7 +1042,7 @@ export function Workspace({
             <button className="set-row" onClick={toggleTts}>
               <div className="set-text">
                 <div className="set-title">Озвучка ответов</div>
-                <div className="set-desc">Amethyst Code читает ответы голосом</div>
+                <div className="set-desc">Amethyst читает ответы голосом</div>
               </div>
               <span className={`switch ${tts && plus ? 'on' : ''}`}>
                 <span className="knob" />
@@ -1071,7 +1090,7 @@ export function Workspace({
                 ⎋ Выйти из аккаунта
               </button>
             </div>
-            <div className="set-foot">Amethyst Code · работает на Gemini</div>
+            <div className="set-foot">Amethyst · работает на Gemini</div>
           </div>
         </div>
       )}

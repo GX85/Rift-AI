@@ -22,7 +22,7 @@
   text-rendering: optimizeLegibility;
 }
 
-/* Cross-platform Amethyst Code refresh */
+/* Cross-platform Amethyst refresh */
 .hero2,
 .platform-page,
 .reviews-page,
@@ -4408,7 +4408,7 @@ input:hover:not(:focus), textarea:hover:not(:focus) { border-color: var(--line-s
   }
 }
 
-/* Amethyst Code mode: phone-first fixes and product focus. */
+/* Amethyst mode: phone-first fixes and product focus. */
 @media (max-width: 820px) {
   html,
   body,
@@ -5357,7 +5357,7 @@ input:hover:not(:focus), textarea:hover:not(:focus) { border-color: var(--line-s
   }
 }
 
-/* Amethyst CodeWorkspace: clean rewrite layer */
+/* Amethyst workspace: clean rewrite layer */
 .acode {
   height: 100dvh;
   display: grid;
