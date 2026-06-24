@@ -7513,3 +7513,230 @@ body,
     transform: translateY(0);
   }
 }
+
+/* Cross-platform feature and animation pass */
+.hero-prompt-grid {
+  width: min(780px, 100%);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 14px auto 0;
+}
+
+.hero-prompt-grid button {
+  min-height: 46px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 9px;
+  padding: 0 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.055);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(240, 244, 255, 0.9);
+  box-shadow: none;
+  font-size: 13px;
+  font-weight: 800;
+  text-align: left;
+}
+
+.hero-prompt-grid button span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hero-prompt-grid button:hover,
+.hero-prompt-grid button:focus-visible {
+  transform: translateY(-2px);
+  border-color: rgba(34, 211, 238, 0.26);
+  background:
+    linear-gradient(135deg, rgba(34, 211, 238, 0.08), rgba(168, 85, 247, 0.12)),
+    rgba(255, 255, 255, 0.06);
+}
+
+@media (min-width: 821px) {
+  .acode-mobile-actions {
+    width: min(920px, 100%);
+    display: flex !important;
+    gap: 8px;
+    margin: 0 auto 10px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .acode-mobile-actions::-webkit-scrollbar {
+    display: none;
+  }
+
+  .acode-mobile-actions button {
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 0 13px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.052);
+    border: 1px solid rgba(255, 255, 255, 0.085);
+    color: #dce3f9;
+    box-shadow: none;
+    font-size: 12.5px;
+    font-weight: 850;
+  }
+
+  .acode-mobile-actions button:hover,
+  .acode-mobile-actions button:focus-visible {
+    transform: translateY(-2px);
+    border-color: rgba(216, 180, 254, 0.28);
+    background: rgba(124, 58, 237, 0.13);
+  }
+}
+
+@keyframes amethyst-float-up {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes amethyst-crystal-spin {
+  0% {
+    transform: rotateX(-18deg) rotateY(0deg) rotateZ(0deg);
+  }
+  50% {
+    transform: rotateX(-12deg) rotateY(180deg) rotateZ(4deg);
+  }
+  100% {
+    transform: rotateX(-18deg) rotateY(360deg) rotateZ(0deg);
+  }
+}
+
+@keyframes amethyst-soft-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 18px 64px rgba(124, 58, 237, 0.2),
+      0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+  }
+  50% {
+    box-shadow:
+      0 22px 86px rgba(34, 211, 238, 0.18),
+      0 0 0 1px rgba(216, 180, 254, 0.2) inset;
+  }
+}
+
+.hero-center,
+.platform-shell,
+.mobile-entry-card,
+.mobile-qr-card,
+.reviews-hero,
+.features {
+  animation: amethyst-float-up 0.58s ease-out both;
+}
+
+.features {
+  animation-delay: 0.08s;
+}
+
+.fractal-cube {
+  animation: amethyst-crystal-spin 16s linear infinite !important;
+}
+
+.hero-fractal-stage,
+.platform-gem,
+.mobile-app-icon,
+.acode-empty > .amlogo {
+  animation: amethyst-soft-pulse 4.8s ease-in-out infinite;
+}
+
+.feature-card,
+.platform-card,
+.review-card,
+.acode-chat-item,
+.acode-new,
+.mobile-entry-card button,
+.mobile-qr-actions a,
+.mobile-qr-actions button {
+  will-change: transform;
+}
+
+.feature-card:hover,
+.platform-card:hover,
+.review-card:hover {
+  transform: translateY(-5px) scale(1.01) !important;
+}
+
+.google-btn,
+.composer-cta,
+.nav-open,
+.acode-send {
+  position: relative;
+  overflow: hidden;
+}
+
+.google-btn::after,
+.composer-cta::after,
+.nav-open::after,
+.acode-send::after {
+  content: "";
+  position: absolute;
+  inset: -45% auto -45% -55%;
+  width: 42%;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.34), transparent);
+  transform: rotate(18deg) translateX(-120%);
+  transition: transform 0.58s ease;
+}
+
+.google-btn:hover::after,
+.composer-cta:hover::after,
+.nav-open:hover::after,
+.acode-send:hover::after {
+  transform: rotate(18deg) translateX(360%);
+}
+
+.acode-main[data-busy="true"] .acode-send.stop {
+  animation: amethyst-soft-pulse 1.6s ease-in-out infinite;
+}
+
+@media (max-width: 720px) {
+  .hero-prompt-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .hero-prompt-grid button {
+    min-height: 44px;
+    border-radius: 15px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-center,
+  .platform-shell,
+  .mobile-entry-card,
+  .mobile-qr-card,
+  .reviews-hero,
+  .features,
+  .fractal-cube,
+  .hero-fractal-stage,
+  .platform-gem,
+  .mobile-app-icon,
+  .acode-empty > .amlogo,
+  .acode-main[data-busy="true"] .acode-send.stop {
+    animation: none !important;
+  }
+
+  .google-btn::after,
+  .composer-cta::after,
+  .nav-open::after,
+  .acode-send::after {
+    display: none;
+  }
+}

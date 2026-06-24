@@ -15,6 +15,13 @@ const PLUS_PERKS = [
 
 const ACCESS_CODES = ['itsamethyst', 'amethystai', 'amethystplus'];
 
+const LANDING_PROMPTS = [
+  'Создай MVP приложения для моей идеи',
+  'Собери лендинг одним HTML-файлом',
+  'Найди ошибку в React/TypeScript коде',
+  'Сделай игру для браузера с touch-управлением',
+];
+
 const REVIEWS = [
   {
     name: 'Айбар',
@@ -226,6 +233,15 @@ export function Landing({ onEnter }: { onEnter?: () => void }) {
             </button>
           </div>
         </form>
+
+        <div className="hero-prompt-grid" aria-label="Быстрые запросы">
+          {LANDING_PROMPTS.map((prompt) => (
+            <button key={prompt} type="button" onClick={() => setWish(prompt)}>
+              <Icon name="spark" size={14} />
+              <span>{prompt}</span>
+            </button>
+          ))}
+        </div>
 
         <div className="hero-platforms" aria-label="Основные возможности">
           <span>React</span>
