@@ -9880,3 +9880,353 @@ body {
     width: calc(100% - 24px) !important;
   }
 }
+
+/* Premium crystal correction: smooth, cinematic, logo-first */
+.hero2 {
+  min-height: 100svh !important;
+  overflow: hidden !important;
+  background:
+    radial-gradient(circle at 52% 8%, rgba(168, 85, 247, 0.28), transparent 20%),
+    radial-gradient(circle at 78% 26%, rgba(34, 211, 238, 0.18), transparent 25%),
+    radial-gradient(circle at 18% 78%, rgba(124, 58, 237, 0.18), transparent 32%),
+    linear-gradient(135deg, #080916 0%, #0b0f25 48%, #061728 100%) !important;
+}
+
+.hero2::before {
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,.34) 0 1px, transparent 1.7px),
+    radial-gradient(circle, rgba(184,92,255,.26) 0 1px, transparent 1.7px) !important;
+  background-size: 168px 168px, 236px 236px !important;
+  background-position: 18px 40px, 80px 112px !important;
+  opacity: 0.42 !important;
+  mix-blend-mode: screen !important;
+}
+
+.hero2::after {
+  content: "" !important;
+  position: absolute !important;
+  right: clamp(-180px, -8vw, -80px) !important;
+  bottom: -80px !important;
+  width: min(58vw, 760px) !important;
+  height: min(58vw, 760px) !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+  opacity: 0.74 !important;
+  background:
+    linear-gradient(158deg, transparent 0 22%, rgba(111, 36, 255, .72) 23% 48%, rgba(39, 214, 232, .12) 49% 51%, rgba(85, 19, 168, .55) 52% 80%, transparent 81%),
+    linear-gradient(78deg, transparent 0 54%, rgba(183, 92, 255, .38) 55% 69%, transparent 70%),
+    linear-gradient(112deg, transparent 0 66%, rgba(94, 234, 212, .16) 67% 69%, transparent 70%) !important;
+  clip-path: polygon(46% 0, 66% 18%, 84% 88%, 58% 100%, 26% 90%, 18% 30%) !important;
+  filter: drop-shadow(0 0 70px rgba(124,58,237,.42)) blur(.2px) !important;
+}
+
+.hero-bg {
+  position: absolute !important;
+  inset: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+}
+
+.hero-bg::before,
+.hero-bg::after {
+  content: "" !important;
+  position: absolute !important;
+  bottom: -12vh !important;
+  width: clamp(180px, 22vw, 360px) !important;
+  height: clamp(320px, 42vw, 620px) !important;
+  background:
+    linear-gradient(100deg, rgba(255,255,255,.12), transparent 22%),
+    linear-gradient(165deg, rgba(137, 72, 255, .68), rgba(25, 9, 85, .64) 56%, rgba(45, 212, 234, .1)) !important;
+  clip-path: polygon(50% 0, 82% 24%, 100% 88%, 55% 100%, 15% 84%, 24% 28%) !important;
+  filter: drop-shadow(0 0 56px rgba(124,58,237,.36)) !important;
+  opacity: 0.72 !important;
+}
+
+.hero-bg::before {
+  right: 23vw !important;
+  transform: rotate(-7deg) !important;
+}
+
+.hero-bg::after {
+  right: 8vw !important;
+  width: clamp(130px, 16vw, 260px) !important;
+  height: clamp(240px, 32vw, 460px) !important;
+  opacity: 0.5 !important;
+  transform: rotate(8deg) !important;
+}
+
+.hero-grid,
+.hero-vignette {
+  display: none !important;
+}
+
+.hero2 > *:not(.hero-bg) {
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.hero-nav {
+  width: min(1420px, calc(100% - 56px)) !important;
+  min-height: 74px !important;
+  margin: 18px auto 0 !important;
+  padding: 12px 18px !important;
+  border-radius: 22px !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  outline: 0 !important;
+  background: rgba(12, 13, 28, 0.68) !important;
+  box-shadow: 0 24px 80px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.08) !important;
+  backdrop-filter: blur(22px) saturate(140%) !important;
+}
+
+.hero-links a,
+.platform-links a {
+  border-radius: 14px !important;
+  border: 1px solid rgba(255,255,255,.1) !important;
+  background: rgba(255,255,255,.055) !important;
+  box-shadow: none !important;
+  color: rgba(246,248,255,.82) !important;
+}
+
+.hero-links a:hover,
+.platform-links a:hover {
+  transform: translateY(-1px) !important;
+  border-color: rgba(180, 139, 255, .48) !important;
+  background: rgba(255,255,255,.09) !important;
+  box-shadow: 0 14px 34px rgba(0,0,0,.22) !important;
+}
+
+.amlogo,
+.hero-logo .amlogo,
+.platform-kicker .amlogo,
+.brand .amlogo,
+.acode-logo .amlogo,
+.side-logo .amlogo,
+.mobile-app-icon .amlogo {
+  overflow: visible !important;
+  padding: 0 !important;
+  border: 0 !important;
+  outline: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  filter: drop-shadow(0 0 10px rgba(183, 92, 255, .72)) drop-shadow(0 0 24px rgba(34, 211, 238, .18)) !important;
+}
+
+.amlogo svg {
+  shape-rendering: crispEdges !important;
+}
+
+.amlogo .gem-glow { fill: rgba(183, 92, 255, .2); }
+.amlogo .gem-shadow { fill: rgba(10, 3, 24, .72); }
+.amlogo .gem-outline { fill: #f5eaff; }
+.amlogo .gem-left { fill: #ff73f1; }
+.amlogo .gem-core { fill: #9b42ff; }
+.amlogo .gem-right { fill: #601ee5; }
+.amlogo .gem-hi { fill: #ffffff; }
+.amlogo .gem-cyan { fill: #55e7ff; }
+.amlogo .gem-spark { fill: #ffffff; }
+
+.hero-fractal-stage {
+  width: 74px !important;
+  height: 74px !important;
+  margin-bottom: 6px !important;
+  border: 0 !important;
+  outline: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  filter: drop-shadow(0 0 24px rgba(183, 92, 255, .64)) !important;
+}
+
+.hero-fractal-stage .amlogo {
+  width: 74px !important;
+  height: 74px !important;
+}
+
+.hero-center {
+  width: min(1120px, calc(100% - 40px)) !important;
+  padding-top: clamp(42px, 7vh, 86px) !important;
+  gap: 18px !important;
+}
+
+.hero-pill,
+.plus-chip,
+.platform-kicker,
+.acode-empty-kicker,
+.mobile-kicker {
+  border-radius: 999px !important;
+  min-height: 40px !important;
+  padding: 0 18px !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  background: rgba(255,255,255,.075) !important;
+  box-shadow: 0 16px 40px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.08) !important;
+  color: #f5f6ff !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif !important;
+  font-size: 16px !important;
+}
+
+.hero-h1 {
+  max-width: 980px !important;
+  margin-top: 20px !important;
+  font-size: clamp(58px, 7.7vw, 132px) !important;
+  line-height: 0.92 !important;
+  letter-spacing: -0.02em !important;
+  text-shadow: 0 20px 70px rgba(0,0,0,.34) !important;
+}
+
+.hero-h1 span {
+  color: transparent !important;
+  background: linear-gradient(90deg, #b66cff, #d475ff 52%, #76efff) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  text-shadow: none !important;
+}
+
+.hero-p {
+  max-width: 850px !important;
+  font-size: clamp(20px, 1.75vw, 28px) !important;
+  line-height: 1.45 !important;
+  color: rgba(221,226,246,.72) !important;
+}
+
+.hero-code-input {
+  width: min(450px, 100%) !important;
+  min-height: 58px !important;
+  border-radius: 16px !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  background: rgba(10, 12, 28, .62) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 20px 54px rgba(0,0,0,.24) !important;
+  backdrop-filter: blur(18px) !important;
+}
+
+.google-btn,
+.composer-cta,
+.nav-open {
+  min-height: 60px !important;
+  border-radius: 16px !important;
+  border: 0 !important;
+  outline: 0 !important;
+  background: linear-gradient(135deg, #ffffff, #f3f0ff) !important;
+  color: #151931 !important;
+  text-shadow: none !important;
+  box-shadow: 0 18px 48px rgba(0,0,0,.28), inset 0 -1px 0 rgba(0,0,0,.08) !important;
+}
+
+.nav-open {
+  background: linear-gradient(135deg, #8b5cf6, #6d5dfc) !important;
+  color: #fff !important;
+}
+
+.google-btn::before,
+.google-btn::after,
+.composer-cta::before,
+.composer-cta::after,
+.nav-open::before,
+.nav-open::after {
+  content: none !important;
+}
+
+.google-btn:hover:not(:disabled),
+.composer-cta:hover:not(:disabled),
+.nav-open:hover:not(:disabled) {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 24px 60px rgba(0,0,0,.34), 0 0 32px rgba(139, 92, 246, .2) !important;
+}
+
+.google-btn .amlogo,
+.composer-cta .amlogo,
+.nav-open .amlogo {
+  filter: drop-shadow(0 0 8px rgba(139, 92, 246, .42)) !important;
+}
+
+.composer {
+  width: min(930px, 100%) !important;
+  margin-top: 18px !important;
+  padding: 18px !important;
+  border-radius: 26px !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  outline: 0 !important;
+  background: rgba(15, 16, 36, .64) !important;
+  box-shadow: 0 26px 90px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.08) !important;
+  backdrop-filter: blur(22px) saturate(135%) !important;
+}
+
+.composer-input {
+  min-height: 94px !important;
+  border: 0 !important;
+  border-radius: 18px !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #fff !important;
+}
+
+.composer-bar {
+  padding-top: 10px !important;
+}
+
+.hero-prompt-grid button,
+.hero-platforms span,
+.feature-card,
+.review-card,
+.platform-card,
+.features {
+  border-radius: 22px !important;
+  border: 1px solid rgba(255,255,255,.1) !important;
+  outline: 0 !important;
+  background: rgba(16, 18, 38, .56) !important;
+  box-shadow: 0 22px 62px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.07) !important;
+  backdrop-filter: blur(18px) !important;
+}
+
+.hero-prompt-grid button:hover,
+.feature-card:hover,
+.review-card:hover,
+.platform-card:hover {
+  transform: translateY(-3px) !important;
+  border-color: rgba(183,92,255,.36) !important;
+  box-shadow: 0 28px 78px rgba(0,0,0,.28), 0 0 32px rgba(139,92,246,.12) !important;
+}
+
+.hero-platforms span {
+  min-height: 44px !important;
+  padding-inline: 24px !important;
+}
+
+.platform-page,
+.reviews-page,
+.mobile-entry,
+.mobile-qr-page,
+.acode {
+  background:
+    radial-gradient(circle at 50% 0%, rgba(139,92,246,.24), transparent 26%),
+    radial-gradient(circle at 85% 20%, rgba(34,211,238,.14), transparent 28%),
+    linear-gradient(135deg, #080916, #0b1024 54%, #061728) !important;
+}
+
+@media (max-width: 820px) {
+  .hero-nav {
+    width: calc(100% - 24px) !important;
+    border-radius: 18px !important;
+  }
+
+  .hero-center {
+    width: min(100% - 28px, 680px) !important;
+    padding-top: 34px !important;
+  }
+
+  .hero-h1 {
+    font-size: clamp(42px, 13vw, 66px) !important;
+  }
+
+  .hero-p {
+    font-size: 17px !important;
+  }
+
+  .hero2::after,
+  .hero-bg::before,
+  .hero-bg::after {
+    opacity: 0.28 !important;
+  }
+}
