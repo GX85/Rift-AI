@@ -72,21 +72,21 @@ const STUDIO_CARDS = [
   },
 ];
 
-const OUTPUTS = ['HTML artifact', 'React/TS code', 'Bug fix', 'Business brief', 'Game prototype'];
+const OUTPUTS = ['HTML-сайт', 'React/TS код', 'Исправление багов', 'Бизнес-бриф', 'Игровой прототип'];
 
 const TOP_BADGES = [
   { icon: 'spark', label: 'Gemini 2.5 Flash' },
-  { icon: 'code', label: 'Artifacts' },
-  { icon: 'globe', label: 'Mobile-ready' },
+  { icon: 'code', label: 'Готовые артефакты' },
+  { icon: 'globe', label: 'Адаптив под телефон' },
 ];
 
 const HERO_METRICS = [
-  { value: 'HTML', label: 'single-file sites' },
-  { value: 'TS', label: 'typed code' },
-  { value: 'MVP', label: 'app logic' },
+  { value: 'HTML', label: 'сайты одним файлом' },
+  { value: 'TS', label: 'типизированный код' },
+  { value: 'MVP', label: 'логика приложения' },
 ];
 
-const PIPELINE_STEPS = ['Brief', 'UI', 'Logic', 'Export'];
+const PIPELINE_STEPS = ['Задача', 'Интерфейс', 'Логика', 'Экспорт'];
 
 function newChat(): Chat {
   return { id: crypto.randomUUID(), title: 'Новый чат', messages: [], updatedAt: Date.now() };
@@ -608,7 +608,7 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
                     <span />
                     <span />
                   </div>
-                  <span className="acode-empty-kicker">AI product studio</span>
+                  <span className="acode-empty-kicker">Студия ИИ-продуктов</span>
                   <h1>Собери продукт, а не просто ответ</h1>
                   <p>Выбери режим или напиши задачу. Amethyst генерирует сайты, web-app MVP, игры, исправления кода и бизнес-структуру прямо в чате.</p>
                   <div className="acode-hero-metrics" aria-label="Product outputs">
@@ -625,7 +625,7 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
                     <i />
                     <i />
                     <i />
-                    <span>artifact.html</span>
+                    <span>результат.html</span>
                   </div>
                   <div className="acode-preview-screen">
                     <b />
@@ -687,7 +687,7 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
                         <div className="acode-artifact-head">
                           <AmethystLogo size={28} />
                           <div>
-                            <strong>HTML artifact готов</strong>
+                            <strong>HTML-артефакт готов</strong>
                             <span>Сайт собран. Скачай файл или скопируй код.</span>
                           </div>
                         </div>

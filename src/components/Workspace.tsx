@@ -75,9 +75,9 @@ const SITE_PRESETS: CreatorPreset[] = [
 
 const APP_PRESETS: CreatorPreset[] = [
   { label: 'CRM', prompt: 'Мини-CRM для заявок: список клиентов, статусы, фильтр, карточка сделки и заметки' },
-  { label: 'Dashboard', prompt: 'SaaS dashboard: метрики, графики на CSS/canvas, таблица задач, фильтры и адаптив' },
-  { label: 'Planner', prompt: 'Планировщик задач для стартапа: доска, приоритеты, дедлайны, быстрые действия' },
-  { label: 'AI tool', prompt: 'Интерфейс AI-инструмента: поле запроса, настройки, история результатов и панель предпросмотра' },
+  { label: 'Панель', prompt: 'SaaS-панель: метрики, графики на CSS/canvas, таблица задач, фильтры и адаптив' },
+  { label: 'Планер', prompt: 'Планировщик задач для стартапа: доска, приоритеты, дедлайны, быстрые действия' },
+  { label: 'ИИ-инструмент', prompt: 'Интерфейс ИИ-инструмента: поле запроса, настройки, история результатов и панель предпросмотра' },
 ];
 
 const GAME_PRESETS: CreatorPreset[] = [
@@ -382,7 +382,7 @@ export function Workspace({
 
   function improveAppPrompt(wish: string) {
     const base = wish.trim() || 'рабочее приложение для управления задачами стартапа';
-    return `Сделай ${base}. Нужен готовый интерактивный web-app прототип в одном HTML-файле: реальный рабочий экран приложения, навигация, состояния, мок-данные, формы, фильтры/поиск, empty/error/loading states, адаптив под телефон, аккуратный бизнес-интерфейс и чистый JS без внешних библиотек.`;
+    return `Сделай ${base}. Нужен готовый интерактивный web-app прототип в одном HTML-файле: реальный рабочий экран приложения, навигация, состояния, мок-данные, формы, фильтры/поиск, состояния загрузки/пусто/ошибка, адаптив под телефон, аккуратный бизнес-интерфейс и чистый JS без внешних библиотек.`;
   }
 
   function improveGamePrompt(wish: string) {
@@ -433,10 +433,10 @@ export function Workspace({
   async function genHtml(kind: 'site' | 'game' | 'app', wish: string) {
     const sys =
       kind === 'site'
-        ? 'You generate premium production-ready websites. Return ONLY one complete HTML document starting with <!DOCTYPE html>. Use embedded CSS and JS only. No markdown. Build a real first screen, navigation, CTA, feature sections, responsive mobile layout, polished spacing, hover/focus states, micro-animations, accessible buttons, and a visual style that matches the user request. No external assets unless generated with CSS/canvas.'
+        ? 'Ты создаёшь премиальные готовые сайты. Верни ТОЛЬКО один полный HTML-документ, начинающийся с <!DOCTYPE html>. Используй встроенные CSS и JS. Без markdown. Собери реальный первый экран, навигацию, CTA, секции преимуществ, адаптив под телефон, аккуратные отступы, hover/focus состояния, микроанимации, доступные кнопки и визуальный стиль под запрос пользователя. Без внешних ассетов, если они не сделаны CSS/canvas.'
         : kind === 'app'
-          ? 'You generate Claude Artifacts style web app prototypes. Return ONLY one complete HTML document starting with <!DOCTYPE html>. Use embedded CSS and JS only. No markdown. Build a real usable app screen, not a landing page. Include navigation, realistic mock data, CRUD-like interactions where useful, search/filter controls, forms, loading/empty/error states, responsive mobile layout, accessible controls, polished dense business UI, and no external libraries/assets.'
-          : 'You generate premium playable browser games. Return ONLY one complete HTML document starting with <!DOCTYPE html>. Use embedded CSS and JS only. No markdown. The game must include canvas rendering, start menu, pause/restart, score/HUD, increasing difficulty, win/lose state, keyboard controls, touch/mobile controls, particles or visual feedback, and no external libraries/assets.';
+          ? 'Ты создаёшь web-app прототипы в стиле артефактов Claude. Верни ТОЛЬКО один полный HTML-документ, начинающийся с <!DOCTYPE html>. Используй встроенные CSS и JS. Без markdown. Собери реальный рабочий экран приложения, не лендинг. Добавь навигацию, реалистичные мок-данные, CRUD-подобные действия где уместно, поиск/фильтры, формы, состояния загрузки/пусто/ошибка, адаптив под телефон, доступные элементы управления, плотный аккуратный бизнес-интерфейс и без внешних библиотек/ассетов.'
+          : 'Ты создаёшь премиальные играбельные браузерные игры. Верни ТОЛЬКО один полный HTML-документ, начинающийся с <!DOCTYPE html>. Используй встроенные CSS и JS. Без markdown. Игра должна включать canvas-рендер, стартовое меню, паузу/рестарт, счёт/HUD, рост сложности, состояние победы/поражения, управление клавиатурой, touch-управление на телефоне, частицы или визуальную обратную связь и без внешних библиотек/ассетов.';
     const upgradedWish =
       kind === 'site'
         ? `User website request: ${improveSitePrompt(wish)}\nMake it visually rich, responsive, and ready to download as a single HTML file.`
@@ -1177,7 +1177,7 @@ export function Workspace({
             </div>
             <ul className="perks">
               <li><b>Без лимитов</b> — у бесплатного {FREE_LIMIT} сообщений</li>
-              <li><b>Студия приложений</b> — рабочие web-app прототипы как Claude Artifacts</li>
+              <li><b>Студия приложений</b> — рабочие web-app прототипы как артефакты Claude</li>
               <li><b>Создание сайтов</b> — генерируй и скачивай сайты</li>
               <li><b>Игровая студия</b> — играбельные игры одним кликом</li>
               <li><b>Генерация картинок</b> — рисует изображения по описанию</li>
@@ -1252,7 +1252,7 @@ export function Workspace({
               </button>
             </div>
             <div className="redeem">
-              <input placeholder="Напр. CRM для заявок, dashboard для продаж, AI-инструмент" value={appWish} onChange={(e) => setAppWish(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && generateApp()} disabled={appBusy} />
+              <input placeholder="Напр. CRM для заявок, панель продаж, ИИ-инструмент" value={appWish} onChange={(e) => setAppWish(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && generateApp()} disabled={appBusy} />
               <button onClick={() => setAppWish(improveAppPrompt(appWish))} disabled={appBusy}>
                 Улучшить
               </button>
