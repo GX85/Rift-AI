@@ -86,6 +86,28 @@ export function PlatformChoice({
           Сейчас похоже на: <b>{phoneLike ? 'телефон / планшет' : 'компьютер'}</b>
         </div>
 
+        <div className="platform-showcase" aria-hidden>
+          <div className="platform-window">
+            <div className="platform-window-top">
+              <span />
+              <span />
+              <span />
+              <b>amethyst.ai</b>
+            </div>
+            <div className="platform-window-body">
+              <div>
+                <strong>Готовый результат</strong>
+                <small>код, сайт, игра или бизнес-план прямо из чата</small>
+              </div>
+              <i />
+            </div>
+          </div>
+          <div className="platform-score">
+            <b>Gemini 2.5 Flash</b>
+            <span>быстрее пишет, лучше собирает, понятнее объясняет</span>
+          </div>
+        </div>
+
         <div className="platform-grid">
           <button className={`platform-card ${!phoneLike ? 'recommended' : ''}`} onClick={onDesktop}>
             {!phoneLike && <span className="platform-badge">Рекомендуется</span>}
