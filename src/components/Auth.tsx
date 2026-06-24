@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { Icon } from './Icons';
-import { AmethystLogo } from './Gems';
 
-// Возможности Amethyst для главного экрана.
+// Возможности (бесплатно) и привилегии Plus — для главного экрана.
 const PLUS_PERKS = [
-  { icon: 'attach', title: 'Разбор файлов', text: 'Прикрепляй код, ошибки и логи — Amethyst найдёт причину и даст фикс.' },
-  { icon: 'models', title: 'Генерация приложений', text: 'Описываешь web-app — получаешь рабочий HTML-прототип с UI и логикой.' },
-  { icon: 'search', title: 'Code review', text: 'Проверка TypeScript, React, архитектуры, edge cases и плохих состояний.' },
-  { icon: 'memory', title: 'Контекст проекта', text: 'Amethyst помнит стек, цели и важные решения внутри проекта.' },
-  { icon: 'globe', title: 'Frontend ready', text: 'Компоненты, адаптив, состояния загрузки, ошибок и пустых списков.' },
-  { icon: 'star', title: 'Gemini внутри', text: 'Gemini как модель, Amethyst как интерфейс и правила для разработки.' },
+  { icon: 'star', title: 'Без лимитов', text: 'Сколько угодно сообщений — у бесплатного есть лимит.' },
+  { icon: 'globe', title: 'MVP и сайты', text: 'Опиши продукт — Amethyst соберёт структуру, лендинг и готовый HTML.' },
+  { icon: 'attach', title: 'Разбор кода', text: 'Прикрепляй файлы, ищи ошибки и получай понятные исправления.' },
+  { icon: 'memory', title: 'Бизнес-память', text: 'Amethyst помнит факты о проекте, клиентах и целях во всех чатах.' },
+  { icon: 'volume', title: 'Питчи и тексты', text: 'Генерируй офферы, CTA, сообщения для продаж и короткие презентации.' },
+  { icon: 'image', title: 'Визуалы для продукта', text: 'Создавай иконки, hero-изображения и материалы для лендинга.' },
+  { icon: 'game', title: 'Прототипы', text: 'Быстро проверяй идеи через интерактивные HTML-прототипы.' },
 ];
 
 const ACCESS_CODES = ['itsamethyst', 'amethystai', 'amethystplus'];
@@ -24,12 +24,12 @@ const REVIEWS = [
   {
     name: 'Алия',
     role: 'начинающий разработчик',
-    text: 'Больше всего понравились подсказки по TypeScript и нормальные фиксы без воды.',
+    text: 'Больше всего понравились подсказки по TypeScript и понятный план, как превратить идею в MVP.',
   },
   {
     name: 'Данияр',
-    role: 'делает web-app',
-    text: 'Описал приложение, получил рабочий HTML-прототип с формами, состояниями и адаптивом.',
+    role: 'запускает мини-стартап',
+    text: 'Попросил бизнес-модель, получил оффер, первые шаги продаж и структуру лендинга.',
   },
 ];
 
@@ -59,10 +59,20 @@ export function PlatformChoice({
   return (
     <main className="platform-page">
       <section className="platform-shell">
-        <div className="platform-logo" aria-hidden>
-          <AmethystLogo size={96} />
+        <div className="hero-fractal-stage platform-gem" aria-hidden>
+          <div className="fractal-cube">
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+          </div>
         </div>
-        <p className="platform-kicker">Amethyst</p>
+        <p className="platform-kicker">Amethyst AI</p>
         <h1>Выбери вход</h1>
         <p className="platform-sub">
           Укажи, откуда заходишь. Amethyst откроет подходящую версию платформы.
@@ -72,7 +82,7 @@ export function PlatformChoice({
           <i />
           <span>Главный экран</span>
           <i />
-          <span>AI chat</span>
+          <span>Amethyst AI</span>
         </div>
         <div className="platform-detect">
           Сейчас похоже на: <b>{phoneLike ? 'телефон / планшет' : 'компьютер'}</b>
@@ -83,7 +93,7 @@ export function PlatformChoice({
             {!phoneLike && <span className="platform-badge">Рекомендуется</span>}
             <span className="platform-icon">⌘</span>
             <strong>Войти с компьютера</strong>
-            <small>Полная web-версия: кодовый чат, файлы, review, отладка и генерация приложений.</small>
+            <small>Полная web-версия: чат, сайты, игры, картинки, отзывы и Plus.</small>
           </button>
           <button className={`platform-card phone ${phoneLike ? 'recommended' : ''}`} onClick={onPhone}>
             {phoneLike && <span className="platform-badge">Рекомендуется</span>}
@@ -95,7 +105,7 @@ export function PlatformChoice({
 
         <div className="platform-links">
           <a href="/qr">Показать QR</a>
-          <a href="/qr">Mobile QR</a>
+          <a href="/reviews">Отзывы</a>
         </div>
       </section>
     </main>
@@ -145,16 +155,13 @@ export function Landing({ onEnter }: { onEnter?: () => void }) {
       </div>
       <nav className="hero-nav">
         <div className="hero-logo">
-          <AmethystLogo size={34} />
-          <span className="hero-logo-text">
-            Amethyst
-          </span>
+          Amethyst<span>AI</span>
         </div>
         <div className="hero-links">
           <a href="#plus">Продукт</a>
-          <a href="#plus">Код</a>
-          <a href="#plus">Сайты</a>
-          <a href="/qr">Mobile</a>
+          <a href="#plus">Возможности</a>
+          <a href="#plus">Для Google</a>
+          <a href="/reviews">Отзывы</a>
         </div>
         <button className="nav-open" onClick={start} disabled={busy}>
           {onEnter ? 'Войти' : 'Войти'}
@@ -162,20 +169,30 @@ export function Landing({ onEnter }: { onEnter?: () => void }) {
       </nav>
 
       <header className="hero-center">
-        <div className="hero-logo-mark" aria-hidden>
-          <AmethystLogo size={118} />
+        <div className="hero-fractal-stage" aria-hidden>
+          <div className="fractal-cube">
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+            <span />
+          </div>
         </div>
         <div className="hero-pill">
-          <span className="dot" /> Gemini-powered coding assistant
+          <span className="dot" /> Gemini-powered code & business assistant
         </div>
 
         <h1 className="hero-h1">
-          Amethyst для <span>разработки</span>
+          Превратите идею в <span>приложение</span>
           <br />
-          приложений
+          и бизнес
         </h1>
         <p className="hero-p">
-          Версия Gemini, сфокусированная на коде: пишет компоненты, чинит ошибки, объясняет логику и собирает web-app прототипы.
+          Amethyst работает на Gemini и помогает писать код, чинить ошибки, собирать MVP, лендинги, web-app прототипы и планы продаж.
         </p>
 
         {onEnter && (
@@ -197,7 +214,7 @@ export function Landing({ onEnter }: { onEnter?: () => void }) {
         <form className="composer" onSubmit={onSubmit}>
           <textarea
             className="composer-input"
-            placeholder="Например: создай адаптивный сайт для AI-продукта одним HTML-файлом..."
+            placeholder="Можешь сразу написать запрос…"
             value={wish}
             onChange={(e) => setWish(e.target.value)}
             rows={2}
@@ -211,25 +228,25 @@ export function Landing({ onEnter }: { onEnter?: () => void }) {
         </form>
 
         <div className="hero-platforms" aria-label="Основные возможности">
-          <span>Код</span>
-          <span>Apps</span>
           <span>React</span>
-          <span>Landing</span>
-          <span>Review</span>
-          <span>Fixes</span>
+          <span>TypeScript</span>
+          <span>Supabase</span>
+          <span>Vercel</span>
+          <span>Gemini</span>
+          <span>MVP</span>
         </div>
 
         {message && <p className="message hero-msg">{message}</p>}
       </header>
 
-      {/* Amethyst — возможности */}
+      {/* Amethyst Plus — характеристики */}
       <section className="features" id="plus">
         <div className="plus-head">
           <span className="plus-chip">
-            <Icon name="star" size={14} /> Amethyst
+            <Icon name="star" size={14} /> Amethyst Plus
           </span>
-          <h2 className="features-h">Кодовый режим без лишнего</h2>
-          <p className="plus-sub">Amethyst сфокусирован на разработке: код, файлы, ошибки, архитектура и приложения.</p>
+          <h2 className="features-h">Больше силы для проектов</h2>
+          <p className="plus-sub">Активируется по коду. Открывает больше функций для разработки, MVP и бизнес-задач.</p>
         </div>
         <div className="features-grid">
           {PLUS_PERKS.map((p) => (
@@ -244,7 +261,7 @@ export function Landing({ onEnter }: { onEnter?: () => void }) {
         </div>
       </section>
 
-      <footer className="landing-footer">Amethyst · работает на Gemini</footer>
+      <footer className="landing-footer">Amethyst AI · работает на Gemini</footer>
     </div>
   );
 }
@@ -254,10 +271,7 @@ export function ReviewsPage() {
     <main className="reviews-page">
       <nav className="hero-nav reviews-nav">
         <a className="hero-logo" href="/">
-          <AmethystLogo size={34} />
-          <span className="hero-logo-text">
-            Amethyst
-          </span>
+          Amethyst<span>AI</span>
         </a>
         <a className="nav-open" href="/">
           Открыть
@@ -268,7 +282,7 @@ export function ReviewsPage() {
         <div className="hero-pill">
           <span className="dot" /> Отзывы
         </div>
-        <h1 className="reviews-title">Что говорят об Amethyst</h1>
+        <h1 className="reviews-title">Что говорят об Amethyst AI</h1>
         <p className="reviews-sub">
           Публичная страница отзывов: её можно открыть без входа, отправить по ссылке или показать через QR-код.
         </p>
