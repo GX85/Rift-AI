@@ -17,7 +17,7 @@ declare const Deno: {
 
 const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY');
 // gemini-2.5-flash — та же модель, что и на фронте (у 2.0-flash на бесплатном ключе нулевая квота).
-const MODEL = 'gemini-2.5-flash';
+const MODEL = Deno.env.get('GEMINI_MODEL') ?? 'gemini-2.5-flash';
 
 const cors = {
   'Access-Control-Allow-Origin': '*',
@@ -45,7 +45,7 @@ Deno.serve(async (req) => {
     }
     // history — массив {role, text} для памяти диалога; temperature — «креативность» (0–1);
     // stream — если true, ответ отдаётся по кусочкам (печатается в реальном времени).
-    const { prompt, system, history, temperature, stream } = await req.json();
+    const { prompt, system, history, temperature, maxTokens, stream } = await req.json();
     if (!prompt) throw new Error('Нужно поле prompt');
 
     const pastContents = (history ?? []).map((h: { role: string; text: string }) => ({
@@ -58,8 +58,8 @@ Deno.serve(async (req) => {
       contents: [...pastContents, { role: 'user', parts: [{ text: prompt }] }],
       // Настройки «интеллекта»: больше места для развёрнутого ответа + управляемая креативность.
       generationConfig: {
-        temperature: typeof temperature === 'number' ? temperature : 0.9,
-        maxOutputTokens: 2048,
+        temperature: typeof temperature === 'number' ? temperature : 0.72,
+        maxOutputTokens: typeof maxTokens === 'number' ? Math.min(Math.max(maxTokens, 512), 8192) : 8192,
         topP: 0.95,
       },
     });

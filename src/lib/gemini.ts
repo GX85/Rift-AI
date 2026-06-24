@@ -252,11 +252,21 @@ function resolvePrompt(input: string | GeminiRequest): { prompt: string; system:
   };
 }
 
-async function invokeAi(prompt: string, system: string, signal?: AbortSignal): Promise<string> {
+async function invokeAi(
+  prompt: string,
+  system: string,
+  signal?: AbortSignal,
+  options?: { temperature?: number; maxTokens?: number },
+): Promise<string> {
   if (signal?.aborted) throw new DOMException('Запрос отменён', 'AbortError');
 
   const { data, error } = await supabase.functions.invoke('ai', {
-    body: { prompt, system },
+    body: {
+      prompt,
+      system,
+      temperature: options?.temperature,
+      maxTokens: options?.maxTokens,
+    },
   });
 
   if (signal?.aborted) throw new DOMException('Запрос отменён', 'AbortError');
@@ -297,7 +307,14 @@ export async function* streamGemini(
 
   let text = '';
   try {
-    text = await invokeAi(base.prompt, system, signal);
+    text = await invokeAi(
+      base.prompt,
+      system,
+      signal,
+      typeof input === 'string'
+        ? undefined
+        : { temperature: input.temperature, maxTokens: input.maxTokens },
+    );
   } catch {
     text = localFallback(base.prompt, system);
   }
@@ -317,7 +334,14 @@ export async function runAgent(
   const base = resolvePrompt(input);
   const system = typeof arg2 === 'string' ? arg2 : base.system;
   try {
-    return await invokeAi(base.prompt, system, typeof input !== 'string' ? input.signal : undefined);
+    return await invokeAi(
+      base.prompt,
+      system,
+      typeof input !== 'string' ? input.signal : undefined,
+      typeof input === 'string'
+        ? undefined
+        : { temperature: input.temperature, maxTokens: input.maxTokens },
+    );
   } catch {
     return localFallback(base.prompt, system);
   }
