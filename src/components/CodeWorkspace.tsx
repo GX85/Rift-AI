@@ -48,7 +48,7 @@ function buildTaskBrief(text: string) {
   const normalized = text.toLowerCase();
   const rules: string[] = [
     'Сначала определи тип задачи и выбери самый полезный формат результата.',
-    'Если просишь код, возвращай рабочий код без TODO-заглушек.',
+    'Если просишь код, возвращай рабочий код без пустых заглушек.',
     'Проверяй мобильную адаптацию, пустые состояния и ошибки.',
   ];
 
@@ -99,6 +99,15 @@ function downloadText(filename: string, text: string) {
   window.setTimeout(() => URL.revokeObjectURL(url), 800);
 }
 
+function htmlFilename(content: string) {
+  const slug = titleFrom(content)
+    .toLowerCase()
+    .replace(/[^a-z0-9а-яё]+/gi, '-')
+    .replace(/^-|-$/g, '')
+    .slice(0, 38);
+  return `${slug || 'amethyst-result'}.html`;
+}
+
 function buildSystem() {
   return `Ты — Amethyst, coding assistant на базе Gemini.
 
@@ -119,7 +128,7 @@ function buildSystem() {
 • Если данных мало — задай максимум один вопрос или сделай разумное допущение.
 • Для нескольких файлов пиши путь файла перед каждым code block.
 • Проверяй код перед ответом: импорты, переменные, JSX, CSS, адаптив, edge cases, закрытые теги, доступность кнопок, отсутствие горизонтального скролла.
-• Не оставляй TODO-заглушки вместо рабочей логики, если пользователь попросил готовый результат.
+• Не оставляй пустые заглушки вместо рабочей логики, если пользователь попросил готовый результат.
 
 Формат:
 1. Короткий результат/диагноз.
@@ -303,13 +312,6 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
     window.setTimeout(() => inputRef.current?.focus(), 0);
   }
 
-  function downloadHtml(message: Message) {
-    const html = extractHtmlArtifact(message.content);
-    if (!html) return;
-    const filename = `${titleFrom(message.content).toLowerCase().replace(/[^a-z0-9а-яё]+/gi, '-').replace(/^-|-$/g, '').slice(0, 38) || 'amethyst-result'}.html`;
-    downloadText(filename, html);
-  }
-
   return (
     <div className="acode">
       {sidebarOpen && <button className="acode-scrim" aria-label="Закрыть меню" onClick={() => setSidebarOpen(false)} />}
@@ -400,28 +402,31 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
               </div>
             </div>
           ) : (
-            messages.map((message) => (
-              <article key={message.id} className={`acode-msg ${message.role}`}>
-                <div className="acode-msg-avatar">
-                  {message.role === 'assistant' ? <AmethystLogo size={24} /> : <span>{name.slice(0, 1).toUpperCase()}</span>}
-                </div>
-                <div className="acode-msg-body">
-                  {message.content ? <Markdown text={message.content} /> : <span className="acode-dots">Amethyst думает...</span>}
-                  {message.content && (
-                    <div className="acode-msg-actions">
-                      <button className="acode-copy" onClick={() => copyMessage(message)}>
-                        {copiedId === message.id ? 'скопировано' : 'копировать'}
-                      </button>
-                      {message.role === 'assistant' && extractHtmlArtifact(message.content) && (
-                        <button className="acode-copy acode-download" onClick={() => downloadHtml(message)}>
-                          скачать HTML
+            messages.map((message) => {
+              const htmlArtifact = message.role === 'assistant' ? extractHtmlArtifact(message.content) : '';
+              return (
+                <article key={message.id} className={`acode-msg ${message.role}`}>
+                  <div className="acode-msg-avatar">
+                    {message.role === 'assistant' ? <AmethystLogo size={24} /> : <span>{name.slice(0, 1).toUpperCase()}</span>}
+                  </div>
+                  <div className="acode-msg-body">
+                    {message.content ? <Markdown text={message.content} /> : <span className="acode-dots">Amethyst думает...</span>}
+                    {message.content && (
+                      <div className="acode-msg-actions">
+                        <button className="acode-copy" onClick={() => copyMessage(message)}>
+                          {copiedId === message.id ? 'скопировано' : 'копировать'}
                         </button>
-                      )}
-                    </div>
-                  )}
-                </div>
-              </article>
-            ))
+                        {htmlArtifact && (
+                          <button className="acode-copy acode-download" onClick={() => downloadText(htmlFilename(message.content), htmlArtifact)}>
+                            скачать HTML
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </article>
+              );
+            })
           )}
         </section>
 
