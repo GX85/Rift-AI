@@ -14724,3 +14724,141 @@ code {
     justify-content: center !important;
   }
 }
+
+/* Crystal navigation v2: embedded into the cave, not cardboard controls */
+.acode-crystal-nav {
+  z-index: 1 !important;
+  mix-blend-mode: screen !important;
+}
+
+.acode-bg-crystal {
+  width: 118px !important;
+  height: 118px !important;
+  opacity: .58 !important;
+  mix-blend-mode: screen !important;
+  animation: cave-crystal-drift 7.5s ease-in-out infinite !important;
+}
+
+.acode-bg-crystal.create,
+.acode-bg-crystal.home {
+  opacity: .36 !important;
+}
+
+.acode-bg-crystal::before {
+  inset: 6px !important;
+  border-radius: 36% 64% 58% 42% / 44% 38% 62% 56% !important;
+  background:
+    conic-gradient(from 140deg, rgba(255,255,255,.34), rgba(255,79,232,.14), rgba(78,231,255,.2), rgba(32,45,120,.08), rgba(255,255,255,.24)),
+    radial-gradient(circle at 42% 30%, rgba(255,255,255,.42), transparent 12%),
+    radial-gradient(circle at 50% 58%, rgba(255,79,232,.34), transparent 62%) !important;
+  filter: blur(1px) drop-shadow(0 0 28px rgba(161, 91, 255, .36)) !important;
+  opacity: .44 !important;
+  transform: rotate(-12deg) scale(.92) !important;
+}
+
+.acode-bg-crystal::after {
+  content: '' !important;
+  position: absolute !important;
+  inset: 24px 18px 16px !important;
+  border-radius: 46% 54% 50% 50% / 34% 36% 64% 66% !important;
+  background:
+    linear-gradient(126deg, transparent 0 36%, rgba(255,255,255,.34) 37% 40%, transparent 41%),
+    linear-gradient(42deg, transparent 0 48%, rgba(78,231,255,.32) 49% 53%, transparent 54%) !important;
+  opacity: .46 !important;
+  transform: rotate(8deg) !important;
+}
+
+.acode-bg-crystal .amlogo {
+  opacity: .74 !important;
+  transform: rotate(-7deg) scale(.78) !important;
+  filter:
+    drop-shadow(0 0 18px rgba(255,79,232,.46))
+    drop-shadow(0 0 28px rgba(78,231,255,.28)) !important;
+}
+
+.acode-bg-crystal span {
+  top: 50% !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: rgba(255,255,255,.86) !important;
+  text-shadow: 0 0 18px rgba(78,231,255,.46), 0 2px 10px rgba(0,0,0,.65) !important;
+}
+
+.acode-bg-crystal:hover,
+.acode-bg-crystal:focus-visible {
+  opacity: .98 !important;
+  mix-blend-mode: normal !important;
+}
+
+.acode-bg-crystal:hover::before,
+.acode-bg-crystal:focus-visible::before {
+  opacity: .78 !important;
+  transform: rotate(-8deg) scale(1.04) !important;
+}
+
+.acode-bg-crystal:hover .amlogo,
+.acode-bg-crystal:focus-visible .amlogo {
+  opacity: 1 !important;
+  transform: rotate(-5deg) scale(.9) translateY(-2px) !important;
+}
+
+.acode-bg-crystal:hover span,
+.acode-bg-crystal:focus-visible span {
+  opacity: .9 !important;
+}
+
+.acode-bg-crystal.chat {
+  right: clamp(4px, 3.6vw, 48px) !important;
+  top: clamp(126px, 19vh, 184px) !important;
+}
+
+.acode-bg-crystal.create {
+  right: clamp(70px, 10vw, 170px) !important;
+  bottom: clamp(168px, 25vh, 270px) !important;
+  animation-delay: -2s !important;
+}
+
+.acode-bg-crystal.settings {
+  left: clamp(282px, 22vw, 405px) !important;
+  bottom: clamp(118px, 20vh, 210px) !important;
+  animation-delay: -4s !important;
+}
+
+.acode-bg-crystal.home {
+  left: clamp(304px, 26vw, 500px) !important;
+  top: clamp(92px, 15vh, 150px) !important;
+  animation-delay: -6s !important;
+}
+
+.acode-open {
+  border-color: rgba(78,231,255,.34) !important;
+  background:
+    linear-gradient(135deg, rgba(78,231,255,.24), rgba(255,79,232,.14)),
+    rgba(7, 14, 34, .76) !important;
+  color: #eaffff !important;
+}
+
+@keyframes cave-crystal-drift {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(-1deg); }
+  50% { transform: translate3d(0, -9px, 0) rotate(2deg); }
+}
+
+@media (max-width: 900px) {
+  .acode-bg-crystal {
+    width: 82px !important;
+    height: 82px !important;
+    opacity: .42 !important;
+  }
+
+  .acode-bg-crystal.chat {
+    right: 2px !important;
+    top: 86px !important;
+  }
+
+  .acode-bg-crystal.settings {
+    right: 4px !important;
+    bottom: 116px !important;
+  }
+}

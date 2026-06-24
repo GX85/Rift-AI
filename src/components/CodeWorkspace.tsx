@@ -96,7 +96,29 @@ function titleFrom(text: string) {
   return text.replace(/\s+/g, ' ').trim().slice(0, 46) || 'Новый чат';
 }
 
+function isArtifactRequest(text: string) {
+  const normalized = text.toLowerCase();
+  const createWords =
+    /создай|сделай|собери|сгенерируй|напиши|построй|разработай|create|make|build|generate|write|code|код|html|react|typescript|прилож|сайт|лендинг|игр|бот|mvp|dashboard|web-app/.test(
+      normalized,
+    );
+  const questionOnly =
+    /^(какая|какой|какое|какие|когда|где|почему|зачем|сколько|что такое|объясни|расскажи|who|what|when|where|why|how)\b/.test(
+      normalized,
+    );
+  return createWords && !questionOnly;
+}
+
 function buildTaskBrief(text: string) {
+  if (!isArtifactRequest(text)) {
+    return `${text}
+
+--- Amethyst answer mode ---
+- Ответь как обычный умный ассистент, без генерации кода и HTML, если пользователь прямо не попросил создать сайт, игру, приложение, компонент или код.
+- Если вопрос про погоду, новости, курс валют или другие live-данные, честно скажи, что у тебя нет прямого live-доступа, и попроси город/источник либо дай общий полезный ответ.
+- Не вставляй code block без явной просьбы о коде.`;
+  }
+
   const normalized = text.toLowerCase();
   const artifactRules = [
     'Если создаёшь сайт, приложение, игру или бота, обязательно верни готовый результат в fenced-блоке ```html ... ```.',
@@ -162,6 +184,16 @@ function downloadText(filename: string, text: string) {
   window.setTimeout(() => URL.revokeObjectURL(url), 800);
 }
 
+function openHtmlArtifact(html: string) {
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const win = window.open(url, '_blank', 'noopener,noreferrer');
+  if (!win) {
+    downloadText('amethyst-result.html', html);
+  }
+  window.setTimeout(() => URL.revokeObjectURL(url), 60000);
+}
+
 function htmlFilename(content: string) {
   const slug = titleFrom(content)
     .toLowerCase()
@@ -182,6 +214,7 @@ function escapeHtml(value: string) {
 }
 
 function detectArtifactKind(text: string): ArtifactKind | null {
+  if (!isArtifactRequest(text)) return null;
   const normalized = text.toLowerCase();
   if (/игр|game|canvas|runner|snake|arcade|шутер|платформер/.test(normalized)) return 'game';
   if (/чатбот|бот|bot|agent|агент|диалог/.test(normalized)) return 'bot';
@@ -285,6 +318,11 @@ function ensureCreatedArtifact(request: string, response: string) {
 
 function buildSystem() {
   return `Ты — Amethyst, coding assistant на базе Gemini 2.5 Flash.
+
+Маршрутизация намерений:
+• Если пользователь задаёт обычный вопрос, просит объяснение, спрашивает погоду/факт/совет и НЕ просит создать код, сайт, игру, приложение или компонент — отвечай обычным текстом, без HTML и без code block.
+• Если вопрос требует live-данных (погода, новости, курсы, расписания), честно скажи, что live-доступа нет, попроси город/источник или дай общий полезный ответ. Не придумывай прогноз и не пиши код вместо ответа.
+• Код и HTML выдавай только когда пользователь явно просит создать, написать, исправить, собрать или проверить код/продукт.
 
 КРИТИЧЕСКИЙ РЕЖИМ:
 • Работай как сильный генератор кода и продуктовых прототипов, а не как обычный чат.
@@ -761,6 +799,9 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
                         </button>
                         {htmlArtifact && (
                           <>
+                            <button className="acode-copy acode-open" onClick={() => openHtmlArtifact(htmlArtifact)}>
+                              открыть
+                            </button>
                             <button className="acode-copy" onClick={() => void navigator.clipboard?.writeText(htmlArtifact)}>
                               копировать HTML
                             </button>
