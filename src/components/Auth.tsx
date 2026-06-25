@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { Icon } from './Icons';
-import { AmethystLogo, AmethystNavigatorStone } from './Gems';
+import { AmethystLogo } from './Gems';
 
 // Возможности (бесплатно) и привилегии Plus — для главного экрана.
 const PLUS_PERKS = [
@@ -103,7 +103,7 @@ export function PlatformChoice({
             </div>
           </div>
           <div className="platform-score">
-            <b>Gemini 2.5 Flash</b>
+            <b>Gemini 3.5 Flash</b>
             <span>быстрее пишет, лучше собирает, понятнее объясняет</span>
           </div>
         </div>
@@ -270,9 +270,9 @@ export function Landing({ onEnter }: { onEnter?: () => void }) {
           <p className="plus-sub">Активируется по коду. Открывает больше функций для разработки, MVP и бизнес-задач.</p>
         </div>
         <div className="crystal-perk-grid">
-          {PLUS_PERKS.map((p) => (
+          {PLUS_PERKS.map((p, index) => (
             <div key={p.title} className="crystal-perk-tile">
-              <AmethystNavigatorStone size={118} />
+              <div className="mono-card-index">{String(index + 1).padStart(2, '0')}</div>
               <div className="crystal-perk-copy">
                 <div className="crystal-perk-title">{p.title}</div>
                 <div className="crystal-perk-text">{p.text}</div>

@@ -3,7 +3,7 @@ import type { Session } from '@supabase/supabase-js';
 import { supabase } from './lib/supabase';
 import { Landing, PlatformChoice, ReviewsPage } from './components/Auth';
 import { CodeWorkspace } from './components/CodeWorkspace';
-import { FractalBackground } from './components/FractalBackground';
+import { InteractionEffects } from './components/InteractionEffects';
 import { MobileApp, MobileEntry, MobileQrPage } from './components/MobileApp';
 
 const GUEST_KEY = 'amethyst_guest';
@@ -106,10 +106,10 @@ export default function App() {
       </main>
     );
 
-  // Cubic WebGL fractal lives behind both the landing page and the workspace.
+  // Global pointer/audio effects live behind every public and app screen.
   const bg = (
     <>
-      <FractalBackground />
+      <InteractionEffects />
       <div className="bg-overlay" aria-hidden />
     </>
   );

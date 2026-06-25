@@ -16,8 +16,8 @@ declare const Deno: {
 };
 
 const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY');
-// gemini-2.5-flash — та же модель, что и на фронте (у 2.0-flash на бесплатном ключе нулевая квота).
-const MODEL = Deno.env.get('GEMINI_MODEL') ?? 'gemini-2.5-flash';
+// По умолчанию используем самую сильную стабильную Gemini-модель из текущей линейки.
+const MODEL = Deno.env.get('GEMINI_MODEL') ?? 'gemini-3.5-flash';
 
 const cors = {
   'Access-Control-Allow-Origin': '*',

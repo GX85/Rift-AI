@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Markdown } from './Markdown';
-import { AmethystLogo, AmethystNavigatorStone } from './Gems';
+import { AmethystLogo } from './Gems';
 import { Icon } from './Icons';
 import { streamGemini } from '../lib/gemini';
 import { deleteChatRow, loadChats, saveChat } from '../lib/chatsStore';
@@ -352,7 +352,7 @@ ${buildGuaranteedHtmlArtifact(kind, request)}`;
 }
 
 function buildSystem() {
-  return `Ты — Amethyst, coding assistant на базе Gemini 2.5 Flash.
+  return `Ты — Amethyst, coding assistant на базе Gemini 3.5 Flash.
 
 Маршрутизация намерений:
 • Если пользователь задаёт обычный вопрос, просит объяснение, спрашивает погоду/факт/совет и НЕ просит создать код, сайт, игру, приложение или компонент — отвечай обычным текстом, без HTML и без code block.
@@ -636,37 +636,8 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
     window.setTimeout(() => inputRef.current?.focus(), 0);
   }
 
-  function focusChat() {
-    setSidebarOpen(false);
-    window.setTimeout(() => inputRef.current?.focus(), 0);
-  }
-
   return (
     <div className="acode">
-      <div className="acode-crystal-field" aria-hidden="true">
-        <span className="ore ore-left" />
-        <span className="ore ore-right" />
-        <span className="ore ore-bottom" />
-        <span className="ore ore-top" />
-      </div>
-      <div className="acode-crystal-nav" aria-label="Кристаллы фона">
-        <button className="acode-bg-crystal chat" type="button" onClick={focusChat} title="Открыть чат">
-          <AmethystNavigatorStone size={158} />
-          <span>Чат</span>
-        </button>
-        <button className="acode-bg-crystal create" type="button" onClick={createChat} title="Новый чат">
-          <AmethystNavigatorStone size={132} />
-          <span>Новый</span>
-        </button>
-        <button className="acode-bg-crystal settings" type="button" onClick={() => useStarter(MOBILE_ACTIONS[0].prompt)} title="Собрать сайт">
-          <AmethystNavigatorStone size={146} />
-          <span>Сайт</span>
-        </button>
-        <button className="acode-bg-crystal home" type="button" onClick={onHome} title="Главная">
-          <AmethystNavigatorStone size={122} />
-          <span>Дом</span>
-        </button>
-      </div>
       {sidebarOpen && <button className="acode-scrim" aria-label="Закрыть меню" onClick={() => setSidebarOpen(false)} />}
 
       <aside className={`acode-side ${sidebarOpen ? 'open' : ''}`}>
