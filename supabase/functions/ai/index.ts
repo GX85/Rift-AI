@@ -16,8 +16,8 @@ declare const Deno: {
 };
 
 const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY');
-// По умолчанию используем самую сильную стабильную Gemini-модель из текущей линейки.
-const MODEL = Deno.env.get('GEMINI_MODEL') ?? 'gemini-3.5-flash';
+// Максимальный интеллект для сложного кода, сайтов, игр и agentic-задач.
+const MODEL = Deno.env.get('GEMINI_MODEL') ?? 'gemini-3.1-pro-preview';
 
 const cors = {
   'Access-Control-Allow-Origin': '*',
@@ -59,7 +59,7 @@ Deno.serve(async (req) => {
       // Настройки «интеллекта»: больше места для развёрнутого ответа + управляемая креативность.
       generationConfig: {
         temperature: typeof temperature === 'number' ? temperature : 0.72,
-        maxOutputTokens: typeof maxTokens === 'number' ? Math.min(Math.max(maxTokens, 512), 16384) : 12000,
+        maxOutputTokens: typeof maxTokens === 'number' ? Math.min(Math.max(maxTokens, 512), 65536) : 32768,
         topP: 0.95,
       },
     });

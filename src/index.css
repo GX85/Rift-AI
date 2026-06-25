@@ -17754,3 +17754,198 @@ a:active,
     animation-duration: .52s !important;
   }
 }
+
+/* Simple black checker finish: no amethyst-style buttons, just dark premium controls. */
+:root {
+  --mono-bg: #030304;
+  --mono-bg-2: #08080a;
+  --mono-panel: rgba(9, 9, 11, .86);
+  --mono-panel-strong: rgba(12, 12, 14, .94);
+  --mono-line: rgba(255, 255, 255, .12);
+  --mono-line-strong: rgba(255, 255, 255, .28);
+  --mono-text: #f5f5f5;
+  --mono-muted: rgba(245, 245, 245, .58);
+}
+
+.bg-overlay,
+.hero2,
+.platform-page,
+.reviews-page,
+.mobile-entry,
+.mobile-qr-page,
+.acode {
+  background:
+    radial-gradient(560px 360px at var(--pointer-x) var(--pointer-y), rgba(255, 255, 255, .07), transparent 68%),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, .045) 0 1px, transparent 1px 42px),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, .045) 0 1px, transparent 1px 42px),
+    linear-gradient(135deg, #030304, #08090c 54%, #030304) !important;
+  background-size: auto, 42px 42px, 42px 42px, auto !important;
+}
+
+.hero2::before,
+.platform-page::before,
+.reviews-page::before,
+.mobile-entry::before,
+.mobile-qr-page::before,
+.acode::before {
+  background:
+    radial-gradient(520px 340px at var(--pointer-x) var(--pointer-y), rgba(255, 255, 255, .1), transparent 68%),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, .035) 0 1px, transparent 1px 21px),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, .035) 0 1px, transparent 1px 21px) !important;
+  background-size: auto, 21px 21px, 21px 21px !important;
+}
+
+.hero2::after,
+.platform-page::after,
+.reviews-page::after,
+.mobile-entry::after,
+.mobile-qr-page::after,
+.acode::after {
+  background:
+    radial-gradient(360px 240px at var(--pointer-x) var(--pointer-y), rgba(255, 255, 255, .08), transparent 72%) !important;
+  animation: none !important;
+}
+
+.hero-nav,
+.reviews-nav,
+.acode-top,
+.acode-side,
+.acode-compose,
+.acode-artifact-card,
+.acode-live-preview,
+.acode-preview-screen,
+.platform-shell,
+.platform-card,
+.platform-window,
+.mobile-entry-card,
+.mobile-qr-card,
+.review-card,
+.crystal-perk-tile,
+.feature-card,
+.composer,
+.acode-msg-body,
+.acode-studio-grid button,
+.acode-starters button,
+.acode-output-strip span,
+.acode-mobile-strip span {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .055), rgba(255, 255, 255, .018)),
+    rgba(8, 8, 10, .88) !important;
+  border-color: var(--mono-line) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 22px 72px rgba(0, 0, 0, .42), inset 0 1px 0 rgba(255, 255, 255, .06) !important;
+}
+
+.hero-pill,
+.plus-chip,
+.platform-flow span,
+.platform-detect,
+.platform-links a,
+.hero-platforms span,
+.acode-copy,
+.acode-download,
+.acode-new,
+.acode-icon,
+.nav-open,
+.google-btn,
+.composer-cta,
+.acode-send,
+.mobile-qr-actions a,
+.mobile-qr-actions button,
+.mobile-entry-card button,
+.platform-badge,
+.platform-icon,
+.hero-links a,
+.hero-prompt-grid button {
+  color: #f5f5f5 !important;
+  background: #070708 !important;
+  border: 1px solid rgba(255, 255, 255, .14) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 12px 34px rgba(0, 0, 0, .36), inset 0 1px 0 rgba(255, 255, 255, .055) !important;
+}
+
+.hero-platforms span,
+.acode-output-strip span,
+.acode-mobile-strip span,
+.platform-flow span,
+.hero-pill,
+.plus-chip,
+.platform-detect,
+.platform-links a,
+.platform-badge {
+  border-radius: 999px !important;
+}
+
+.google-btn .amlogo,
+.composer-cta .amlogo,
+.nav-open .amlogo,
+.acode-copy .amlogo,
+.acode-new .amlogo,
+.acode-send .amlogo {
+  display: none !important;
+}
+
+.nav-open:hover,
+.google-btn:hover,
+.composer-cta:hover,
+.acode-send:hover,
+.acode-new:hover,
+.acode-copy:hover,
+.hero-links a:hover,
+.hero-prompt-grid button:hover,
+.acode-studio-grid button:hover,
+.acode-starters button:hover,
+.platform-card:hover,
+.crystal-perk-tile:hover,
+.review-card:hover {
+  background: #101012 !important;
+  border-color: rgba(255, 255, 255, .3) !important;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, .5), inset 0 1px 0 rgba(255, 255, 255, .09) !important;
+}
+
+.hero-prompt-grid button,
+.acode-studio-grid button,
+.acode-starters button {
+  background:
+    repeating-linear-gradient(0deg, transparent 0 20px, rgba(255, 255, 255, .025) 21px),
+    #070708 !important;
+}
+
+.hero-code-input,
+.composer-input,
+.acode-compose textarea,
+.mobile-entry-card input,
+.acode-artifact-code pre {
+  background:
+    repeating-linear-gradient(0deg, transparent 0 20px, rgba(255, 255, 255, .026) 21px),
+    #050506 !important;
+  border-color: rgba(255, 255, 255, .13) !important;
+}
+
+.bg-overlay::before {
+  background:
+    radial-gradient(500px 330px at var(--pointer-x) var(--pointer-y), rgba(255, 255, 255, .13), transparent 68%),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, .038) 0 1px, transparent 1px 42px),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, .038) 0 1px, transparent 1px 42px) !important;
+}
+
+.bg-overlay::after {
+  border-color: rgba(255, 255, 255, .36) !important;
+  background:
+    radial-gradient(circle, rgba(255, 255, 255, .12), rgba(255, 255, 255, .04) 38%, transparent 68%),
+    repeating-linear-gradient(0deg, transparent 0 14px, rgba(255, 255, 255, .09) 15px),
+    repeating-linear-gradient(90deg, transparent 0 14px, rgba(255, 255, 255, .09) 15px) !important;
+}
+
+.hero2:hover,
+.platform-page:hover,
+.reviews-page:hover,
+.mobile-entry:hover,
+.mobile-qr-page:hover,
+.acode:hover {
+  background-position:
+    center,
+    calc(var(--pointer-x) / 18) calc(var(--pointer-y) / 18),
+    calc(var(--pointer-x) / -20) calc(var(--pointer-y) / -20),
+    center !important;
+}

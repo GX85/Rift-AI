@@ -352,7 +352,7 @@ ${buildGuaranteedHtmlArtifact(kind, request)}`;
 }
 
 function buildSystem() {
-  return `Ты — Amethyst, coding assistant на базе Gemini 3.5 Flash.
+  return `Ты — Amethyst, coding assistant на базе Gemini 3.1 Pro Preview.
 
 Маршрутизация намерений:
 • Если пользователь задаёт обычный вопрос, просит объяснение, спрашивает погоду/факт/совет и НЕ просит создать код, сайт, игру, приложение или компонент — отвечай обычным текстом, без HTML и без code block.
@@ -575,7 +575,7 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
         history: messages.map((message) => ({ role: message.role, text: message.content })),
         prompt,
         temperature: 0.25,
-        maxTokens: 12000,
+        maxTokens: 24000,
         signal: controller.signal,
       })) {
         streamed += chunk;

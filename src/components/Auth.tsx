@@ -103,7 +103,7 @@ export function PlatformChoice({
             </div>
           </div>
           <div className="platform-score">
-            <b>Gemini 3.5 Flash</b>
+            <b>Gemini 3.1 Pro Preview</b>
             <span>быстрее пишет, лучше собирает, понятнее объясняет</span>
           </div>
         </div>
