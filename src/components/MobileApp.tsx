@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 import { CodeWorkspace } from './CodeWorkspace';
-import { AmethystLogo } from './Gems';
 
 type MobileAppProps = {
   name: string;
@@ -187,7 +186,7 @@ export function MobileQrPage() {
     <main className="mobile-qr-page">
       <section className="mobile-qr-card">
         <div className="mobile-app-icon">
-          <AmethystLogo size={38} />
+          <span>AI</span>
         </div>
         <p className="mobile-kicker">Amethyst Mobile</p>
         <h1>Открой на телефоне</h1>
@@ -220,7 +219,7 @@ export function MobileEntry({ onEnter }: MobileEntryProps) {
     <main className="mobile-entry">
       <section className="mobile-entry-card">
         <div className="mobile-app-icon">
-          <AmethystLogo size={38} />
+          <span>AI</span>
         </div>
         <p className="mobile-kicker">Mobile app</p>
         <h1>Amethyst</h1>

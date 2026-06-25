@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { Icon } from './Icons';
-import { AmethystLogo } from './Gems';
 
 // Возможности (бесплатно) и привилегии Plus — для главного экрана.
 const PLUS_PERKS = [
@@ -67,10 +66,7 @@ export function PlatformChoice({
   return (
     <main className="platform-page">
       <section className="platform-shell">
-        <div className="hero-fractal-stage platform-gem" aria-hidden>
-          <AmethystLogo size={126} />
-        </div>
-        <p className="platform-kicker"><AmethystLogo size={24} /> Amethyst AI</p>
+        <p className="platform-kicker">Amethyst AI</p>
         <h1>Выбери вход</h1>
         <p className="platform-sub">
           Укажи, откуда заходишь. Amethyst откроет подходящую версию платформы.
@@ -175,7 +171,6 @@ export function Landing({ onEnter }: { onEnter?: () => void }) {
       </div>
       <nav className="hero-nav">
         <div className="hero-logo">
-          <AmethystLogo size={34} />
           Amethyst<span>AI</span>
         </div>
         <div className="hero-links">
@@ -190,9 +185,6 @@ export function Landing({ onEnter }: { onEnter?: () => void }) {
       </nav>
 
       <header className="hero-center">
-        <div className="hero-fractal-stage" aria-hidden>
-          <AmethystLogo size={126} />
-        </div>
         <div className="hero-pill">
           <span className="dot" /> ИИ-ассистент для кода, сайтов и бизнеса
         </div>
@@ -292,7 +284,6 @@ export function ReviewsPage() {
     <main className="reviews-page">
       <nav className="hero-nav reviews-nav">
         <a className="hero-logo" href="/">
-          <AmethystLogo size={34} />
           Amethyst<span>AI</span>
         </a>
         <a className="nav-open" href="/">

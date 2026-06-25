@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Markdown } from './Markdown';
-import { AmethystLogo } from './Gems';
 import { Icon } from './Icons';
 import { streamGemini, runAgent, generateImage, hasDesktop } from '../lib/gemini';
 import { loadChats, saveChat, deleteChatRow } from '../lib/chatsStore';
@@ -767,7 +766,6 @@ export function Workspace({
       <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
         <div className="side-top">
           <button className="side-logo" onClick={onHome} title="На главный экран">
-            <AmethystLogo size={34} />
             <span className="side-logo-text">
               Amethyst<span>AI</span>
             </span>
@@ -815,7 +813,6 @@ export function Workspace({
           ) : (
             filtered.map((c) => (
               <div key={c.id} className={`chat-item ${c.id === active?.id ? 'active' : ''}`} onClick={() => selectChat(c.id)}>
-                <AmethystLogo size={15} />
                 {editingId === c.id ? (
                   <input
                     className="chat-rename"
@@ -890,7 +887,7 @@ export function Workspace({
           )}
           <div className="ws-bar-model">
             <div className="ai-ava">
-              <AmethystLogo size={18} />
+              <span>A</span>
             </div>
             <div>
               <div className="ws-bar-name">Amethyst</div>
@@ -905,7 +902,7 @@ export function Workspace({
         {empty ? (
           <div className="hero-chat">
             <div className="hero-chat-logo" aria-hidden>
-              <AmethystLogo size={96} />
+              <span className="mono-product-mark hero">AI</span>
             </div>
             <h1 className="hero-chat-title">Amethyst</h1>
             <p className="hero-chat-sub">Опиши задачу, вставь ошибку или прикрепи файл. Я помогу написать, понять и починить код.</p>
@@ -945,7 +942,7 @@ export function Workspace({
                   return (
                     <div key={m.id} className="turn turn-ai">
                       <div className="ai-ava">
-                        <AmethystLogo size={20} />
+                        <span>A</span>
                       </div>
                       <div className="ai-text">
                         {waiting ? (

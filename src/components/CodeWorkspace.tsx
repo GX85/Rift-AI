@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Markdown } from './Markdown';
-import { AmethystLogo } from './Gems';
 import { Icon } from './Icons';
 import { streamGemini } from '../lib/gemini';
 import { deleteChatRow, loadChats, saveChat } from '../lib/chatsStore';
@@ -698,7 +697,7 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
             <Icon name="menu" size={17} />
           </button>
           <div className="acode-model">
-            <AmethystLogo size={30} />
+            <span className="mono-product-mark">AI</span>
             <div>
               <strong>Amethyst</strong>
               <span>{messages.length ? active.title : 'ИИ-ассистент для кода и продуктов'}</span>
@@ -720,7 +719,7 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
             <div className="acode-empty">
               <div className="acode-empty-hero">
                 <div className="acode-empty-copy">
-                  <AmethystLogo size={78} />
+                  <span className="mono-product-mark hero">AI</span>
                   <div className="acode-empty-orbit" aria-hidden="true">
                     <span />
                     <span />
@@ -797,13 +796,13 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
               return (
                 <article key={message.id} className={`acode-msg ${message.role}`}>
                   <div className="acode-msg-avatar">
-                    {message.role === 'assistant' ? <AmethystLogo size={24} /> : <span>{name.slice(0, 1).toUpperCase()}</span>}
+                    <span>{message.role === 'assistant' ? 'A' : name.slice(0, 1).toUpperCase()}</span>
                   </div>
                   <div className={`acode-msg-body ${isHtmlResult ? 'artifact-ready' : ''}`}>
                     {isHtmlResult ? (
                       <div className="acode-artifact-card">
                         <div className="acode-artifact-head">
-                          <AmethystLogo size={28} />
+                          <span className="mono-product-mark small">HTML</span>
                           <div>
                             <strong>HTML-артефакт готов</strong>
                             <span>Сайт собран. Скачай файл или скопируй код.</span>

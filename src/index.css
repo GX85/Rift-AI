@@ -18125,3 +18125,58 @@ button svg,
     repeating-linear-gradient(0deg, rgba(255, 255, 255, .038) 0 1px, transparent 1px 42px),
     repeating-linear-gradient(90deg, rgba(255, 255, 255, .038) 0 1px, transparent 1px 42px) !important;
 }
+
+/* Absolute no-gem pass. */
+.amlogo,
+.amlogo *,
+.hero-fractal-stage,
+.platform-gem,
+.hero-chat-logo .amlogo,
+.acode-artifact-head .amlogo,
+.acode-msg-avatar .amlogo,
+.mobile-app-icon .amlogo {
+  display: none !important;
+  visibility: hidden !important;
+}
+
+.mono-product-mark,
+.mobile-app-icon > span,
+.ai-ava > span {
+  display: inline-grid !important;
+  place-items: center !important;
+  min-width: 34px !important;
+  height: 34px !important;
+  padding: 0 10px !important;
+  color: #f4f4f5 !important;
+  background:
+    repeating-linear-gradient(0deg, rgba(255,255,255,.045) 0 1px, transparent 1px 9px),
+    #050506 !important;
+  border: 1px solid rgba(255, 255, 255, .18) !important;
+  border-radius: 10px !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 10px 26px rgba(0,0,0,.32) !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  letter-spacing: 0 !important;
+}
+
+.mono-product-mark.hero {
+  width: 78px !important;
+  height: 78px !important;
+  border-radius: 18px !important;
+  font-size: 18px !important;
+}
+
+.mono-product-mark.small {
+  width: auto !important;
+  min-width: 54px !important;
+  height: 34px !important;
+  border-radius: 10px !important;
+}
+
+.mobile-app-icon {
+  display: inline-grid !important;
+  place-items: center !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
