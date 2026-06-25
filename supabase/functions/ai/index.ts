@@ -17,7 +17,10 @@ declare const Deno: {
 
 const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY');
 // Максимальный актуальный дефолт для сложного кода, сайтов, игр и agentic-задач.
-const MODEL = Deno.env.get('GEMINI_MODEL') ?? 'gemini-3.5-flash';
+// Если Pro Preview недоступен по ключу/лимиту, функция мягко падает на сильную Flash-модель.
+const PRIMARY_MODEL = Deno.env.get('GEMINI_MODEL') ?? 'gemini-3.1-pro-preview';
+const FALLBACK_MODEL = Deno.env.get('GEMINI_FALLBACK_MODEL') ?? 'gemini-3.5-flash';
+const MODEL_CHAIN = Array.from(new Set([PRIMARY_MODEL, FALLBACK_MODEL].filter(Boolean)));
 
 const cors = {
   'Access-Control-Allow-Origin': '*',
@@ -34,6 +37,28 @@ function extractText(data: unknown): string {
     .map((p) => p.text ?? '')
     .join('')
     .trim();
+}
+
+async function fetchGemini(model: string, mode: 'stream' | 'json', requestBody: string) {
+  const action = mode === 'stream' ? 'streamGenerateContent?alt=sse&' : 'generateContent?';
+  return fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${model}:${action}key=${GEMINI_API_KEY}`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: requestBody,
+    },
+  );
+}
+
+async function firstWorkingGemini(mode: 'stream' | 'json', requestBody: string) {
+  let lastError = '';
+  for (const model of MODEL_CHAIN) {
+    const response = await fetchGemini(model, mode, requestBody);
+    if (response.ok && (mode === 'json' || response.body)) return { response, model };
+    lastError = await response.text().catch(() => response.statusText);
+  }
+  throw new Error(`Gemini: ${lastError || 'нет доступной модели'}`);
 }
 
 Deno.serve(async (req) => {
@@ -66,19 +91,8 @@ Deno.serve(async (req) => {
 
     // ── Режим стриминга: качаем SSE из Gemini и пересылаем фронту чистый текст по кусочкам ──
     if (stream) {
-      const upstream = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:streamGenerateContent?alt=sse&key=${GEMINI_API_KEY}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: requestBody,
-        },
-      );
-
-      if (!upstream.ok || !upstream.body) {
-        const errText = await upstream.text();
-        throw new Error(`Gemini: ${errText || upstream.statusText}`);
-      }
+      const { response: upstream } = await firstWorkingGemini('stream', requestBody);
+      if (!upstream.body) throw new Error('Gemini: пустой streaming body');
 
       const reader = upstream.body.getReader();
       const decoder = new TextDecoder();
@@ -120,15 +134,7 @@ Deno.serve(async (req) => {
     }
 
     // ── Обычный режим: ждём весь ответ и отдаём JSON ──
-    const res = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent?key=${GEMINI_API_KEY}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: requestBody,
-      },
-    );
-
+    const { response: res, model } = await firstWorkingGemini('json', requestBody);
     const data = await res.json();
 
     if (data?.error) {
@@ -136,7 +142,7 @@ Deno.serve(async (req) => {
     }
 
     const text = extractText(data);
-    return new Response(JSON.stringify({ text }), {
+    return new Response(JSON.stringify({ text, model }), {
       headers: { ...cors, 'Content-Type': 'application/json' },
     });
   } catch (e) {
