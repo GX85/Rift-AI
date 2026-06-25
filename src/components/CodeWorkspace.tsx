@@ -269,7 +269,8 @@ function looksBrokenHtmlArtifact(html: string) {
 
 function extractHtmlArtifact(content: string) {
   const artifacts = findHtmlArtifacts(content);
-  return artifacts.find((html) => !looksBrokenHtmlArtifact(html)) ?? '';
+  const usable = artifacts.filter((html) => !looksBrokenHtmlArtifact(html));
+  return usable.at(-1) ?? '';
 }
 
 function downloadText(filename: string, text: string) {
@@ -321,11 +322,128 @@ function detectArtifactKind(text: string): ArtifactKind | null {
   return null;
 }
 
+function buildPremiumProductHtml(kind: Exclude<ArtifactKind, 'game'>, title: string, request: string) {
+  const plainTitle = titleFrom(request).replace(/^создай\s+/i, '') || 'Amethyst product';
+  const pageTitle = title;
+  const jsTitle = JSON.stringify(plainTitle);
+  const modeCopy =
+    kind === 'bot'
+      ? {
+          badge: 'Чатбот',
+          heading: 'Рабочий чатбот для продукта',
+          sub: 'Готовый диалоговый прототип: быстрые сценарии, ответы, история и понятный fallback.',
+          panel: 'Диалог',
+          placeholder: 'Напиши сообщение боту...',
+        }
+      : kind === 'app'
+        ? {
+            badge: 'Web-app',
+            heading: 'Рабочая панель приложения',
+            sub: 'MVP с задачами, метриками, фильтрами, формой, localStorage и мобильной адаптацией.',
+            panel: 'Рабочая область',
+            placeholder: 'Новая задача, клиент или идея...',
+          }
+        : {
+            badge: 'Landing',
+            heading: 'Готовый продуктовый сайт',
+            sub: 'Лендинг с первым экраном, преимуществами, процессом, CTA, заявками и адаптивом.',
+            panel: 'Заявки',
+            placeholder: 'Имя, телефон или идея проекта...',
+          };
+  const seed =
+    kind === 'bot'
+      ? ['Привет! Чем поможет Amethyst?', 'Собери сайт', 'Объясни ошибку', 'Сделай план запуска']
+      : kind === 'app'
+        ? ['Собрать первый экран', 'Проверить мобильную версию', 'Добавить экспорт результата']
+        : ['Заявка: обсудить MVP', 'Подготовить оффер', 'Показать демо клиенту'];
+
+  return `\`\`\`html
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>${pageTitle}</title>
+  <style>
+    :root{color-scheme:dark;--bg:#050506;--panel:#101012;--panel2:#151517;--line:#ffffff18;--line2:#ffffff2c;--text:#f6f6f7;--muted:#a1a1aa;--soft:#d4d4d8;--ok:#f5f5f5}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,Arial,sans-serif;overflow-x:hidden}button,input{font:inherit}
+    body::before{content:"";position:fixed;inset:-20%;z-index:-2;background:radial-gradient(circle at var(--mx,70%) var(--my,24%),#ffffff12,transparent 23%),radial-gradient(circle at 12% 20%,#ffffff0d,transparent 24%),#050506;transition:background-position .4s ease}
+    body::after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradient(#ffffff0a 1px,transparent 1px),linear-gradient(90deg,#ffffff0a 1px,transparent 1px);background-size:42px 42px;mask-image:radial-gradient(circle at 50% 18%,#000 0 48%,transparent 82%);animation:gridMove 18s linear infinite}
+    @keyframes gridMove{to{background-position:42px 42px}}
+    .shell{min-height:100vh;padding:24px}.wrap{width:min(1180px,100%);margin:auto}.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 16px;border:1px solid var(--line);border-radius:24px;background:#0b0b0dcc;backdrop-filter:blur(18px);position:sticky;top:16px;z-index:5}.brand{display:flex;align-items:center;gap:10px;font-weight:950}.logo{width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--line2);border-radius:12px;background:#050506}.nav a{color:var(--soft);text-decoration:none;font-weight:800}.links{display:flex;gap:18px}.btn{border:1px solid var(--line2);border-radius:14px;min-height:44px;padding:0 18px;background:#f4f4f5;color:#09090b;font-weight:950;cursor:pointer;box-shadow:0 16px 40px #0007;transition:.22s ease}.btn.dark{background:#0a0a0b;color:white}.btn:hover{transform:translateY(-2px);filter:brightness(1.08)}
+    .hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(360px,.86fr);gap:24px;align-items:center;padding:76px 0 44px}.badge{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:999px;padding:8px 13px;background:#ffffff0b;color:#e5e5e7;font-weight:900}.dot{width:8px;height:8px;border-radius:50%;background:#fff;box-shadow:0 0 18px #fff}h1{font-size:clamp(44px,7vw,88px);line-height:.93;margin:18px 0;text-wrap:balance;letter-spacing:0}.lead{font-size:clamp(17px,2vw,22px);line-height:1.55;color:var(--muted);max-width:760px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:28px}.metric{border:1px solid var(--line);border-radius:18px;background:#ffffff09;padding:16px}.metric b{display:block;font-size:28px}.metric span{color:var(--muted);font-weight:800;font-size:13px}
+    .product{border:1px solid var(--line2);border-radius:28px;background:linear-gradient(180deg,#151517,#0b0b0d);box-shadow:0 30px 110px #000b;padding:18px;overflow:hidden}.screen{min-height:440px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(180deg,#0c0c0e,#080809);padding:18px;display:grid;gap:14px}.screen-top{display:flex;justify-content:space-between;gap:10px;align-items:center}.tabs{display:flex;gap:8px;flex-wrap:wrap}.tab{border:1px solid var(--line);border-radius:999px;background:#050506;color:#d4d4d8;padding:9px 12px;font-weight:900;cursor:pointer}.tab.active{background:#f4f4f5;color:#050506}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.card{border:1px solid var(--line);border-radius:18px;background:#141416;padding:16px;min-height:120px}.card b{font-size:24px}.card span{display:block;color:var(--muted);margin-top:8px;line-height:1.45}.workspace{display:grid;grid-template-columns:1fr .8fr;gap:12px}.panel{border:1px solid var(--line);border-radius:20px;background:#101012;padding:16px}.panel h3{margin:0 0 12px}.list{display:grid;gap:8px}.item{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:14px;background:#ffffff08}.item.done{opacity:.58}.item button{border:0;background:transparent;color:white;cursor:pointer}.form{display:flex;gap:8px;margin-top:12px}.form input{flex:1;min-width:0;border:1px solid var(--line2);border-radius:14px;background:#050506;color:white;padding:13px}.mini-chat{display:grid;gap:10px;max-height:270px;overflow:auto}.bubble{padding:12px 14px;border-radius:16px;background:#ffffff0d;color:#e4e4e7}.bubble.user{background:#f4f4f5;color:#09090b;margin-left:22px}.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.chip{border:1px solid var(--line);border-radius:999px;background:#0a0a0b;color:#fff;padding:8px 10px;font-weight:800;cursor:pointer}
+    section.block{padding:44px 0}.section-title{font-size:clamp(30px,4vw,52px);line-height:1;margin:0 0 14px}.feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.feature{border:1px solid var(--line);border-radius:22px;background:#0f0f11;padding:20px;min-height:170px}.feature i{display:grid;place-items:center;width:42px;height:42px;border-radius:14px;background:#f4f4f5;color:#050506;font-style:normal;font-weight:950}.feature p{color:var(--muted);line-height:1.55}.footer{border-top:1px solid var(--line);padding:26px 0;color:#a1a1aa;display:flex;justify-content:space-between;gap:12px}
+    @media(max-width:860px){.shell{padding:12px}.links{display:none}.hero{grid-template-columns:1fr;padding-top:42px}.metrics,.cards,.feature-grid,.workspace{grid-template-columns:1fr}.screen{min-height:auto}.form{flex-direction:column}.btn{width:100%}.footer{flex-direction:column}}
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <div class="wrap">
+      <nav class="nav">
+        <div class="brand"><span class="logo">AI</span><span>Amethyst</span></div>
+        <div class="links"><a href="#demo">Демо</a><a href="#features">Функции</a><a href="#start">Старт</a></div>
+        <button class="btn dark" onclick="document.querySelector('#start').scrollIntoView()">Открыть</button>
+      </nav>
+      <section class="hero">
+        <div>
+          <span class="badge"><span class="dot"></span>${modeCopy.badge}</span>
+          <h1>${modeCopy.heading}</h1>
+          <p class="lead">${modeCopy.sub} Запрос: ${pageTitle}.</p>
+          <div class="actions"><button class="btn" onclick="document.querySelector('#demo').scrollIntoView()">Посмотреть демо</button><button class="btn dark" onclick="addSmartItem()">Создать пример</button></div>
+          <div class="metrics"><div class="metric"><b id="m1">0</b><span>элементов</span></div><div class="metric"><b>100%</b><span>адаптив</span></div><div class="metric"><b>HTML</b><span>один файл</span></div></div>
+        </div>
+        <div class="product" id="demo">
+          <div class="screen">
+            <div class="screen-top"><b>${modeCopy.panel}</b><div class="tabs"><button class="tab active" data-view="work">Работа</button><button class="tab" data-view="plan">План</button><button class="tab" data-view="data">Данные</button></div></div>
+            <div class="cards"><div class="card"><b>01</b><span>Понятный первый экран без пустого фона.</span></div><div class="card"><b>02</b><span>Кнопки, состояния и реальные обработчики.</span></div><div class="card"><b>03</b><span>Сохранение данных в localStorage.</span></div></div>
+            <div class="workspace">
+              <div class="panel" id="start">
+                <h3>${kind === 'bot' ? 'Чат' : 'Список'}</h3>
+                <div class="${kind === 'bot' ? 'mini-chat' : 'list'}" id="list"></div>
+                <form class="form" id="form"><input id="input" placeholder="${modeCopy.placeholder}" /><button class="btn">Добавить</button></form>
+                <div class="chips"><button class="chip" data-add="Собрать MVP">Собрать MVP</button><button class="chip" data-add="Проверить ошибки">Проверить ошибки</button><button class="chip" data-add="Сделать красивее">Сделать красивее</button></div>
+              </div>
+              <div class="panel"><h3>Статус</h3><p id="status">Готово к работе. Можно добавлять элементы, переключать вкладки и проверять мобильную версию.</p><div id="viewText"></div></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="block" id="features">
+        <h2 class="section-title">Что уже работает</h2>
+        <div class="feature-grid"><div class="feature"><i>UI</i><h3>Интерфейс</h3><p>Сетка, карточки, CTA, формы и адаптив без горизонтального скролла.</p></div><div class="feature"><i>JS</i><h3>Логика</h3><p>Форма, удаление, состояния, вкладки, быстрые действия и сохранение.</p></div><div class="feature"><i>QA</i><h3>Проверка</h3><p>Не пустой body, видимый первый экран, рабочие кнопки и fallback.</p></div></div>
+      </section>
+      <footer class="footer"><span>Amethyst demo artifact</span><span>Сделано одним HTML-файлом</span></footer>
+    </div>
+  </main>
+  <script>
+    const mode=${JSON.stringify(kind)}, title=${jsTitle};
+    const key='amethyst_artifact_'+mode+'_'+title.toLowerCase().replace(/\\W+/g,'_');
+    const seed=${JSON.stringify(seed)};
+    let items=JSON.parse(localStorage.getItem(key)||JSON.stringify(seed.map((text,i)=>({text,done:i===0}))));
+    const list=document.getElementById('list'), form=document.getElementById('form'), input=document.getElementById('input'), metric=document.getElementById('m1'), status=document.getElementById('status'), viewText=document.getElementById('viewText');
+    function save(){localStorage.setItem(key,JSON.stringify(items));metric.textContent=String(items.length)}
+    function botReply(text){const t=text.toLowerCase();if(t.includes('сайт'))return 'Соберу структуру: hero, CTA, секции, форма и адаптивный HTML.';if(t.includes('ошиб'))return 'Пришли ошибку или код, я дам причину, фикс и проверку.';if(t.includes('план'))return 'План: цель, аудитория, MVP, демо, запуск, метрики.';return 'Я понял: '+text+'. Могу превратить это в задачу, сайт, бота или MVP.'}
+    function render(){save();if(mode==='bot'){list.innerHTML=items.map((it,i)=>'<div class="bubble '+(i%2?'user':'')+'">'+it.text+'</div>').join('')}else{list.innerHTML=items.map((it,i)=>'<div class="item '+(it.done?'done':'')+'"><span>'+it.text+'</span><span><button onclick="toggle('+i+')">✓</button><button onclick="del('+i+')">×</button></span></div>').join('')||'<p>Пока пусто. Добавь первый элемент.</p>'}}
+    function add(value){const text=(value||input.value).trim();if(!text)return;if(mode==='bot'){items.push({text,done:false});items.push({text:botReply(text),done:false})}else items.push({text,done:false});input.value='';status.textContent='Добавлено: '+text;render()}
+    function del(i){items.splice(i,1);render()} function toggle(i){items[i].done=!items[i].done;render()} function addSmartItem(){add(mode==='site'?'Новая заявка с сайта':mode==='app'?'Новая задача MVP':'Собери сценарий продаж')}
+    window.del=del;window.toggle=toggle;window.addSmartItem=addSmartItem;form.onsubmit=e=>{e.preventDefault();add()};document.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>add(b.dataset.add));
+    document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');const v=b.dataset.view;viewText.innerHTML=v==='plan'?'<p>План: собрать основу, проверить UI, добавить данные, показать демо.</p>':v==='data'?'<p>Данные хранятся локально в браузере. Обнови страницу — список останется.</p>':'<p>Рабочий режим активен.</p>'});
+    addEventListener('pointermove',e=>{document.body.style.setProperty('--mx',e.clientX/window.innerWidth*100+'%');document.body.style.setProperty('--my',e.clientY/window.innerHeight*100+'%')});
+    render();
+  </script>
+</body>
+</html>
+\`\`\``;
+}
+
 function buildGuaranteedHtmlArtifact(kind: ArtifactKind, request: string) {
   const title = escapeHtml(titleFrom(request).replace(/^создай\s+/i, '') || 'Amethyst result');
   const isGame = kind === 'game';
   const isBot = kind === 'bot';
   const isApp = kind === 'app';
+
+  if (!isGame) return buildPremiumProductHtml(kind, title, request);
 
   if (isGame) {
     return `\`\`\`html
