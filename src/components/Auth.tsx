@@ -217,7 +217,8 @@ export function Landing({ onEnter }: { onEnter?: () => void }) {
         )}
 
         <button className="google-btn" onClick={start} disabled={busy}>
-          {busy ? <span className="spinner" /> : onEnter ? <AmethystLogo size={24} /> : <GoogleIcon />}
+          {busy && <span className="spinner" />}
+          {!busy && !onEnter && <GoogleIcon />}
           {onEnter ? 'Открыть Amethyst' : 'Войти через Google'}
         </button>
         <p className="cta-note">{onEnter ? "Коды: It'sAmethyst, AmethystAI, AmethystPlus" : 'Без паролей — вход за пару секунд.'}</p>
@@ -233,7 +234,6 @@ export function Landing({ onEnter }: { onEnter?: () => void }) {
           <div className="composer-bar">
             <span style={{ flex: 1 }} />
             <button type="submit" className="composer-cta" disabled={busy}>
-              {onEnter && <AmethystLogo size={20} />}
               {onEnter ? 'Открыть' : 'Создать'}
             </button>
           </div>

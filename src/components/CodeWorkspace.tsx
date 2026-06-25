@@ -643,7 +643,6 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
       <aside className={`acode-side ${sidebarOpen ? 'open' : ''}`}>
         <div className="acode-brand">
           <button className="acode-logo" onClick={onHome} title="На главный экран">
-            <AmethystLogo size={34} />
             <span>Amethyst</span>
           </button>
           <button className="acode-icon mobile-only" onClick={() => setSidebarOpen(false)} title="Закрыть">
