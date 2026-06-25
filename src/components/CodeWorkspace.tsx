@@ -90,7 +90,7 @@ function titleFrom(text: string) {
 function isArtifactRequest(text: string) {
   const normalized = text.toLowerCase().trim();
   const buildVerb =
-    /(создай|сделай|собери|сгенерируй|построй|разработай|сверстай|запрограммируй|реализуй|напиши|create|make|build|generate|implement|write)/.test(
+    /(создай|создать|сделай|сделать|собери|собрать|сгенерируй|сгенерировать|построй|построить|разработай|разработать|сверстай|сверстать|запрограммируй|запрограммировать|реализуй|реализовать|напиши|написать|create|make|build|generate|implement|write)/.test(
       normalized,
     );
   const artifactNoun =
@@ -230,6 +230,14 @@ function downloadText(filename: string, text: string) {
   link.click();
   link.remove();
   window.setTimeout(() => URL.revokeObjectURL(url), 800);
+}
+
+function openHtmlArtifact(text: string) {
+  const blob = new Blob([text], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const popup = window.open(url, '_blank', 'noopener,noreferrer');
+  if (!popup) downloadText('amethyst-result.html', text);
+  window.setTimeout(() => URL.revokeObjectURL(url), 30000);
 }
 
 function htmlFilename(content: string) {
@@ -862,6 +870,9 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
                           <>
                             <button className="acode-copy" onClick={() => void navigator.clipboard?.writeText(htmlArtifact)}>
                               копировать HTML
+                            </button>
+                            <button className="acode-copy acode-open" onClick={() => openHtmlArtifact(htmlArtifact)}>
+                              открыть
                             </button>
                             <button className="acode-copy acode-download" onClick={() => downloadText(htmlFilename(message.content), htmlArtifact)}>
                               скачать HTML

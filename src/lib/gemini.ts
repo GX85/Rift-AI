@@ -55,7 +55,7 @@ function userPromptOnly(prompt: string) {
 function wantsLocalArtifact(text: string) {
   const normalized = text.toLowerCase().trim();
   const buildVerb =
-    /(создай|сделай|собери|сгенерируй|построй|разработай|сверстай|запрограммируй|реализуй|напиши|create|make|build|generate|implement|write)/.test(
+    /(создай|создать|сделай|сделать|собери|собрать|сгенерируй|сгенерировать|построй|построить|разработай|разработать|сверстай|сверстать|запрограммируй|запрограммировать|реализуй|реализовать|напиши|написать|create|make|build|generate|implement|write)/.test(
       normalized,
     );
   const artifactNoun =

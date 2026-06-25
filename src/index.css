@@ -19267,3 +19267,494 @@ html body .mono-card-index {
     font-size: 28px !important;
   }
 }
+
+/* 2026-06-25 product refresh: dark grid UI, readable chat-first layout, no decorative amethyst chrome. */
+@keyframes mono-grid-drift {
+  0% { background-position: 0 0, 0 0, 0 0, center; }
+  100% { background-position: 0 0, 42px 42px, -42px 42px, center; }
+}
+
+@keyframes mono-panel-in {
+  from { opacity: 0; transform: translateY(18px) scale(.985); filter: blur(8px); }
+  to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+@keyframes mono-soft-float {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -6px, 0); }
+}
+
+html body {
+  background: #020203 !important;
+  color: #f7f7f8 !important;
+}
+
+html body .bg-overlay {
+  display: block !important;
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 0 !important;
+  pointer-events: none !important;
+  opacity: .72 !important;
+  background-color: #020203 !important;
+  background-image:
+    radial-gradient(640px 440px at var(--pointer-x, 50%) var(--pointer-y, 50%), rgba(255,255,255,.08), transparent 70%),
+    repeating-linear-gradient(0deg, rgba(255,255,255,.052) 0 1px, transparent 1px 42px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.052) 0 1px, transparent 1px 42px),
+    linear-gradient(180deg, #020203, #050506) !important;
+  animation: mono-grid-drift 24s linear infinite !important;
+}
+
+html body .acode,
+html body .platform-page,
+html body .hero2,
+html body .reviews-page,
+html body .mobile-entry,
+html body .mobile-qr-page {
+  position: relative !important;
+  z-index: 1 !important;
+  isolation: isolate !important;
+  background-color: #020203 !important;
+  background-image:
+    radial-gradient(760px 520px at var(--pointer-x, 50%) var(--pointer-y, 50%), rgba(255,255,255,.07), transparent 72%),
+    repeating-linear-gradient(0deg, rgba(255,255,255,.05) 0 1px, transparent 1px 42px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.05) 0 1px, transparent 1px 42px),
+    linear-gradient(180deg, #020203, #050506) !important;
+  animation: mono-grid-drift 28s linear infinite !important;
+}
+
+html body .acode {
+  grid-template-columns: minmax(292px, 336px) minmax(0, 1fr) !important;
+}
+
+html body .acode-side,
+html body .acode-top,
+html body .acode-compose,
+html body .acode-msg-body,
+html body .acode-artifact-card,
+html body .platform-shell,
+html body .mobile-entry-card,
+html body .mobile-qr-card {
+  background-color: rgba(13, 13, 15, .9) !important;
+  background-image:
+    linear-gradient(180deg, rgba(255,255,255,.052), rgba(255,255,255,.012)),
+    repeating-linear-gradient(0deg, rgba(255,255,255,.018) 0 1px, transparent 1px 28px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.018) 0 1px, transparent 1px 28px) !important;
+  border: 1px solid rgba(255,255,255,.13) !important;
+  box-shadow: 0 22px 70px rgba(0,0,0,.42), inset 0 1px 0 rgba(255,255,255,.06) !important;
+  backdrop-filter: blur(22px) saturate(120%) !important;
+}
+
+html body .acode-main {
+  background: transparent !important;
+  background-image: none !important;
+}
+
+html body .acode-top {
+  width: min(100% - 28px, 1320px) !important;
+  margin: 18px auto 0 !important;
+  border-radius: 26px !important;
+  padding: 18px 22px !important;
+}
+
+html body .acode-model strong,
+html body .acode-logo span,
+html body .acode-empty h1,
+html body .acode-studio-grid strong,
+html body .acode-msg-body strong,
+html body .platform-title,
+html body .reviews-title {
+  color: #f8f8f8 !important;
+  -webkit-text-fill-color: currentColor !important;
+  background: none !important;
+  background-image: none !important;
+  text-shadow: 0 1px 0 rgba(0,0,0,.55) !important;
+}
+
+html body .acode-model span,
+html body .acode-empty p,
+html body .acode-studio-grid span,
+html body .acode-msg-body,
+html body .platform-sub,
+html body .reviews-sub {
+  color: #bebec5 !important;
+}
+
+html body .brand-pixel-logo {
+  filter: none !important;
+}
+
+html body .acode-logo .brand-pixel-logo,
+html body .acode-model .brand-pixel-logo {
+  display: inline-block !important;
+}
+
+html body .acode-empty {
+  width: min(100%, 1180px) !important;
+  min-height: 100% !important;
+  margin: 0 auto !important;
+  display: grid !important;
+  align-content: center !important;
+  gap: 22px !important;
+  padding: clamp(10px, 3vh, 40px) 0 !important;
+}
+
+html body .acode-empty-hero {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 18px !important;
+  max-width: 980px !important;
+  margin: 0 auto !important;
+  text-align: center !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+html body .acode-live-preview,
+html body .acode-empty-orbit {
+  display: none !important;
+}
+
+html body .acode-empty-copy {
+  display: grid !important;
+  justify-items: center !important;
+  gap: 14px !important;
+}
+
+html body .mono-product-mark.hero,
+html body .acode-empty-kicker {
+  color: #f5f5f5 !important;
+  background: #0b0b0c !important;
+  background-image: none !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  border-radius: 999px !important;
+  box-shadow: 0 16px 44px rgba(0,0,0,.35) !important;
+}
+
+html body .acode-empty h1 {
+  max-width: 920px !important;
+  margin: 0 !important;
+  font-size: clamp(42px, 7vw, 86px) !important;
+  line-height: .94 !important;
+  letter-spacing: 0 !important;
+}
+
+html body .acode-empty p {
+  max-width: 760px !important;
+  margin: 0 !important;
+  font-size: clamp(16px, 1.6vw, 20px) !important;
+  line-height: 1.55 !important;
+}
+
+html body .acode-hero-metrics {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  gap: 10px !important;
+  margin-top: 4px !important;
+}
+
+html body .acode-hero-metrics span,
+html body .acode-output-strip span,
+html body .acode-mobile-strip span {
+  color: #f4f4f5 !important;
+  background: #0b0b0d !important;
+  background-image: none !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  border-radius: 999px !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06) !important;
+}
+
+html body .acode-studio-grid {
+  width: min(100%, 1040px) !important;
+  margin: 0 auto !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+}
+
+html body .acode-studio-grid button {
+  min-height: 128px !important;
+  padding: 18px !important;
+  border-radius: 22px !important;
+  text-align: left !important;
+  background: rgba(9, 9, 10, .94) !important;
+  background-image: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.012)) !important;
+  border: 1px solid rgba(255,255,255,.13) !important;
+  box-shadow: 0 18px 54px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.055) !important;
+  transition:
+    transform .42s cubic-bezier(.16,1,.3,1),
+    border-color .42s cubic-bezier(.16,1,.3,1),
+    background-color .42s cubic-bezier(.16,1,.3,1),
+    box-shadow .42s cubic-bezier(.16,1,.3,1) !important;
+}
+
+html body .acode-studio-grid button:hover,
+html body .acode-studio-grid button:focus-visible {
+  transform: translateY(-5px) !important;
+  border-color: rgba(255,255,255,.28) !important;
+  background-color: rgba(18,18,20,.98) !important;
+  box-shadow: 0 24px 72px rgba(0,0,0,.48), inset 0 1px 0 rgba(255,255,255,.09) !important;
+}
+
+html body .acode-studio-grid button svg,
+html body .acode-icon svg,
+html body .acode-send svg,
+html body .acode-new svg {
+  color: #f7f7f8 !important;
+  stroke: currentColor !important;
+}
+
+html body .acode-output-strip {
+  width: min(100%, 1040px) !important;
+  margin: 0 auto !important;
+  justify-content: center !important;
+  gap: 8px !important;
+}
+
+html body .acode-starters {
+  width: min(100%, 1040px) !important;
+  margin: 0 auto !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+}
+
+html body .acode-starters button,
+html body .acode-new,
+html body .acode-icon,
+html body .acode-send,
+html body .acode-copy,
+html body .platform-links a,
+html body .google-btn,
+html body .primary-btn,
+html body .secondary-btn {
+  color: #f6f6f7 !important;
+  -webkit-text-fill-color: currentColor !important;
+  background: #0a0a0b !important;
+  background-image: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.012)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 14px 36px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06) !important;
+  transition:
+    transform .34s cubic-bezier(.16,1,.3,1),
+    border-color .34s cubic-bezier(.16,1,.3,1),
+    background-color .34s cubic-bezier(.16,1,.3,1),
+    box-shadow .34s cubic-bezier(.16,1,.3,1) !important;
+}
+
+html body .acode-starters button:hover,
+html body .acode-new:hover,
+html body .acode-icon:hover,
+html body .acode-send:hover:not(:disabled),
+html body .acode-copy:hover,
+html body .platform-links a:hover,
+html body .google-btn:hover:not(:disabled),
+html body .primary-btn:hover,
+html body .secondary-btn:hover {
+  transform: translateY(-2px) !important;
+  border-color: rgba(255,255,255,.34) !important;
+  background-color: #151517 !important;
+  box-shadow: 0 20px 54px rgba(0,0,0,.48), inset 0 1px 0 rgba(255,255,255,.1) !important;
+}
+
+html body .acode-send:disabled {
+  opacity: .48 !important;
+  transform: none !important;
+}
+
+html body .acode-compose-wrap {
+  background: linear-gradient(180deg, rgba(2,2,3,0), rgba(2,2,3,.82) 22%, #020203 100%) !important;
+  border-top: 1px solid rgba(255,255,255,.08) !important;
+  padding: 16px clamp(14px, 3.5vw, 48px) 22px !important;
+}
+
+html body .acode-compose {
+  width: min(100%, 1120px) !important;
+  min-height: 134px !important;
+  border-radius: 28px !important;
+  padding: 18px !important;
+}
+
+html body .acode-compose textarea {
+  min-height: 58px !important;
+  max-height: 170px !important;
+  padding: 16px 18px !important;
+  color: #f8f8f8 !important;
+  background: #070708 !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  border-radius: 20px !important;
+  font-size: 18px !important;
+  line-height: 1.45 !important;
+  overflow-wrap: anywhere !important;
+}
+
+html body .acode-compose textarea::placeholder {
+  color: #9b9ba3 !important;
+}
+
+html.fx-keying body .acode-compose {
+  border-color: rgba(255,255,255,.24) !important;
+  box-shadow: 0 26px 84px rgba(0,0,0,.54), 0 0 0 4px rgba(255,255,255,.035), inset 0 1px 0 rgba(255,255,255,.1) !important;
+}
+
+html body .acode-thread {
+  scroll-behavior: smooth !important;
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(255,255,255,.34) transparent !important;
+}
+
+html body .acode-msg {
+  animation: mono-panel-in .48s cubic-bezier(.16,1,.3,1) both !important;
+}
+
+html body .acode-msg-body {
+  max-width: min(920px, 100%) !important;
+  overflow: hidden !important;
+  overflow-wrap: anywhere !important;
+  border-radius: 24px !important;
+}
+
+html body .acode-msg.user {
+  justify-content: flex-end !important;
+}
+
+html body .acode-msg.user .acode-msg-body {
+  background-color: rgba(22,22,24,.94) !important;
+}
+
+html body .acode-msg-body pre,
+html body .acode-artifact-code pre {
+  max-width: 100% !important;
+  overflow: auto !important;
+  white-space: pre !important;
+  background: #050506 !important;
+  border-color: rgba(255,255,255,.13) !important;
+}
+
+html body .acode-artifact-live {
+  height: min(58vh, 560px) !important;
+  min-height: 320px !important;
+  background: #050506 !important;
+}
+
+html body .acode-msg-actions {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+}
+
+html body .acode-open {
+  border-color: rgba(255,255,255,.26) !important;
+}
+
+html body .acode-side {
+  border-radius: 0 26px 26px 0 !important;
+  padding: 26px 24px !important;
+}
+
+html body .acode-chat-item,
+html body .acode-chat-item.active {
+  border-radius: 18px !important;
+  min-height: 62px !important;
+}
+
+html body .acode-chat-item span {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+}
+
+html body .acode-mobile-strip {
+  width: min(100% - 28px, 1320px) !important;
+  margin: 10px auto 0 !important;
+  justify-content: flex-start !important;
+  overflow-x: auto !important;
+  padding: 4px 0 !important;
+}
+
+@media (max-width: 1120px) {
+  html body .acode-studio-grid,
+  html body .acode-starters {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 900px) {
+  html body .acode {
+    grid-template-columns: 1fr !important;
+  }
+
+  html body .acode-side {
+    position: fixed !important;
+    inset: 0 auto 0 0 !important;
+    width: min(88vw, 360px) !important;
+    transform: translateX(-104%) !important;
+    transition: transform .38s cubic-bezier(.16,1,.3,1) !important;
+    z-index: 80 !important;
+  }
+
+  html body .acode-side.open {
+    transform: translateX(0) !important;
+  }
+
+  html body .acode-top {
+    margin-top: 10px !important;
+    width: min(100% - 20px, 1320px) !important;
+  }
+
+  html body .acode-empty {
+    align-content: start !important;
+    padding-top: 12px !important;
+  }
+}
+
+@media (max-width: 640px) {
+  html body .acode-thread {
+    padding: 12px 10px 8px !important;
+  }
+
+  html body .acode-empty h1 {
+    font-size: clamp(34px, 13vw, 54px) !important;
+  }
+
+  html body .acode-empty p {
+    font-size: 15px !important;
+  }
+
+  html body .acode-studio-grid,
+  html body .acode-starters {
+    grid-template-columns: 1fr !important;
+  }
+
+  html body .acode-studio-grid button {
+    min-height: 104px !important;
+    padding: 16px !important;
+  }
+
+  html body .acode-output-strip {
+    justify-content: flex-start !important;
+  }
+
+  html body .acode-compose-wrap {
+    padding: 10px !important;
+  }
+
+  html body .acode-compose {
+    min-height: 122px !important;
+    padding: 12px !important;
+    border-radius: 22px !important;
+  }
+
+  html body .acode-compose textarea {
+    min-height: 54px !important;
+    font-size: 16px !important;
+    border-radius: 16px !important;
+  }
+
+  html body .acode-artifact-live {
+    min-height: 260px !important;
+    height: 48vh !important;
+  }
+}
