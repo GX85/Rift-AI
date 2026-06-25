@@ -18180,3 +18180,278 @@ button svg,
   border: 0 !important;
   box-shadow: none !important;
 }
+
+/* Final black-button lock: smooth, dark, no purple, no pink, no amethyst styling. */
+:root {
+  --accent: #f5f5f5 !important;
+  --accent-2: #d4d4d8 !important;
+  --accent-3: #a1a1aa !important;
+  --purple: #f5f5f5 !important;
+  --cyan: #e5e7eb !important;
+  --pink: #f5f5f5 !important;
+  --violet: #f5f5f5 !important;
+  --elite-purple: #f5f5f5 !important;
+  --present-purple: #f5f5f5 !important;
+  --present-cyan: #e5e7eb !important;
+  --amx-purple: #f5f5f5 !important;
+  --amx-pink: #f5f5f5 !important;
+  --amx-cyan: #e5e7eb !important;
+  --cave-violet: #f5f5f5 !important;
+  --cave-pink: #f5f5f5 !important;
+  --cave-cyan: #e5e7eb !important;
+}
+
+button,
+[role="button"],
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+a.nav-open,
+.nav-open,
+.google-btn,
+.composer-cta,
+.acode-new,
+.acode-icon,
+.acode-send,
+.acode-copy,
+.acode-chat-item,
+.hero-links a,
+.hero-prompt-grid button,
+.platform-card,
+.platform-links a,
+.mobile-qr-actions a,
+.mobile-qr-actions button,
+.mobile-entry-card button,
+.acode-studio-grid button,
+.acode-starters button,
+.acode-output-strip span,
+.acode-mobile-strip span,
+.hero-platforms span,
+.plus-chip,
+.hero-pill,
+.platform-badge,
+.platform-icon,
+.platform-detect,
+.platform-flow span,
+.mono-product-mark,
+.mobile-app-icon > span,
+.ai-ava > span {
+  appearance: none !important;
+  color: #f4f4f5 !important;
+  -webkit-text-fill-color: currentColor !important;
+  background: #08080a !important;
+  background-color: #08080a !important;
+  background-image: none !important;
+  border: 1px solid rgba(255, 255, 255, .14) !important;
+  border-radius: 14px !important;
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, .38),
+    inset 0 1px 0 rgba(255, 255, 255, .06) !important;
+  text-shadow: none !important;
+  filter: none !important;
+  clip-path: none !important;
+}
+
+button:hover,
+[role="button"]:hover,
+input[type="button"]:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover,
+a.nav-open:hover,
+.nav-open:hover,
+.google-btn:hover,
+.composer-cta:hover,
+.acode-new:hover,
+.acode-icon:hover,
+.acode-send:hover,
+.acode-copy:hover,
+.acode-chat-item:hover,
+.hero-links a:hover,
+.hero-prompt-grid button:hover,
+.platform-card:hover,
+.platform-links a:hover,
+.mobile-qr-actions a:hover,
+.mobile-qr-actions button:hover,
+.mobile-entry-card button:hover,
+.acode-studio-grid button:hover,
+.acode-starters button:hover {
+  background: #111113 !important;
+  background-color: #111113 !important;
+  background-image: none !important;
+  border-color: rgba(255, 255, 255, .28) !important;
+  color: #ffffff !important;
+  box-shadow:
+    0 16px 42px rgba(0, 0, 0, .48),
+    inset 0 1px 0 rgba(255, 255, 255, .08) !important;
+}
+
+button::before,
+button::after,
+[role="button"]::before,
+[role="button"]::after,
+a.nav-open::before,
+a.nav-open::after,
+.nav-open::before,
+.nav-open::after,
+.google-btn::before,
+.google-btn::after,
+.composer-cta::before,
+.composer-cta::after,
+.platform-card::before,
+.platform-card::after,
+.platform-icon::before,
+.platform-icon::after,
+.acode-new::before,
+.acode-new::after,
+.acode-icon::before,
+.acode-icon::after,
+.acode-send::before,
+.acode-send::after,
+.hero-prompt-grid button::before,
+.hero-prompt-grid button::after,
+.acode-studio-grid button::before,
+.acode-studio-grid button::after,
+.acode-starters button::before,
+.acode-starters button::after {
+  display: none !important;
+  content: none !important;
+  background: transparent !important;
+  background-image: none !important;
+}
+
+.google-icon {
+  display: none !important;
+}
+
+button svg,
+[role="button"] svg,
+.acode-icon svg,
+.acode-send svg,
+.hero-prompt-grid button svg,
+.acode-studio-grid button svg {
+  color: currentColor !important;
+  stroke: currentColor !important;
+  filter: grayscale(1) saturate(0) !important;
+}
+
+.accent,
+.violet,
+.hero-h1 span,
+.platform-card strong,
+.platform-card small,
+.crystal-perk-title,
+.features-h,
+.plus-chip,
+.hero-pill,
+.acode-empty-kicker {
+  color: #f4f4f5 !important;
+  -webkit-text-fill-color: currentColor !important;
+  background: none !important;
+  background-image: none !important;
+  text-shadow: none !important;
+}
+
+.hero2,
+.platform-page,
+.reviews-page,
+.mobile-entry,
+.mobile-qr-page,
+.acode,
+.bg-overlay {
+  background-color: #030304 !important;
+  background-image:
+    radial-gradient(520px 340px at var(--pointer-x) var(--pointer-y), rgba(255, 255, 255, .05), transparent 68%),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, .038) 0 1px, transparent 1px 42px),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, .038) 0 1px, transparent 1px 42px) !important;
+}
+
+html body .google-btn,
+html body .google-btn:not(:disabled),
+html body .google-btn:hover,
+html body .google-btn:hover:not(:disabled),
+html body .composer-cta,
+html body .composer-cta:not(:disabled),
+html body .composer-cta:hover,
+html body .composer-cta:hover:not(:disabled),
+html body .nav-open,
+html body .nav-open:not(:disabled),
+html body .nav-open:hover,
+html body .nav-open:hover:not(:disabled),
+html body .platform-card,
+html body .platform-card:hover,
+html body .platform-card.recommended,
+html body .platform-card.phone,
+html body .platform-icon,
+html body .acode-new,
+html body .acode-icon,
+html body .acode-send,
+html body .acode-copy,
+html body .hero-prompt-grid button,
+html body .acode-studio-grid button,
+html body .acode-starters button,
+html body .mobile-entry-card button,
+html body .mobile-qr-actions a,
+html body .mobile-qr-actions button {
+  color: #f4f4f5 !important;
+  -webkit-text-fill-color: currentColor !important;
+  background: #08080a !important;
+  background-color: #08080a !important;
+  background-image: none !important;
+  border: 1px solid rgba(255, 255, 255, .14) !important;
+  border-radius: 14px !important;
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, .38),
+    inset 0 1px 0 rgba(255, 255, 255, .06) !important;
+  text-shadow: none !important;
+  filter: none !important;
+  clip-path: none !important;
+}
+
+html body .google-btn:hover,
+html body .google-btn:hover:not(:disabled),
+html body .composer-cta:hover,
+html body .composer-cta:hover:not(:disabled),
+html body .nav-open:hover,
+html body .nav-open:hover:not(:disabled),
+html body .platform-card:hover,
+html body .acode-new:hover,
+html body .acode-icon:hover,
+html body .acode-send:hover,
+html body .acode-copy:hover,
+html body .hero-prompt-grid button:hover,
+html body .acode-studio-grid button:hover,
+html body .acode-starters button:hover,
+html body .mobile-entry-card button:hover,
+html body .mobile-qr-actions a:hover,
+html body .mobile-qr-actions button:hover {
+  background: #111113 !important;
+  background-color: #111113 !important;
+  background-image: none !important;
+  border-color: rgba(255, 255, 255, .28) !important;
+  color: #ffffff !important;
+}
+
+html body .google-btn::before,
+html body .google-btn::after,
+html body .composer-cta::before,
+html body .composer-cta::after,
+html body .nav-open::before,
+html body .nav-open::after,
+html body .platform-card::before,
+html body .platform-card::after,
+html body .platform-icon::before,
+html body .platform-icon::after {
+  display: none !important;
+  content: none !important;
+  background: transparent !important;
+  background-image: none !important;
+}
+
+html body .acode-artifact-preview b,
+html body .line,
+html body .list li::before,
+html body .progress i {
+  background: #f4f4f5 !important;
+  background-color: #f4f4f5 !important;
+  background-image: none !important;
+}

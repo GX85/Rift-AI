@@ -362,6 +362,115 @@
       border-radius: 0 !important;
       background: var(--px-cyan) !important;
     }
+
+    /* Final monochrome presentation pass: smooth black controls, no violet/pink/cyan. */
+    :root {
+      --cyan: #e5e7eb !important;
+      --violet: #f5f5f5 !important;
+      --px-hi: #f5f5f5 !important;
+      --px-cyan: #e5e7eb !important;
+      --px-panel: #09090b !important;
+      --px-line: rgba(255,255,255,.14) !important;
+      --px-shadow: 0 16px 44px rgba(0,0,0,.44) !important;
+    }
+
+    *,
+    *::before,
+    *::after {
+      text-shadow: none !important;
+    }
+
+    body,
+    button,
+    input,
+    textarea {
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+    }
+
+    body {
+      background:
+        radial-gradient(540px 340px at 50% 0%, rgba(255,255,255,.055), transparent 68%),
+        repeating-linear-gradient(0deg, rgba(255,255,255,.04) 0 1px, transparent 1px 42px),
+        repeating-linear-gradient(90deg, rgba(255,255,255,.04) 0 1px, transparent 1px 42px),
+        #030304 !important;
+      background-size: auto, 42px 42px, 42px 42px, auto !important;
+    }
+
+    .card,
+    .device,
+    .logo-art,
+    .tag,
+    .nav,
+    .qr img,
+    .mock-card {
+      border-radius: 18px !important;
+      border: 1px solid rgba(255,255,255,.12) !important;
+      background: #09090b !important;
+      background-image: none !important;
+      box-shadow: 0 18px 54px rgba(0,0,0,.42) !important;
+      backdrop-filter: blur(18px) !important;
+    }
+
+    button,
+    .nav button,
+    .nav a {
+      appearance: none !important;
+      border-radius: 14px !important;
+      border: 1px solid rgba(255,255,255,.14) !important;
+      background: #08080a !important;
+      background-color: #08080a !important;
+      background-image: none !important;
+      color: #f4f4f5 !important;
+      box-shadow: 0 12px 32px rgba(0,0,0,.38), inset 0 1px 0 rgba(255,255,255,.06) !important;
+      text-shadow: none !important;
+      cursor: pointer !important;
+    }
+
+    button:hover,
+    .nav button:hover,
+    .nav a:hover {
+      background: #111113 !important;
+      background-image: none !important;
+      border-color: rgba(255,255,255,.28) !important;
+      color: #fff !important;
+    }
+
+    button::before,
+    button::after,
+    .nav button::before,
+    .nav button::after,
+    .nav a::before,
+    .nav a::after {
+      display: none !important;
+      content: none !important;
+      background: transparent !important;
+      background-image: none !important;
+    }
+
+    .accent,
+    .violet,
+    .lead strong,
+    .metric strong {
+      color: #f4f4f5 !important;
+      -webkit-text-fill-color: currentColor !important;
+      background: none !important;
+      background-image: none !important;
+    }
+
+    .line,
+    .list li::before,
+    .progress i {
+      background: #f4f4f5 !important;
+      background-image: none !important;
+      border-radius: 999px !important;
+    }
+
+    .brand img,
+    .logo-art img {
+      image-rendering: auto !important;
+      filter: grayscale(1) saturate(0) brightness(1.12) !important;
+      box-shadow: none !important;
+    }
   </style>
 </head>
 <body>
