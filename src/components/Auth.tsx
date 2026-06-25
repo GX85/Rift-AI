@@ -67,7 +67,7 @@ export function PlatformChoice({
     <main className="platform-page">
       <section className="platform-shell">
         <p className="platform-kicker">
-          <img className="brand-pixel-logo" src="/amethyst-logo-pixel.svg" alt="" />
+          <img className="brand-pixel-logo" src="/amethyst-icon.svg" alt="" />
           Amethyst AI
         </p>
         <h1>Выбери вход</h1>
@@ -174,7 +174,7 @@ export function Landing({ onEnter }: { onEnter?: () => void }) {
       </div>
       <nav className="hero-nav">
         <div className="hero-logo">
-          <img className="brand-pixel-logo" src="/amethyst-logo-pixel.svg" alt="" />
+          <img className="brand-pixel-logo" src="/amethyst-icon.svg" alt="" />
           Amethyst<span>AI</span>
         </div>
         <div className="hero-links">
@@ -288,7 +288,7 @@ export function ReviewsPage() {
     <main className="reviews-page">
       <nav className="hero-nav reviews-nav">
         <a className="hero-logo" href="/">
-          <img className="brand-pixel-logo" src="/amethyst-logo-pixel.svg" alt="" />
+          <img className="brand-pixel-logo" src="/amethyst-icon.svg" alt="" />
           Amethyst<span>AI</span>
         </a>
         <a className="nav-open" href="/">

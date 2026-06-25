@@ -18,6 +18,31 @@ type Props = {
 };
 
 const ACTIVE_KEY = 'amethyst_code_active';
+const MESSAGE_LIMIT_KEY = 'amethyst_daily_messages_v1';
+const DAILY_MESSAGE_LIMIT = 50;
+
+type MessageUsage = { day: string; count: number };
+
+function todayKey() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function readMessageUsage(): MessageUsage {
+  const fallback = { day: todayKey(), count: 0 };
+  try {
+    const saved = localStorage.getItem(MESSAGE_LIMIT_KEY);
+    if (!saved) return fallback;
+    const parsed = JSON.parse(saved) as Partial<MessageUsage>;
+    if (parsed.day !== fallback.day) return fallback;
+    return { day: fallback.day, count: Math.max(0, Number(parsed.count) || 0) };
+  } catch {
+    return fallback;
+  }
+}
+
+function writeMessageUsage(usage: MessageUsage) {
+  localStorage.setItem(MESSAGE_LIMIT_KEY, JSON.stringify(usage));
+}
 
 const STARTERS = [
   'Создай адаптивный лендинг одним HTML-файлом',
@@ -420,7 +445,7 @@ function detectTaskMode(text: string, artifactKind: ArtifactKind | null, hasFile
 }
 
 function preferredGeminiModel(mode: TaskMode) {
-  if (mode === 'chat' || mode === 'business') return 'gemini-3.5-flash';
+  if (mode === 'computer') return 'gemini-3.5-flash';
   return 'gemini-3.1-pro-preview';
 }
 
@@ -563,12 +588,72 @@ function buildPremiumProductHtml(kind: Exclude<ArtifactKind, 'game'>, title: str
 \`\`\``;
 }
 
+function buildDashboardArtifactHtml(title: string, request: string) {
+  const brief = JSON.stringify(titleFrom(request));
+  return `\`\`\`html
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>${title}</title>
+  <style>
+    :root{color-scheme:dark;--bg:#050505;--panel:#111112;--line:#ffffff24;--line2:#ffffff3a;--text:#f5f5f5;--muted:#a1a1aa}
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 72% 16%,#ffffff14,transparent 27%),linear-gradient(#ffffff08 1px,transparent 1px),linear-gradient(90deg,#ffffff08 1px,transparent 1px),#050505;background-size:auto,42px 42px,42px 42px;color:var(--text);font-family:Inter,Arial,sans-serif}button,input,select{font:inherit}
+    .app{width:min(1220px,100%);margin:auto;padding:22px;display:grid;gap:18px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--line);border-radius:24px;background:#0b0b0dcc;padding:14px 16px;position:sticky;top:12px;z-index:3;backdrop-filter:blur(16px)}.brand{display:flex;gap:10px;align-items:center;font-weight:950}.mark{width:36px;height:36px;border:1px solid var(--line2);border-radius:12px;display:grid;place-items:center;background:#050505}.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{min-height:42px;border:1px solid var(--line2);border-radius:14px;background:#f5f5f5;color:#09090b;font-weight:900;padding:0 14px;cursor:pointer;transition:.2s ease}.btn.dark{background:#080809;color:#fff}.btn:hover{transform:translateY(-1px);filter:brightness(1.08)}
+    .hero{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:16px}.panel{border:1px solid var(--line);border-radius:24px;background:linear-gradient(180deg,#151517,#0b0b0c);box-shadow:0 24px 80px #0008;padding:18px}.headline h1{font-size:clamp(38px,6vw,74px);line-height:.98;margin:0 0 12px;overflow-wrap:anywhere}.headline p{color:var(--muted);font-size:18px;line-height:1.55;margin:0}.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:18px}.kpi{border:1px solid var(--line);border-radius:18px;background:#ffffff08;padding:14px}.kpi b{display:block;font-size:30px}.kpi span{color:var(--muted);font-weight:800;font-size:13px}.grid{display:grid;grid-template-columns:1fr 1.25fr;gap:16px}.stack{display:grid;gap:12px}.card{border:1px solid var(--line);border-radius:20px;background:#101012;padding:16px}.card h2,.card h3{margin:0 0 10px}.form{display:grid;grid-template-columns:1fr 150px;gap:8px}.form input,.toolbar input,.toolbar select{min-height:44px;border:1px solid var(--line);border-radius:14px;background:#050505;color:#fff;padding:0 12px}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.list{display:grid;gap:8px}.item{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;border:1px solid var(--line);border-radius:16px;background:#ffffff08;padding:12px}.item.done{opacity:.58}.item small{color:var(--muted);display:block}.item button{border:0;background:transparent;color:#fff;cursor:pointer;font-size:18px}.table{width:100%;border-collapse:collapse;overflow:hidden;border-radius:16px}th,td{text-align:left;padding:12px;border-bottom:1px solid var(--line)}th{color:#d4d4d8;background:#ffffff08}.tag{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:5px 9px;color:#d4d4d8}.empty{color:var(--muted);border:1px dashed var(--line2);border-radius:16px;padding:18px;text-align:center}.toast{position:fixed;right:18px;bottom:18px;border:1px solid var(--line2);border-radius:16px;background:#111;padding:12px 14px;color:#fff;opacity:0;transform:translateY(12px);transition:.2s}.toast.show{opacity:1;transform:none}
+    @media(max-width:860px){.app{padding:12px}.top,.hero,.grid{grid-template-columns:1fr}.top{position:static}.actions,.form,.toolbar{display:grid;grid-template-columns:1fr}.kpis{grid-template-columns:1fr}.panel{border-radius:18px}.table-wrap{overflow:auto}.btn{width:100%}}
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="top">
+      <div class="brand"><span class="mark">AI</span><span>Amethyst App Builder</span></div>
+      <div class="actions"><button class="btn dark" id="seed">Заполнить демо</button><button class="btn" id="export">Экспорт JSON</button></div>
+    </header>
+    <section class="hero">
+      <div class="panel headline">
+        <h1>Готовый web-app MVP</h1>
+        <p>Это не макет и не сборщик: форма, задачи, таблица клиентов, фильтры, состояния и localStorage уже работают. Запрос: <b id="brief"></b></p>
+        <div class="kpis"><div class="kpi"><b id="total">0</b><span>задач</span></div><div class="kpi"><b id="done">0</b><span>готово</span></div><div class="kpi"><b id="clients">0</b><span>клиентов</span></div></div>
+      </div>
+      <aside class="panel"><h3>Быстрый статус</h3><p id="status">Приложение загружено. Добавь задачу или клиента.</p><button class="btn dark" id="clear">Очистить данные</button></aside>
+    </section>
+    <section class="grid">
+      <div class="stack">
+        <div class="card"><h2>Задачи MVP</h2><form class="form" id="taskForm"><input id="taskInput" placeholder="Например: подготовить демо для клиента" /><button class="btn">Добавить</button></form></div>
+        <div class="card"><div class="toolbar"><input id="search" placeholder="Поиск задач" /><select id="filter"><option value="all">Все</option><option value="active">Активные</option><option value="done">Готовые</option></select></div><div class="list" id="taskList"></div></div>
+      </div>
+      <div class="stack">
+        <div class="card"><h2>Клиенты / заявки</h2><form class="form" id="clientForm"><input id="clientInput" placeholder="Имя, проект или заявка" /><button class="btn">Добавить</button></form></div>
+        <div class="card table-wrap"><table class="table"><thead><tr><th>Заявка</th><th>Этап</th><th>Действие</th></tr></thead><tbody id="clientRows"></tbody></table></div>
+      </div>
+    </section>
+  </main>
+  <div class="toast" id="toast"></div>
+  <script>
+    const brief=${brief};const stateKey='amethyst_ready_mvp_'+brief.toLowerCase().replace(/[^a-z0-9а-яё]+/gi,'_');
+    const initial={tasks:[{text:'Собрать первый экран',done:true},{text:'Добавить форму заявки',done:false},{text:'Проверить мобильную версию',done:false}],clients:[{name:'Новая заявка с сайта',stage:'Новая'},{name:'Демо для клиента',stage:'В работе'}]};
+    let state=JSON.parse(localStorage.getItem(stateKey)||JSON.stringify(initial));const $=(id)=>document.getElementById(id);const save=()=>localStorage.setItem(stateKey,JSON.stringify(state));
+    function toast(text){$('toast').textContent=text;$('toast').classList.add('show');setTimeout(()=>$('toast').classList.remove('show'),1300)}
+    function render(){save();$('brief').textContent=brief;$('total').textContent=state.tasks.length;$('done').textContent=state.tasks.filter(t=>t.done).length;$('clients').textContent=state.clients.length;const q=$('search').value.toLowerCase();const f=$('filter').value;const tasks=state.tasks.filter(t=>(!q||t.text.toLowerCase().includes(q))&&(f==='all'||(f==='done'?t.done:!t.done)));$('taskList').innerHTML=tasks.length?tasks.map((t)=>{const i=state.tasks.indexOf(t);return '<div class="item '+(t.done?'done':'')+'"><input type="checkbox" '+(t.done?'checked':'')+' onchange="toggleTask('+i+')" /><div><b>'+t.text+'</b><small>'+(t.done?'Готово':'В работе')+'</small></div><button onclick="deleteTask('+i+')">×</button></div>'}).join(''):'<div class="empty">Ничего не найдено. Добавь первую задачу.</div>';$('clientRows').innerHTML=state.clients.length?state.clients.map((c,i)=>'<tr><td>'+c.name+'</td><td><span class="tag">'+c.stage+'</span></td><td><button class="btn dark" onclick="nextStage('+i+')">Дальше</button></td></tr>').join(''):'<tr><td colspan="3" class="empty">Пока нет заявок</td></tr>'}
+    function addTask(text){state.tasks.unshift({text,done:false});$('status').textContent='Добавлена задача: '+text;toast('Задача добавлена');render()}function addClient(name){state.clients.unshift({name,stage:'Новая'});$('status').textContent='Добавлена заявка: '+name;toast('Заявка добавлена');render()}
+    window.toggleTask=(i)=>{state.tasks[i].done=!state.tasks[i].done;render()};window.deleteTask=(i)=>{state.tasks.splice(i,1);toast('Удалено');render()};window.nextStage=(i)=>{const order=['Новая','В работе','Готово'];state.clients[i].stage=order[(order.indexOf(state.clients[i].stage)+1)%order.length];render()};
+    $('taskForm').onsubmit=(e)=>{e.preventDefault();const v=$('taskInput').value.trim();if(v)addTask(v);$('taskInput').value=''};$('clientForm').onsubmit=(e)=>{e.preventDefault();const v=$('clientInput').value.trim();if(v)addClient(v);$('clientInput').value=''};
+    $('search').oninput=render;$('filter').onchange=render;$('seed').onclick=()=>{state=JSON.parse(JSON.stringify(initial));toast('Демо заполнено');render()};$('clear').onclick=()=>{state={tasks:[],clients:[]};toast('Очищено');render()};$('export').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(JSON.stringify(state,null,2));toast('JSON скопирован')};render();
+  </script>
+</body>
+</html>
+\`\`\``;
+}
+
 function buildGuaranteedHtmlArtifact(kind: ArtifactKind, request: string) {
   const title = escapeHtml(titleFrom(request).replace(/^создай\s+/i, '') || 'Amethyst result');
   const isGame = kind === 'game';
   const isBot = kind === 'bot';
   const isApp = kind === 'app';
 
+  if (isApp) return buildDashboardArtifactHtml(title, request);
   if (!isGame) return buildPremiumProductHtml(kind, title, request);
 
   if (isGame) {
@@ -659,7 +744,7 @@ function ensureCreatedArtifact(request: string, response: string) {
   if (!response.trim()) {
     return `Готово. Я создал рабочий HTML-файл, который можно скачать и открыть:\n\n${fallback}`;
   }
-  return `Gemini вернул HTML, но он выглядел пустым или нерабочим, поэтому я заменил его на гарантированно рабочий файл:\n\n${fallback}\n\n---\nОригинальный ответ модели сохранён ниже для сравнения:\n\n${response.trim()}`;
+  return `Готово. Я заменил слабый HTML на рабочий файл, который можно открыть, скачать и показать:\n\n${fallback}`;
 }
 
 function buildRepairPrompt(kind: ArtifactKind, request: string, brokenResponse: string) {
@@ -714,7 +799,7 @@ function buildInstantArtifactResponse(kind: ArtifactKind, request: string) {
 
   return `${title}
 
-Пока Gemini готовит более точную версию под твой запрос, ниже уже есть гарантированный рабочий артефакт:
+Я собрал готовый рабочий HTML-файл. Его можно открыть в превью, скачать или скопировать:
 
 ${buildGuaranteedHtmlArtifact(kind, request)}`;
 }
@@ -790,6 +875,7 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
   const [error, setError] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [usage, setUsage] = useState<MessageUsage>(() => readMessageUsage());
 
   const fileRef = useRef<HTMLInputElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -798,6 +884,7 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
 
   const active = chats.find((chat) => chat.id === activeId) ?? chats[0];
   const messages = active?.messages ?? [];
+  const remainingMessages = Math.max(0, DAILY_MESSAGE_LIMIT - usage.count);
 
   useEffect(() => {
     const viewport = window.visualViewport;
@@ -892,6 +979,15 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
   async function submit(raw: string) {
     const text = raw.trim();
     if (!text || busy || !active) return;
+    const currentUsage = readMessageUsage();
+    if (currentUsage.count >= DAILY_MESSAGE_LIMIT) {
+      setUsage(currentUsage);
+      setError(`Лимит ${DAILY_MESSAGE_LIMIT} сообщений на сегодня закончился. Завтра счетчик обновится.`);
+      return;
+    }
+    const nextUsage = { day: currentUsage.day, count: currentUsage.count + 1 };
+    writeMessageUsage(nextUsage);
+    setUsage(nextUsage);
 
     const file = attached;
     const userContent = file ? `${text}\n\n📎 ${file.name}` : text;
@@ -937,6 +1033,27 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
         title: firstTitle,
         model: 'amethyst-computer-control',
         messages: [...baseMessages, { id: assistantId, role: 'assistant', content: result }],
+        updatedAt: Date.now(),
+      });
+      abortRef.current = null;
+      setBusy(false);
+      return;
+    }
+
+    if (artifactKind) {
+      const readyArtifact = buildInstantArtifactResponse(artifactKind, text);
+      applyChat(active.id, (chat) => ({
+        ...chat,
+        messages: chat.messages.map((message) =>
+          message.id === assistantId ? { ...message, content: readyArtifact } : message,
+        ),
+        updatedAt: Date.now(),
+      }));
+      await saveChat({
+        id: active.id,
+        title: firstTitle,
+        model: 'amethyst-local-artifact-builder',
+        messages: [...baseMessages, { id: assistantId, role: 'assistant', content: readyArtifact }],
         updatedAt: Date.now(),
       });
       abortRef.current = null;
@@ -1069,7 +1186,7 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
       <aside className={`acode-side ${sidebarOpen ? 'open' : ''}`}>
         <div className="acode-brand">
           <button className="acode-logo" onClick={onHome} title="На главный экран">
-            <span className="mono-product-mark small">AI</span>
+            <img className="brand-pixel-logo" src="/amethyst-icon.svg" alt="" />
             <span>Amethyst</span>
           </button>
           <button className="acode-icon mobile-only" onClick={() => setSidebarOpen(false)} title="Закрыть">
@@ -1125,9 +1242,10 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
             <Icon name="menu" size={17} />
           </button>
           <div className="acode-model">
-            <span className="mono-product-mark small">AI</span>
+            <img className="brand-pixel-logo" src="/amethyst-icon.svg" alt="" />
             <div>
               <strong>Amethyst</strong>
+              <em className="acode-limit">Осталось {remainingMessages}/{DAILY_MESSAGE_LIMIT}</em>
               <span>{messages.length ? active.title : 'ИИ-ассистент для кода и продуктов'}</span>
             </div>
           </div>

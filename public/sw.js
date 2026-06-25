@@ -1,11 +1,10 @@
-const CACHE_NAME = 'amethyst-mobile-v7-mono-no-gems-20260625';
+const CACHE_NAME = 'amethyst-mobile-v8-pixel-logo-builder-20260625';
 const APP_SHELL = [
   '/',
   '/mobile',
   '/qr',
   '/manifest.webmanifest',
-  '/amethyst-logo-pixel.svg',
-  '/amethyst-logo-pixel.png',
+  '/amethyst-icon.svg',
   '/amethyst-mobile-qr.png',
 ];
 

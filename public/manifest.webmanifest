@@ -10,7 +10,7 @@
   "theme_color": "#0b0b12",
   "icons": [
     {
-      "src": "/amethyst-logo-pixel.png?v=20260625-logo",
+      "src": "/amethyst-icon.svg?v=20260625-pixel",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any maskable"

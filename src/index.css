@@ -20379,3 +20379,34 @@ html body .acode input {
     box-shadow .22s ease,
     opacity .22s ease !important;
 }
+
+/* Keep the brand mark as the actual pixel amethyst while the rest of the UI stays monochrome. */
+html body .brand-pixel-logo,
+html body .acode-logo .brand-pixel-logo,
+html body .acode-model .brand-pixel-logo,
+html body .hero-logo .brand-pixel-logo,
+html body .mobile-app-icon .brand-pixel-logo {
+  width: 38px !important;
+  height: 38px !important;
+  object-fit: contain !important;
+  image-rendering: pixelated !important;
+  image-rendering: crisp-edges !important;
+  filter: drop-shadow(0 0 14px rgba(185, 92, 255, .7)) !important;
+  opacity: 1 !important;
+}
+
+html body .acode-model .brand-pixel-logo {
+  width: 30px !important;
+  height: 30px !important;
+}
+
+html body .acode-limit {
+  display: block !important;
+  margin-top: 3px !important;
+  font-style: normal !important;
+  font-size: 11px !important;
+  font-weight: 800 !important;
+  letter-spacing: 0 !important;
+  line-height: 1.15 !important;
+  color: rgba(255,255,255,.58) !important;
+}
