@@ -59,14 +59,14 @@ function wantsLocalArtifact(text: string) {
       normalized,
     );
   const artifactNoun =
-    /(сайт|лендинг|страниц|web-?app|прилож|игр|game|canvas|бот|чатбот|agent|агент|компонент|react|typescript|html|css|javascript|код|mvp|dashboard|прототип)/.test(
+    /(сайт|лендинг|страниц|web-?app|прилож|программ|утилит|инструмент|сервис|панел|трекер|todo|игр|game|canvas|бот|чатбот|agent|агент|компонент|react|typescript|html|css|javascript|код|mvp|dashboard|прототип)/.test(
       normalized,
     );
   const fixIntent =
     /(исправь|почини|найди ошиб|разбери код|проведи code review|code review|review|fix|debug|bug)/.test(normalized) &&
     /(код|react|typescript|javascript|html|css|ошиб|bug|component|компонент)/.test(normalized);
   const explicitArtifact =
-    /(одним html|html-файл|готовый html|полный html|рабочий сайт|рабочую игру|рабочее приложение|напиши код|write code|write html|сделай игру|создай сайт|собери сайт|создай лендинг|собери web-app|создай бота)/.test(
+    /(одним html|html-файл|готовый html|полный html|рабочий сайт|рабочую игру|рабочее приложение|рабочую программу|напиши код|write code|write html|сделай игру|создай сайт|собери сайт|создай лендинг|собери web-app|создай бота|сделай программу|создай программу|собери приложение|сделай приложение)/.test(
       normalized,
     );
   const casualWriting = /напиши (эссе|текст|письмо|пост|сообщение|описание|план|идею|идеи|ответ|речь|презентац)/.test(normalized);
@@ -103,7 +103,7 @@ function polishedLocalFallback(prompt: string, _system: string): string {
   if (!wantsLocalArtifact(text)) return localPlainFallback(text);
   const isGame = /(игр|game|canvas|platformer|snake|runner|arcade|shooter|платформер|шутер)/i.test(text);
   const isBot = /(чатбот|бот|bot|agent|агент|system prompt|workflow|диалог)/i.test(text);
-  const isSite = /(сайт|лендинг|landing|html|верстк|website|страниц|web-app|прототип|mvp)/i.test(text);
+  const isSite = /(сайт|лендинг|landing|html|верстк|website|страниц|web-app|прототип|mvp|прилож|программ|утилит|сервис|панел|dashboard|трекер|todo)/i.test(text);
   const isCode = /(код|react|typescript|javascript|python|bug|ошибк|компонент|api|supabase|review|рефактор)/i.test(text);
 
   if (isGame) {

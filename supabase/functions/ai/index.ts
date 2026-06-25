@@ -17,10 +17,24 @@ declare const Deno: {
 
 const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY');
 // Максимальный актуальный дефолт для сложного кода, сайтов, игр и agentic-задач.
-// Если Pro Preview недоступен по ключу/лимиту, функция мягко падает на сильную Flash-модель.
+// Если Pro недоступен по ключу/лимиту, функция мягко падает на сильные fallback-модели.
 const PRIMARY_MODEL = Deno.env.get('GEMINI_MODEL') ?? 'gemini-3.1-pro-preview';
 const FALLBACK_MODEL = Deno.env.get('GEMINI_FALLBACK_MODEL') ?? 'gemini-3.5-flash';
-const MODEL_CHAIN = Array.from(new Set([PRIMARY_MODEL, FALLBACK_MODEL].filter(Boolean)));
+const EXTRA_MODELS = Deno.env.get('GEMINI_EXTRA_MODELS')
+  ?.split(',')
+  .map((model) => model.trim())
+  .filter(Boolean) ?? [];
+const DEFAULT_MODEL_CHAIN = [
+  PRIMARY_MODEL,
+  FALLBACK_MODEL,
+  ...EXTRA_MODELS,
+  'gemini-2.5-pro',
+  'gemini-2.5-flash',
+].filter(Boolean);
+
+function modelChain(preferred?: string) {
+  return Array.from(new Set([preferred, ...DEFAULT_MODEL_CHAIN].filter(Boolean)));
+}
 
 const cors = {
   'Access-Control-Allow-Origin': '*',
@@ -51,9 +65,9 @@ async function fetchGemini(model: string, mode: 'stream' | 'json', requestBody: 
   );
 }
 
-async function firstWorkingGemini(mode: 'stream' | 'json', requestBody: string) {
+async function firstWorkingGemini(mode: 'stream' | 'json', requestBody: string, models: string[]) {
   let lastError = '';
-  for (const model of MODEL_CHAIN) {
+  for (const model of models) {
     const response = await fetchGemini(model, mode, requestBody);
     if (response.ok && (mode === 'json' || response.body)) return { response, model };
     lastError = await response.text().catch(() => response.statusText);
@@ -70,8 +84,9 @@ Deno.serve(async (req) => {
     }
     // history — массив {role, text} для памяти диалога; temperature — «креативность» (0–1);
     // stream — если true, ответ отдаётся по кусочкам (печатается в реальном времени).
-    const { prompt, system, history, temperature, maxTokens, stream } = await req.json();
+    const { prompt, system, history, temperature, maxTokens, stream, model } = await req.json();
     if (!prompt) throw new Error('Нужно поле prompt');
+    const models = modelChain(typeof model === 'string' ? model : undefined);
 
     const pastContents = (history ?? []).map((h: { role: string; text: string }) => ({
       role: h.role === 'assistant' ? 'model' : 'user',
@@ -91,7 +106,7 @@ Deno.serve(async (req) => {
 
     // ── Режим стриминга: качаем SSE из Gemini и пересылаем фронту чистый текст по кусочкам ──
     if (stream) {
-      const { response: upstream } = await firstWorkingGemini('stream', requestBody);
+      const { response: upstream } = await firstWorkingGemini('stream', requestBody, models);
       if (!upstream.body) throw new Error('Gemini: пустой streaming body');
 
       const reader = upstream.body.getReader();
@@ -134,7 +149,7 @@ Deno.serve(async (req) => {
     }
 
     // ── Обычный режим: ждём весь ответ и отдаём JSON ──
-    const { response: res, model } = await firstWorkingGemini('json', requestBody);
+    const { response: res, model: usedModel } = await firstWorkingGemini('json', requestBody, models);
     const data = await res.json();
 
     if (data?.error) {
@@ -142,7 +157,7 @@ Deno.serve(async (req) => {
     }
 
     const text = extractText(data);
-    return new Response(JSON.stringify({ text, model }), {
+    return new Response(JSON.stringify({ text, model: usedModel }), {
       headers: { ...cors, 'Content-Type': 'application/json' },
     });
   } catch (e) {

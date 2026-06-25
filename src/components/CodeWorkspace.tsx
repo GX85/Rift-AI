@@ -137,6 +137,9 @@ function buildTaskBrief(text: string) {
     'Перед ответом мысленно проверь, что HTML содержит видимый первый экран, реальные элементы интерфейса, рабочие кнопки, обработчики событий и не даёт пустой фон.',
     'Если делаешь игру, обязательно нарисуй начальное меню/игровую сцену, счёт, рестарт, управление клавиатурой и touch, а также requestAnimationFrame или явную игровую логику.',
     'Если делаешь сайт, обязательно добавь hero, навигацию, CTA, секции, footer, адаптив и визуальную тему, а не пустую карточку.',
+    'Если делаешь приложение, обязательно добавь данные, форму, список или таблицу, фильтры/вкладки, localStorage и рабочие кнопки.',
+    'Не используй React imports, Babel, CDN, внешние картинки и дополнительные файлы, если просишь один HTML.',
+    'Если первый вариант получается слабым, перепиши его сам до выдачи.',
   ];
   const rules: string[] = [
     'Сначала определи тип задачи и выбери самый полезный формат результата.',
@@ -271,6 +274,10 @@ function extractHtmlArtifact(content: string) {
   const artifacts = findHtmlArtifacts(content);
   const usable = artifacts.filter((html) => !looksBrokenHtmlArtifact(html));
   return usable.at(-1) ?? '';
+}
+
+function hasUsableHtmlArtifact(content: string) {
+  return Boolean(extractHtmlArtifact(content));
 }
 
 function downloadText(filename: string, text: string) {
@@ -536,6 +543,45 @@ function ensureCreatedArtifact(request: string, response: string) {
   return `Gemini вернул HTML, но он выглядел пустым или нерабочим, поэтому я заменил его на гарантированно рабочий файл:\n\n${fallback}\n\n---\nОригинальный ответ модели сохранён ниже для сравнения:\n\n${response.trim()}`;
 }
 
+function buildRepairPrompt(kind: ArtifactKind, request: string, brokenResponse: string) {
+  const kindName =
+    kind === 'game' ? 'playable browser game' : kind === 'bot' ? 'chatbot prototype' : kind === 'app' ? 'web-app MVP' : 'website';
+  return `Ты выполняешь второй проход качества для Amethyst.
+
+Пользователь попросил: ${request}
+Тип результата: ${kindName}
+
+Ответ ниже оказался слабым, пустым или не открывается как рабочий продукт. Исправь его.
+
+Жёсткие требования:
+- Верни ТОЛЬКО один полный HTML-документ в fenced-блоке \`\`\`html ... \`\`\`.
+- HTML начинается с <!doctype html>, содержит <html>, <head>, <style>, <body>.
+- Никаких CDN, внешних картинок, React import, Babel, npm и дополнительных файлов.
+- Первый экран должен быть видимым, тёмным, презентабельным, с реальным UI.
+- Все кнопки должны иметь обработчики. Для приложения нужны mock data, форма, фильтры/состояния и localStorage.
+- Для игры нужны canvas/DOM-сцена, старт, рестарт, счёт, collision logic, keyboard + touch и requestAnimationFrame.
+- Для сайта нужны nav, hero, CTA, секции, footer и адаптив без горизонтального скролла.
+- Для бота нужны UI чата, intents/fallback в JS и рабочий диалог.
+- Проверь закрытие тегов и отсутствие пустого body.
+
+Слабый ответ, который надо заменить:
+${brokenResponse.slice(0, 22000)}`;
+}
+
+async function repairArtifactWithGemini(kind: ArtifactKind, request: string, brokenResponse: string, signal: AbortSignal) {
+  let repaired = '';
+  for await (const chunk of streamGemini({
+    system: buildSystem(),
+    prompt: buildRepairPrompt(kind, request, brokenResponse),
+    temperature: 0.12,
+    maxTokens: 28000,
+    signal,
+  })) {
+    repaired += chunk;
+  }
+  return repaired;
+}
+
 function buildInstantArtifactResponse(kind: ArtifactKind, request: string) {
   const title =
     kind === 'game'
@@ -554,18 +600,20 @@ ${buildGuaranteedHtmlArtifact(kind, request)}`;
 }
 
 function buildSystem() {
-  return `Ты — Amethyst, coding assistant на базе Gemini 3.1 Pro Preview.
+  return `Ты — Amethyst, сильный coding/product assistant на базе Gemini.
 
 Маршрутизация намерений:
 • Если пользователь задаёт обычный вопрос, просит объяснение, спрашивает погоду/факт/совет и НЕ просит создать код, сайт, игру, приложение или компонент — отвечай обычным текстом, без HTML и без code block.
 • Ты можешь спокойно общаться на разные темы: учеба, идеи, бизнес, презентация, тексты, объяснения, планы, код. Не своди всё к программированию.
 • Если вопрос требует live-данных (погода, новости, курсы, расписания), честно скажи, что live-доступа нет, попроси город/источник или дай общий полезный ответ. Не придумывай прогноз и не пиши код вместо ответа.
 • Код и HTML выдавай только когда пользователь явно просит создать, написать, исправить, собрать или проверить код/продукт.
+• Если пользователь злится или пишет коротко, всё равно извлекай задачу и делай полезный следующий шаг.
 
 Режимы работы:
 • CHAT: обычный вопрос, разговор, объяснение, совет, презентация, погода/факт/идея. В этом режиме запрещены HTML, code block, CSS, JS и JSON, если пользователь прямо не попросил код.
 • ARTIFACT: пользователь явно просит создать/собрать/сделать/сгенерировать/написать сайт, игру, приложение, компонент, бота или код. В этом режиме возвращай готовый рабочий результат.
 • REVIEW/FIX: пользователь явно просит исправить ошибку, проверить код или провести code review. В этом режиме дай причину, точный фикс и проверку.
+• BUSINESS: пользователь просит идею, план продаж, pitch, презентацию, оффер, CJM, MVP или анализ. Дай структурированный результат без кода, если код не просили.
 
 Для ARTIFACT:
 • Для сайта, лендинга, web-app, игры или чатбота возвращай один полный HTML-документ в блоке \`\`\`html.
@@ -575,6 +623,9 @@ function buildSystem() {
 • Если создаешь сайт, обязательно добавь nav, hero, CTA, секции, footer, hover/focus states и отсутствие горизонтального скролла.
 • Не выдавай только план, если пользователь просит создать. Сначала готовый результат, потом короткая проверка.
 • Если данных мало — сам выбери разумную тему и собери рабочую версию.
+• Не используй React imports/Babel/CDN в HTML-артефакте. Всё должно запускаться двойным кликом по одному HTML-файлу.
+• Если создаёшь приложение, оно должно иметь данные, форму, список/таблицу, фильтр или вкладки, empty state, localStorage и реальные обработчики.
+• Перед финальным ответом проверь свой HTML как ревьюер: есть body, видимый контент, CSS, JS без синтаксических ошибок, закрытые теги, адаптив, кнопки не пустые.
 
 Главная роль: помогать с разработкой, как Codex/Claude for code.
 
@@ -582,6 +633,8 @@ function buildSystem() {
 • Отвечай конкретно и инженерно, без воды.
 • Если просят код — давай рабочий код, а не общие советы.
 • Если задача широкая — сам выбери разумный стек и сразу выдай готовый результат.
+• Не начинай с извинений. Начинай с результата.
+• Если пользователь просит улучшить интеллект/функционал, предлагай архитектуру и конкретные изменения, а не общие обещания.
 • Для сайтов и лендингов выдавай один полный HTML-файл с <!doctype html>, CSS внутри <style>, JS внутри <script> если нужен.
 • Сайты должны быть как готовый продукт: nav, hero, CTA, секции пользы, тарифы/кейсы если уместно, форма/контакты, footer, mobile layout, hover/focus states, aria-label где нужно, без горизонтального скролла.
 • Для web-app прототипов делай рабочую логику: мок-данные, формы, фильтры, пустые состояния, ошибки, сохранение в localStorage если это полезно.
@@ -803,8 +856,8 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
         system: buildSystem(),
         history: messages.map((message) => ({ role: message.role, text: message.content })),
         prompt,
-        temperature: 0.25,
-        maxTokens: 24000,
+        temperature: artifactKind ? 0.16 : 0.42,
+        maxTokens: artifactKind ? 32000 : 12000,
         signal: controller.signal,
       })) {
         streamed += chunk;
@@ -823,13 +876,29 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
       if (!controller.signal.aborted) {
         setError(err instanceof Error ? err.message : 'Ошибка ответа AI.');
       }
-    } finally {
-      abortRef.current = null;
-      setBusy(false);
     }
 
     if (!controller.signal.aborted) {
-      const ensured = ensureCreatedArtifact(text, streamed || full);
+      let finalAnswer = artifactKind ? streamed.trim() : streamed || full;
+      if (artifactKind && finalAnswer && !hasUsableHtmlArtifact(finalAnswer)) {
+        applyChat(active.id, (chat) => ({
+          ...chat,
+          messages: chat.messages.map((message) =>
+            message.id === assistantId
+              ? { ...message, content: `${full}\n\n---\nAmethyst проверяет результат и чинит HTML, чтобы он точно открылся...` }
+              : message,
+          ),
+          updatedAt: Date.now(),
+        }));
+        try {
+          const repaired = await repairArtifactWithGemini(artifactKind, text, finalAnswer, controller.signal);
+          if (repaired.trim()) finalAnswer = repaired;
+        } catch {
+          // Если второй проход не удался, ниже сработает локальная гарантия рабочего HTML.
+        }
+      }
+
+      const ensured = ensureCreatedArtifact(text, finalAnswer || full);
       if (ensured !== full) {
         full = ensured;
         applyChat(active.id, (chat) => ({
@@ -841,6 +910,9 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
         }));
       }
     }
+
+    abortRef.current = null;
+    setBusy(false);
 
     if (full.trim()) {
       const savedMessages = [...baseMessages, { id: assistantId, role: 'assistant' as const, content: full }];
