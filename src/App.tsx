@@ -30,6 +30,12 @@ function rememberView(view: AppView) {
   localStorage.setItem(VIEW_KEY, view);
 }
 
+function clearHash() {
+  if (window.location.hash) {
+    window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
+  }
+}
+
 // Достаём из профиля Google имя и аватар (поля могут называться по-разному).
 function profileOf(session: Session) {
   const m = session.user.user_metadata ?? {};
@@ -118,6 +124,7 @@ export default function App() {
   function enterGuest() {
     localStorage.setItem(GUEST_KEY, '1');
     rememberPlatform(entryPlatform);
+    clearHash();
     setGuest(true);
     setView('app');
   }
@@ -174,6 +181,7 @@ export default function App() {
       window.location.href = '/mobile';
       return;
     }
+    clearHash();
     setView('app');
   }
 

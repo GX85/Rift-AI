@@ -18948,3 +18948,322 @@ html body .crystal-perk-tile:nth-child(4) { animation-delay: .15s !important; }
     transition-duration: .01ms !important;
   }
 }
+
+/* 2026-06-25 hotfix: keep only the pixel logo; remove every decorative amethyst shard/purple field. */
+html body .brand-pixel-logo {
+  display: inline-block !important;
+  width: 42px !important;
+  height: 42px !important;
+  min-width: 42px !important;
+  object-fit: contain !important;
+  image-rendering: pixelated !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  filter: drop-shadow(0 0 14px rgba(165, 120, 255, .38)) !important;
+}
+
+html body .acode-logo,
+html body .hero-logo,
+html body .platform-kicker,
+html body .acode-model,
+html body .mobile-app-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+html body .acode-logo .brand-pixel-logo,
+html body .hero-logo .brand-pixel-logo {
+  width: 46px !important;
+  height: 46px !important;
+  min-width: 46px !important;
+}
+
+html body .acode-model .brand-pixel-logo,
+html body .platform-kicker .brand-pixel-logo,
+html body .mobile-app-icon .brand-pixel-logo {
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+}
+
+html body .acode::before,
+html body .acode::after,
+html body .bg-overlay,
+html body .bg-overlay::before,
+html body .bg-overlay::after,
+html body .hero2::before,
+html body .hero2::after,
+html body .platform-page::before,
+html body .platform-page::after,
+html body .reviews-page::before,
+html body .reviews-page::after,
+html body .mobile-entry::before,
+html body .mobile-entry::after,
+html body .mobile-qr-page::before,
+html body .mobile-qr-page::after,
+html body .platform-links a::before,
+html body .platform-links a::after,
+html body .acode-new::before,
+html body .acode-new::after,
+html body .acode-icon::before,
+html body .acode-icon::after,
+html body .acode-send::before,
+html body .acode-send::after,
+html body .acode-copy::before,
+html body .acode-copy::after,
+html body .acode-chat-item i::before,
+html body .acode-chat-item i::after {
+  display: none !important;
+  content: none !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  filter: none !important;
+  transform: none !important;
+  clip-path: none !important;
+}
+
+html body .acode,
+html body .hero2,
+html body .platform-page,
+html body .reviews-page,
+html body .mobile-entry,
+html body .mobile-qr-page {
+  background-color: #020203 !important;
+  background-image:
+    radial-gradient(620px 420px at var(--pointer-x, 50%) var(--pointer-y, 50%), rgba(255,255,255,.05), transparent 72%),
+    repeating-linear-gradient(0deg, rgba(255,255,255,.052) 0 1px, transparent 1px 42px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.052) 0 1px, transparent 1px 42px),
+    linear-gradient(180deg, #020203 0%, #050506 100%) !important;
+}
+
+html body .acode {
+  height: var(--amethyst-app-height, 100dvh) !important;
+  min-height: var(--amethyst-app-height, 100dvh) !important;
+  max-height: var(--amethyst-app-height, 100dvh) !important;
+  overflow: hidden !important;
+  grid-template-columns: minmax(300px, 372px) minmax(0, 1fr) !important;
+}
+
+html body .acode-main {
+  display: grid !important;
+  grid-template-rows: auto minmax(0, 1fr) auto !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  height: 100% !important;
+  overflow: hidden !important;
+  background-color: #030304 !important;
+  background-image:
+    radial-gradient(680px 420px at var(--pointer-x, 50%) var(--pointer-y, 50%), rgba(255,255,255,.045), transparent 70%),
+    repeating-linear-gradient(0deg, rgba(255,255,255,.035) 0 1px, transparent 1px 42px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.035) 0 1px, transparent 1px 42px) !important;
+}
+
+html body .acode-thread {
+  min-height: 0 !important;
+  height: auto !important;
+  overflow: auto !important;
+  padding: 28px clamp(18px, 4vw, 56px) 24px !important;
+  background: transparent !important;
+}
+
+html body .acode-main[data-empty="true"] .acode-thread {
+  padding-bottom: 16px !important;
+}
+
+html body .acode-empty {
+  width: min(100%, 1180px) !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  gap: 22px !important;
+  align-content: start !important;
+}
+
+html body .acode-empty-hero,
+html body .acode-live-preview {
+  display: none !important;
+}
+
+html body .acode-studio-grid {
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)) !important;
+  gap: 16px !important;
+}
+
+html body .acode-studio-grid button {
+  min-height: 158px !important;
+  padding: 24px !important;
+}
+
+html body .acode-output-strip {
+  justify-content: flex-start !important;
+  overflow-x: auto !important;
+  padding: 8px !important;
+}
+
+html body .acode-starters {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
+  gap: 14px !important;
+}
+
+html body .acode-compose-wrap {
+  position: relative !important;
+  z-index: 50 !important;
+  padding: 16px clamp(14px, 3.2vw, 44px) 20px !important;
+  background:
+    linear-gradient(180deg, rgba(3,3,4,0), rgba(3,3,4,.94) 24%, #030304 100%) !important;
+  border-top: 1px solid rgba(255,255,255,.1) !important;
+}
+
+html body .acode-compose {
+  min-height: 124px !important;
+  border-radius: 24px !important;
+  background: rgba(8,8,10,.98) !important;
+  background-image: none !important;
+}
+
+html body .acode-compose textarea {
+  min-height: 56px !important;
+  font-size: 18px !important;
+}
+
+html body .acode-chat-item,
+html body .acode-chat-item.active,
+html body .acode-chat-item:hover {
+  background: #08080a !important;
+  background-image: none !important;
+  border-color: rgba(255,255,255,.16) !important;
+  box-shadow: 0 12px 34px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.06) !important;
+}
+
+html body .acode-chat-item.active {
+  outline: 1px solid rgba(255,255,255,.2) !important;
+}
+
+html body .acode-chat-item i {
+  display: inline-grid !important;
+  place-items: center !important;
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  color: #d4d4d8 !important;
+  background: #111113 !important;
+  background-image: none !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+  opacity: 0 !important;
+  transform: translateX(4px) !important;
+  transition: opacity .25s cubic-bezier(.16,1,.3,1), transform .25s cubic-bezier(.16,1,.3,1), border-color .25s !important;
+}
+
+html body .acode-chat-item:hover i,
+html body .acode-chat-item:focus-visible i {
+  opacity: 1 !important;
+  transform: translateX(0) !important;
+}
+
+html body .platform-shell {
+  width: min(100% - 32px, 1280px) !important;
+  min-height: auto !important;
+  padding: clamp(28px, 4vw, 56px) !important;
+}
+
+html body .platform-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(300px, 1fr)) !important;
+  gap: 20px !important;
+}
+
+html body .platform-card,
+html body .platform-card.recommended,
+html body .platform-card.phone {
+  min-height: 260px !important;
+  padding: 30px !important;
+  background: #08080a !important;
+  background-image: none !important;
+  border-color: rgba(255,255,255,.16) !important;
+  overflow: hidden !important;
+}
+
+html body .platform-card strong {
+  font-size: clamp(26px, 3vw, 36px) !important;
+  line-height: 1.12 !important;
+  letter-spacing: 0 !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  hyphens: none !important;
+}
+
+html body .platform-card small {
+  max-width: 420px !important;
+  font-size: clamp(15px, 1.4vw, 17px) !important;
+  line-height: 1.5 !important;
+  word-break: normal !important;
+  overflow-wrap: normal !important;
+  hyphens: none !important;
+}
+
+html body .platform-links a {
+  position: relative !important;
+  overflow: hidden !important;
+  color: #f5f5f5 !important;
+  background: #08080a !important;
+  background-image: none !important;
+  border-color: rgba(255,255,255,.16) !important;
+}
+
+html body .review-avatar,
+html body .review-avatar.small,
+html body .mono-card-index {
+  background: #08080a !important;
+  background-image: none !important;
+  color: #f5f5f5 !important;
+}
+
+@media (max-width: 900px) {
+  html body .acode {
+    grid-template-columns: 1fr !important;
+  }
+
+  html body .acode-side {
+    width: min(86vw, 360px) !important;
+  }
+
+  html body .platform-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  html body .platform-card {
+    min-height: 220px !important;
+  }
+}
+
+@media (max-width: 620px) {
+  html body .acode-thread {
+    padding: 14px 12px 12px !important;
+  }
+
+  html body .acode-compose-wrap {
+    padding: 10px 10px 12px !important;
+  }
+
+  html body .acode-compose {
+    min-height: 112px !important;
+  }
+
+  html body .platform-shell {
+    width: min(100% - 18px, 1280px) !important;
+    padding: 22px !important;
+  }
+
+  html body .platform-card strong {
+    font-size: 28px !important;
+  }
+}

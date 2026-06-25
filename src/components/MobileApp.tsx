@@ -186,7 +186,7 @@ export function MobileQrPage() {
     <main className="mobile-qr-page">
       <section className="mobile-qr-card">
         <div className="mobile-app-icon">
-          <span>AI</span>
+          <img className="brand-pixel-logo" src="/amethyst-logo-pixel.svg" alt="" />
         </div>
         <p className="mobile-kicker">Amethyst Mobile</p>
         <h1>Открой на телефоне</h1>
@@ -219,7 +219,7 @@ export function MobileEntry({ onEnter }: MobileEntryProps) {
     <main className="mobile-entry">
       <section className="mobile-entry-card">
         <div className="mobile-app-icon">
-          <span>AI</span>
+          <img className="brand-pixel-logo" src="/amethyst-logo-pixel.svg" alt="" />
         </div>
         <p className="mobile-kicker">Mobile app</p>
         <h1>Amethyst</h1>

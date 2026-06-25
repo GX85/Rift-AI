@@ -642,6 +642,7 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
       <aside className={`acode-side ${sidebarOpen ? 'open' : ''}`}>
         <div className="acode-brand">
           <button className="acode-logo" onClick={onHome} title="На главный экран">
+            <img className="brand-pixel-logo" src="/amethyst-logo-pixel.svg" alt="" />
             <span>Amethyst</span>
           </button>
           <button className="acode-icon mobile-only" onClick={() => setSidebarOpen(false)} title="Закрыть">
@@ -697,7 +698,7 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
             <Icon name="menu" size={17} />
           </button>
           <div className="acode-model">
-            <span className="mono-product-mark">AI</span>
+            <img className="brand-pixel-logo" src="/amethyst-logo-pixel.svg" alt="" />
             <div>
               <strong>Amethyst</strong>
               <span>{messages.length ? active.title : 'ИИ-ассистент для кода и продуктов'}</span>
