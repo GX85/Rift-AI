@@ -8,7 +8,21 @@ type AudioKit = {
   oscillators: OscillatorNode[];
   lfo: OscillatorNode;
   lfoGain: GainNode;
+  noise: AudioBuffer;
 };
+
+const BACKGROUND_MUSIC_SRC = '/background-music.mp3';
+
+function createNoiseBuffer(ctx: AudioContext) {
+  const length = Math.floor(ctx.sampleRate * 0.09);
+  const buffer = ctx.createBuffer(1, length, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < length; i++) {
+    const fade = 1 - i / length;
+    data[i] = (Math.random() * 2 - 1) * fade;
+  }
+  return buffer;
+}
 
 function createAudioKit(): AudioKit | null {
   if (typeof window === 'undefined' || !window.AudioContext) return null;
@@ -19,12 +33,13 @@ function createAudioKit(): AudioKit | null {
   const ambient = ctx.createGain();
   const lfo = ctx.createOscillator();
   const lfoGain = ctx.createGain();
+  const noise = createNoiseBuffer(ctx);
 
-  master.gain.value = 0.052;
+  master.gain.value = 0.064;
   filter.type = 'lowpass';
-  filter.frequency.value = 880;
+  filter.frequency.value = 720;
   filter.Q.value = 0.42;
-  ambient.gain.value = 0.075;
+  ambient.gain.value = 0.066;
 
   ambient.connect(filter);
   filter.connect(master);
@@ -37,31 +52,36 @@ function createAudioKit(): AudioKit | null {
   lfoGain.connect(ambient.gain);
   lfo.start();
 
-  const oscillators = [82.41, 123.47, 164.81].map((frequency, index) => {
+  const oscillators = [73.42, 110, 146.83, 220].map((frequency, index) => {
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
     osc.type = index === 1 ? 'triangle' : 'sine';
     osc.frequency.value = frequency;
-    gain.gain.value = index === 0 ? 0.5 : 0.28;
+    gain.gain.value = index === 0 ? 0.45 : 0.2;
     osc.connect(gain);
     gain.connect(ambient);
     osc.start();
     return osc;
   });
 
-  return { ctx, master, ambient, filter, oscillators, lfo, lfoGain };
+  return { ctx, master, ambient, filter, oscillators, lfo, lfoGain, noise };
 }
 
 export function InteractionEffects() {
   const kitRef = useRef<AudioKit | null>(null);
+  const musicRef = useRef<HTMLAudioElement | null>(null);
   const lastTapRef = useRef(0);
+  const musicTriedRef = useRef(false);
 
   useEffect(() => {
     const root = document.documentElement;
+    let touchTimer = 0;
 
     function setPointer(x: number, y: number) {
       root.style.setProperty('--pointer-x', `${(x / window.innerWidth) * 100}%`);
       root.style.setProperty('--pointer-y', `${(y / window.innerHeight) * 100}%`);
+      root.style.setProperty('--pointer-tilt-x', `${(x / window.innerWidth - 0.5) * 16}deg`);
+      root.style.setProperty('--pointer-tilt-y', `${(y / window.innerHeight - 0.5) * -16}deg`);
     }
 
     function ensureAudio() {
@@ -70,41 +90,95 @@ export function InteractionEffects() {
       return kitRef.current;
     }
 
+    async function startBackgroundMusic() {
+      const audio = musicRef.current;
+      if (!audio || musicTriedRef.current) return;
+      musicTriedRef.current = true;
+      audio.volume = 0.16;
+      audio.loop = true;
+      try {
+        await audio.play();
+        const kit = ensureAudio();
+        if (kit) kit.ambient.gain.setTargetAtTime(0.018, kit.ctx.currentTime, 0.8);
+      } catch {
+        const kit = ensureAudio();
+        if (kit) kit.ambient.gain.setTargetAtTime(0.066, kit.ctx.currentTime, 0.8);
+      }
+    }
+
+    function markTouch(x: number, y: number) {
+      root.style.setProperty('--touch-x', `${(x / window.innerWidth) * 100}%`);
+      root.style.setProperty('--touch-y', `${(y / window.innerHeight) * 100}%`);
+      root.classList.add('fx-touching');
+      window.clearTimeout(touchTimer);
+      touchTimer = window.setTimeout(() => root.classList.remove('fx-touching'), 760);
+    }
+
     function playKeyClick(soft = false) {
       const kit = ensureAudio();
       if (!kit) return;
       const now = kit.ctx.currentTime;
-      if (now - lastTapRef.current < 0.026) return;
+      if (now - lastTapRef.current < 0.024) return;
       lastTapRef.current = now;
 
-      const osc = kit.ctx.createOscillator();
-      const gain = kit.ctx.createGain();
-      const clickFilter = kit.ctx.createBiquadFilter();
-      const base = soft ? 520 : 820;
+      const noise = kit.ctx.createBufferSource();
+      const noiseGain = kit.ctx.createGain();
+      const noiseFilter = kit.ctx.createBiquadFilter();
+      const thock = kit.ctx.createOscillator();
+      const thockGain = kit.ctx.createGain();
+      const snap = kit.ctx.createOscillator();
+      const snapGain = kit.ctx.createGain();
 
-      osc.type = soft ? 'sine' : 'triangle';
-      osc.frequency.setValueAtTime(base + Math.random() * 180, now);
-      clickFilter.type = 'bandpass';
-      clickFilter.frequency.value = soft ? 760 : 1120;
-      clickFilter.Q.value = 2.4;
-      gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.exponentialRampToValueAtTime(soft ? 0.018 : 0.034, now + 0.006);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + (soft ? 0.09 : 0.058));
+      noise.buffer = kit.noise;
+      noiseFilter.type = 'bandpass';
+      noiseFilter.frequency.value = soft ? 920 : 1650;
+      noiseFilter.Q.value = soft ? 2.6 : 5.8;
+      noiseGain.gain.setValueAtTime(0.0001, now);
+      noiseGain.gain.exponentialRampToValueAtTime(soft ? 0.028 : 0.055, now + 0.004);
+      noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + (soft ? 0.07 : 0.046));
 
-      osc.connect(clickFilter);
-      clickFilter.connect(gain);
-      gain.connect(kit.master);
-      osc.start(now);
-      osc.stop(now + 0.11);
+      thock.type = 'triangle';
+      thock.frequency.setValueAtTime(soft ? 138 : 164 + Math.random() * 18, now);
+      thockGain.gain.setValueAtTime(0.0001, now);
+      thockGain.gain.exponentialRampToValueAtTime(soft ? 0.018 : 0.031, now + 0.008);
+      thockGain.gain.exponentialRampToValueAtTime(0.0001, now + (soft ? 0.12 : 0.082));
+
+      snap.type = 'square';
+      snap.frequency.setValueAtTime(soft ? 420 : 740 + Math.random() * 90, now);
+      snapGain.gain.setValueAtTime(0.0001, now);
+      snapGain.gain.exponentialRampToValueAtTime(soft ? 0.004 : 0.011, now + 0.003);
+      snapGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.022);
+
+      noise.connect(noiseFilter);
+      noiseFilter.connect(noiseGain);
+      noiseGain.connect(kit.master);
+      thock.connect(thockGain);
+      thockGain.connect(kit.master);
+      snap.connect(snapGain);
+      snapGain.connect(kit.master);
+
+      noise.start(now);
+      noise.stop(now + 0.09);
+      thock.start(now);
+      thock.stop(now + 0.13);
+      snap.start(now);
+      snap.stop(now + 0.03);
     }
 
     const onPointerMove = (event: PointerEvent) => setPointer(event.clientX, event.clientY);
     const onPointerDown = (event: PointerEvent) => {
       setPointer(event.clientX, event.clientY);
+      markTouch(event.clientX, event.clientY);
+      void startBackgroundMusic();
       playKeyClick(true);
     };
     const onKeyDown = (event: KeyboardEvent) => {
-      if (!event.repeat) playKeyClick();
+      void startBackgroundMusic();
+      if (!event.repeat) {
+        root.classList.add('fx-keying');
+        window.setTimeout(() => root.classList.remove('fx-keying'), 120);
+        playKeyClick();
+      }
     };
 
     window.addEventListener('pointermove', onPointerMove, { passive: true });
@@ -115,6 +189,7 @@ export function InteractionEffects() {
       window.removeEventListener('pointermove', onPointerMove);
       window.removeEventListener('pointerdown', onPointerDown);
       window.removeEventListener('keydown', onKeyDown);
+      window.clearTimeout(touchTimer);
       const kit = kitRef.current;
       kitRef.current = null;
       if (!kit) return;
@@ -129,5 +204,5 @@ export function InteractionEffects() {
     };
   }, []);
 
-  return null;
+  return <audio ref={musicRef} src={BACKGROUND_MUSIC_SRC} preload="auto" loop aria-hidden />;
 }

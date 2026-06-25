@@ -59,7 +59,7 @@ Deno.serve(async (req) => {
       // Настройки «интеллекта»: больше места для развёрнутого ответа + управляемая креативность.
       generationConfig: {
         temperature: typeof temperature === 'number' ? temperature : 0.72,
-        maxOutputTokens: typeof maxTokens === 'number' ? Math.min(Math.max(maxTokens, 512), 8192) : 8192,
+        maxOutputTokens: typeof maxTokens === 'number' ? Math.min(Math.max(maxTokens, 512), 16384) : 12000,
         topP: 0.95,
       },
     });

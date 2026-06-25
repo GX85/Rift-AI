@@ -575,7 +575,7 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
         history: messages.map((message) => ({ role: message.role, text: message.content })),
         prompt,
         temperature: 0.25,
-        maxTokens: 8192,
+        maxTokens: 12000,
         signal: controller.signal,
       })) {
         streamed += chunk;
