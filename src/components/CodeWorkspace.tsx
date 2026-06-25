@@ -95,14 +95,14 @@ function isArtifactRequest(text: string) {
       normalized,
     );
   const artifactNoun =
-    /(сайт|лендинг|страниц|web-?app|прилож|игр|game|canvas|бот|чатбот|agent|агент|компонент|react|typescript|html|css|javascript|код|mvp|dashboard|прототип)/.test(
+    /(сайт|лендинг|страниц|web-?app|прилож|программ|утилит|инструмент|сервис|панел|трекер|todo|игр|game|canvas|бот|чатбот|agent|агент|компонент|react|typescript|html|css|javascript|код|mvp|dashboard|прототип)/.test(
       normalized,
     );
   const fixIntent =
     /(исправь|почини|найди ошиб|разбери код|проведи code review|code review|review|fix|debug|bug)/.test(normalized) &&
     /(код|react|typescript|javascript|html|css|ошиб|bug|component|компонент)/.test(normalized);
   const explicitArtifact =
-    /(одним html|html-файл|готовый html|полный html|рабочий сайт|рабочую игру|рабочее приложение|напиши код|write code|write html|сделай игру|создай сайт|собери сайт|создай лендинг|собери web-app|создай бота)/.test(
+    /(одним html|html-файл|готовый html|полный html|рабочий сайт|рабочую игру|рабочее приложение|рабочую программу|напиши код|write code|write html|сделай игру|создай сайт|собери сайт|создай лендинг|собери web-app|создай бота|сделай программу|создай программу|собери приложение|сделай приложение)/.test(
       normalized,
     );
   const casualWriting = /напиши (эссе|текст|письмо|пост|сообщение|описание|план|идею|идеи|ответ|речь|презентац)/.test(normalized);
@@ -160,6 +160,11 @@ function buildTaskBrief(text: string) {
       'Для чатбота верни system prompt, intents, сценарии, fallback, guardrails, memory policy, тестовые диалоги и UI/JS-прототип при реализации.',
     );
   }
+  if (/программ|прилож|app|web-app|mvp|crm|dashboard|панел|сервис|утилит|трекер|todo/.test(normalized)) {
+    rules.push(
+      'Для приложения верни один рабочий HTML-прототип с интерфейсом, мок-данными, формой, состояниями, localStorage и понятными действиями.',
+    );
+  }
   if (/react|typescript|tsx|компонент/.test(normalized)) {
     rules.push(
       'Для React/TypeScript используй строгие типы, без any, с loading/empty/error состояниями и понятными props.',
@@ -205,20 +210,66 @@ function cleanPlainConversationResponse(request: string, response: string) {
   return 'Понял вопрос. Отвечаю без кода: я могу помочь с объяснением, идеей, планом, презентацией или обычным разговором. Если нужен именно код, сайт, игра или приложение — напиши это прямо, и я соберу готовый результат.';
 }
 
-function extractHtmlArtifact(content: string) {
+function findHtmlArtifacts(content: string) {
   const blocks = Array.from(content.matchAll(/```([a-zA-Z0-9_-]*)\n([\s\S]*?)```/g));
-  const html = blocks.find((match) => {
-    const lang = match[1].toLowerCase();
-    const code = match[2].trim().toLowerCase();
-    return lang === 'html' || code.startsWith('<!doctype html') || code.startsWith('<html');
-  });
-  if (html) return html[2].trim();
+  const artifacts = blocks
+    .filter((match) => {
+      const lang = match[1].toLowerCase();
+      const code = match[2].trim().toLowerCase();
+      return lang === 'html' || code.startsWith('<!doctype html') || code.startsWith('<html');
+    })
+    .map((match) => match[2].trim());
 
   const rawStart = content.search(/<!doctype html|<html[\s>]/i);
-  if (rawStart === -1) return '';
-  const raw = content.slice(rawStart).trim();
-  const end = raw.search(/<\/html>/i);
-  return end === -1 ? raw : raw.slice(0, end + '</html>'.length).trim();
+  if (rawStart !== -1) {
+    const raw = content.slice(rawStart).trim();
+    const end = raw.search(/<\/html>/i);
+    artifacts.push(end === -1 ? raw : raw.slice(0, end + '</html>'.length).trim());
+  }
+
+  return Array.from(new Set(artifacts));
+}
+
+function visibleHtmlText(html: string) {
+  const body = html.match(/<body\b[^>]*>([\s\S]*?)<\/body>/i)?.[1] ?? html;
+  return body
+    .replace(/<script\b[\s\S]*?<\/script>/gi, ' ')
+    .replace(/<style\b[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<noscript\b[\s\S]*?<\/noscript>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&[a-z0-9#]+;/gi, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function looksBrokenHtmlArtifact(html: string) {
+  const trimmed = html.trim();
+  if (!trimmed) return true;
+  const lower = trimmed.toLowerCase();
+  const body = trimmed.match(/<body\b[^>]*>([\s\S]*?)<\/body>/i)?.[1] ?? trimmed;
+  const text = visibleHtmlText(trimmed);
+  const hasDocument = /<!doctype html|<html[\s>]/i.test(trimmed);
+  const hasBody = /<body\b/i.test(trimmed);
+  const hasVisibleNode = /<(main|section|article|nav|header|footer|h1|h2|p|ul|ol|li|button|a|form|input|textarea|canvas|svg|div)\b/i.test(body);
+  const hasCanvasOrSvg = /<(canvas|svg)\b/i.test(body);
+  const hasUsefulCss = /<style\b[^>]*>[\s\S]{80,}<\/style>/i.test(trimmed);
+  const hasUsefulScript = /<script\b[^>]*>[\s\S]{80,}<\/script>/i.test(trimmed);
+  const reactMountOnly = /<div\s+id=["']root["']\s*>\s*<\/div>/i.test(body)
+    && /(import\s+react|reactdom|createroot|type=["']text\/babel["']|from\s+["']react["'])/i.test(trimmed);
+  const codeInsteadOfHtml = /^(\s*(import|export|const|let|function|class)\s+)/i.test(trimmed) || /```/.test(trimmed);
+
+  if (codeInsteadOfHtml || reactMountOnly) return true;
+  if (!hasDocument || !hasBody) return true;
+  if (/<body\b[^>]*>\s*<\/body>/i.test(trimmed)) return true;
+  if (!hasCanvasOrSvg && text.length < 28) return true;
+  if (!hasVisibleNode && !hasUsefulCss && !hasUsefulScript) return true;
+  if (lower.includes('<div id="root"></div>') && text.length < 60) return true;
+  return false;
+}
+
+function extractHtmlArtifact(content: string) {
+  const artifacts = findHtmlArtifacts(content);
+  return artifacts.find((html) => !looksBrokenHtmlArtifact(html)) ?? '';
 }
 
 function downloadText(filename: string, text: string) {
@@ -266,7 +317,7 @@ function detectArtifactKind(text: string): ArtifactKind | null {
   if (/игр|game|canvas|runner|snake|arcade|шутер|платформер/.test(normalized)) return 'game';
   if (/чатбот|бот|bot|agent|агент|диалог/.test(normalized)) return 'bot';
   if (/сайт|лендинг|landing|website|страниц|html/.test(normalized)) return 'site';
-  if (/программ|прилож|app|web-app|mvp|crm|dashboard|панел|сервис/.test(normalized)) return 'app';
+  if (/программ|прилож|app|web-app|mvp|crm|dashboard|панел|сервис|утилит|инструмент|трекер|todo/.test(normalized)) return 'app';
   return null;
 }
 
@@ -356,12 +407,15 @@ function buildGuaranteedHtmlArtifact(kind: ArtifactKind, request: string) {
 function ensureCreatedArtifact(request: string, response: string) {
   const kind = detectArtifactKind(request);
   if (!kind) return cleanPlainConversationResponse(request, response);
-  if (extractHtmlArtifact(response)) return response;
+  const htmlArtifacts = findHtmlArtifacts(response);
+  const usable = htmlArtifacts.find((html) => !looksBrokenHtmlArtifact(html));
+  if (usable) return response;
+
   const fallback = buildGuaranteedHtmlArtifact(kind, request);
-  const intro = response.trim()
-    ? `${response.trim()}\n\n---\nЯ добавил рабочий HTML-файл, чтобы результат точно можно было скачать и открыть:`
-    : 'Готово. Я создал рабочий HTML-файл, который можно скачать и открыть:';
-  return `${intro}\n\n${fallback}`;
+  if (!response.trim()) {
+    return `Готово. Я создал рабочий HTML-файл, который можно скачать и открыть:\n\n${fallback}`;
+  }
+  return `Gemini вернул HTML, но он выглядел пустым или нерабочим, поэтому я заменил его на гарантированно рабочий файл:\n\n${fallback}\n\n---\nОригинальный ответ модели сохранён ниже для сравнения:\n\n${response.trim()}`;
 }
 
 function buildInstantArtifactResponse(kind: ArtifactKind, request: string) {

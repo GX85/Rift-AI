@@ -19758,3 +19758,9 @@ html body .acode-mobile-strip {
     height: 48vh !important;
   }
 }
+
+/* Artifact safety: previews must never look like a blank white page while HTML loads or fails. */
+html body .acode-artifact-live iframe {
+  background: #050506 !important;
+  color-scheme: dark !important;
+}
