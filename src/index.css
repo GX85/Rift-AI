@@ -19764,3 +19764,458 @@ html body .acode-artifact-live iframe {
   background: #050506 !important;
   color-scheme: dark !important;
 }
+
+/* Amethyst mobile v2: phone layout must behave like an app, not a squeezed desktop. */
+@media (max-width: 820px), (pointer: coarse) {
+  html,
+  body,
+  #root {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow-x: hidden !important;
+    overscroll-behavior-x: none !important;
+  }
+
+  html body .acode,
+  html body .mobile-app-mode {
+    width: 100% !important;
+    max-width: 100vw !important;
+    min-width: 0 !important;
+    height: var(--amethyst-app-height, 100dvh) !important;
+    min-height: var(--amethyst-app-height, 100dvh) !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    overflow: hidden !important;
+    background-color: #020203 !important;
+    background-image:
+      radial-gradient(420px 320px at var(--pointer-x, 50%) var(--pointer-y, 18%), rgba(255,255,255,.06), transparent 72%),
+      linear-gradient(115deg, transparent 24%, rgba(255,255,255,.028) 48%, transparent 72%),
+      repeating-linear-gradient(0deg, rgba(255,255,255,.05) 0 1px, transparent 1px 34px),
+      repeating-linear-gradient(90deg, rgba(255,255,255,.05) 0 1px, transparent 1px 34px),
+      linear-gradient(180deg, #020203, #050506) !important;
+  }
+
+  html body .acode-main {
+    width: 100% !important;
+    max-width: 100vw !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: var(--amethyst-app-height, 100dvh) !important;
+    display: grid !important;
+    grid-template-rows: auto auto minmax(0, 1fr) auto !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+  }
+
+  html body .acode-scrim {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 79 !important;
+    background: rgba(0,0,0,.62) !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    backdrop-filter: blur(10px) !important;
+  }
+
+  html body .acode-side {
+    position: fixed !important;
+    inset: 0 auto 0 0 !important;
+    width: min(86vw, 340px) !important;
+    max-width: calc(100vw - 28px) !important;
+    height: var(--amethyst-app-height, 100dvh) !important;
+    min-height: 0 !important;
+    padding:
+      max(14px, env(safe-area-inset-top))
+      14px
+      max(14px, env(safe-area-inset-bottom)) !important;
+    border-radius: 0 22px 22px 0 !important;
+    transform: translate3d(-105%, 0, 0) !important;
+    transition: transform .34s cubic-bezier(.16,1,.3,1) !important;
+    z-index: 90 !important;
+    overflow: hidden !important;
+  }
+
+  html body .acode-side.open {
+    transform: translate3d(0, 0, 0) !important;
+  }
+
+  html body .acode-brand,
+  html body .acode-user {
+    flex: 0 0 auto !important;
+  }
+
+  html body .acode-chat-list {
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    padding-right: 2px !important;
+  }
+
+  html body .acode-logo,
+  html body .acode-new,
+  html body .acode-chat-item,
+  html body .acode-user {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  html body .acode-top {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 30 !important;
+    width: calc(100% - 20px) !important;
+    max-width: none !important;
+    margin:
+      max(8px, env(safe-area-inset-top))
+      10px
+      8px !important;
+    min-height: 64px !important;
+    padding: 10px 12px !important;
+    border-radius: 20px !important;
+    display: grid !important;
+    grid-template-columns: 44px minmax(0, 1fr) !important;
+    gap: 10px !important;
+    align-items: center !important;
+  }
+
+  html body .acode-model {
+    min-width: 0 !important;
+    gap: 10px !important;
+  }
+
+  html body .acode-model strong,
+  html body .acode-model span {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  html body .acode-model .brand-pixel-logo {
+    width: 34px !important;
+    height: 34px !important;
+    flex: 0 0 34px !important;
+  }
+
+  html body .acode-mobile-strip {
+    width: calc(100% - 20px) !important;
+    margin: 0 10px 6px !important;
+    display: flex !important;
+    gap: 8px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scroll-snap-type: x proximity !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+  }
+
+  html body .acode-mobile-strip::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  html body .acode-mobile-strip span {
+    flex: 0 0 auto !important;
+    min-height: 36px !important;
+    padding: 0 12px !important;
+    font-size: 13px !important;
+    scroll-snap-align: start !important;
+  }
+
+  html body .acode-thread {
+    width: 100% !important;
+    max-width: 100vw !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    padding: 8px 10px 10px !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    scroll-padding-bottom: 180px !important;
+  }
+
+  html body .acode-empty {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 0 !important;
+    align-content: start !important;
+    gap: 14px !important;
+    padding: 2px 0 6px !important;
+  }
+
+  html body .acode-empty-hero,
+  html body .acode-empty-copy,
+  html body .acode-studio-grid,
+  html body .acode-starters {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  html body .acode-empty h1 {
+    max-width: 100% !important;
+    font-size: clamp(30px, 11vw, 48px) !important;
+    line-height: .98 !important;
+    text-wrap: balance !important;
+  }
+
+  html body .acode-empty p {
+    max-width: 100% !important;
+    font-size: 14.5px !important;
+    line-height: 1.52 !important;
+  }
+
+  html body .acode-hero-metrics {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    width: 100% !important;
+    gap: 8px !important;
+  }
+
+  html body .acode-hero-metrics span {
+    min-width: 0 !important;
+    padding: 9px 8px !important;
+    text-align: center !important;
+  }
+
+  html body .acode-hero-metrics small {
+    display: none !important;
+  }
+
+  html body .acode-studio-grid,
+  html body .acode-starters {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    margin: 0 !important;
+  }
+
+  html body .acode-studio-grid button,
+  html body .acode-starters button {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 86px !important;
+    padding: 14px !important;
+    border-radius: 18px !important;
+    text-align: left !important;
+  }
+
+  html body .acode-studio-grid button strong,
+  html body .acode-studio-grid button span,
+  html body .acode-starters button {
+    overflow-wrap: anywhere !important;
+  }
+
+  html body .acode-output-strip {
+    display: flex !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    gap: 8px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scrollbar-width: none !important;
+  }
+
+  html body .acode-output-strip::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  html body .acode-output-strip span {
+    flex: 0 0 auto !important;
+    min-height: 34px !important;
+    padding: 0 12px !important;
+    font-size: 13px !important;
+  }
+
+  html body .acode-msg {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    gap: 8px !important;
+    align-items: flex-start !important;
+  }
+
+  html body .acode-msg-avatar {
+    width: 32px !important;
+    height: 32px !important;
+    flex: 0 0 32px !important;
+  }
+
+  html body .acode-msg-body {
+    width: auto !important;
+    max-width: calc(100vw - 62px) !important;
+    min-width: 0 !important;
+    padding: 14px !important;
+    border-radius: 18px !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  html body .acode-msg.user .acode-msg-body {
+    max-width: min(82vw, 520px) !important;
+  }
+
+  html body .acode-artifact-card,
+  html body .acode-artifact-head,
+  html body .acode-artifact-code,
+  html body .acode-msg-body pre,
+  html body .acode-artifact-code pre {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow-x: auto !important;
+  }
+
+  html body .acode-artifact-head {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  html body .acode-artifact-live {
+    height: min(46vh, 360px) !important;
+    min-height: 230px !important;
+    border-radius: 16px !important;
+  }
+
+  html body .acode-msg-actions {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    width: 100% !important;
+    gap: 8px !important;
+  }
+
+  html body .acode-copy {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 42px !important;
+    padding: 0 10px !important;
+    font-size: 13px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  html body .acode-compose-wrap {
+    position: sticky !important;
+    bottom: 0 !important;
+    z-index: 35 !important;
+    width: 100% !important;
+    max-width: 100vw !important;
+    padding:
+      8px
+      max(10px, env(safe-area-inset-right))
+      max(10px, env(safe-area-inset-bottom))
+      max(10px, env(safe-area-inset-left)) !important;
+    background:
+      linear-gradient(180deg, rgba(2,2,3,0), rgba(2,2,3,.9) 18%, #020203 100%) !important;
+  }
+
+  html body .acode-compose {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    min-height: 108px !important;
+    padding: 10px !important;
+    border-radius: 20px !important;
+    display: grid !important;
+    grid-template-rows: minmax(46px, auto) 44px !important;
+    gap: 8px !important;
+  }
+
+  html body .acode-compose textarea {
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 46px !important;
+    max-height: 118px !important;
+    padding: 12px 14px !important;
+    font-size: 16px !important;
+    line-height: 1.42 !important;
+  }
+
+  html body .acode-compose-actions {
+    display: grid !important;
+    grid-template-columns: 44px 1fr 52px !important;
+    gap: 8px !important;
+    align-items: center !important;
+  }
+
+  html body .acode-compose-actions > span {
+    min-width: 0 !important;
+  }
+
+  html body .acode-icon,
+  html body .acode-send {
+    min-width: 44px !important;
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 14px !important;
+  }
+
+  html body .mobile-entry,
+  html body .mobile-qr-page {
+    width: 100% !important;
+    max-width: 100vw !important;
+    min-height: var(--amethyst-app-height, 100dvh) !important;
+    padding:
+      max(14px, env(safe-area-inset-top))
+      max(12px, env(safe-area-inset-right))
+      max(14px, env(safe-area-inset-bottom))
+      max(12px, env(safe-area-inset-left)) !important;
+    overflow-x: hidden !important;
+  }
+
+  html body .mobile-entry-card,
+  html body .mobile-qr-card {
+    width: min(100%, 520px) !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    padding: 20px !important;
+    border-radius: 24px !important;
+  }
+
+  html body .mobile-entry-card h1,
+  html body .mobile-qr-card h1 {
+    font-size: clamp(34px, 13vw, 58px) !important;
+    line-height: .98 !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  html body .mobile-entry-card input,
+  html body .mobile-entry-card button,
+  html body .mobile-entry-card a,
+  html body .mobile-qr-actions a,
+  html body .mobile-qr-actions button,
+  html body .mobile-url {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    overflow-wrap: anywhere !important;
+  }
+}
+
+@media (max-width: 380px) {
+  html body .acode-top {
+    width: calc(100% - 12px) !important;
+    margin-left: 6px !important;
+    margin-right: 6px !important;
+    grid-template-columns: 40px minmax(0, 1fr) !important;
+    padding: 8px !important;
+  }
+
+  html body .acode-thread {
+    padding-left: 6px !important;
+    padding-right: 6px !important;
+  }
+
+  html body .acode-msg-body {
+    max-width: calc(100vw - 48px) !important;
+    padding: 12px !important;
+  }
+
+  html body .acode-msg-actions {
+    grid-template-columns: 1fr !important;
+  }
+}
