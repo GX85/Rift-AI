@@ -321,10 +321,29 @@ function hasProductionHtmlQuality(html: string, kind: ArtifactKind) {
   );
 }
 
-function extractHtmlArtifact(content: string) {
+function scoreHtmlArtifact(html: string) {
+  const lower = html.toLowerCase();
+  let score = Math.min(html.length, 22000);
+  if (/<!doctype html|<html[\s>]/i.test(html)) score += 1600;
+  if (/<style\b[^>]*>[\s\S]{200,}<\/style>/i.test(html)) score += 1800;
+  if (/<script\b[^>]*>[\s\S]{200,}<\/script>/i.test(html)) score += 1800;
+  if (/(localstorage|json\.parse|form|submit|queryselector|getelementbyid)/i.test(lower)) score += 1800;
+  if (/(requestanimationframe|setinterval|canvas|keydown|touch|pointer)/i.test(lower)) score += 1400;
+  if (/(nav|header|main|section|footer|button|input|textarea|table|ul|ol)/i.test(lower)) score += 1200;
+  if (/@media|max-width|grid-template|flex/i.test(lower)) score += 900;
+  if (/react\.createelement|babel|cdn\.|unpkg|cdnjs|<div\s+id=["']root["']\s*>\s*<\/div>/i.test(lower)) score -= 5000;
+  return score;
+}
+
+function extractHtmlArtifact(content: string, preferredKind?: ArtifactKind | null) {
   const artifacts = findHtmlArtifacts(content);
   const usable = artifacts.filter((html) => !looksBrokenHtmlArtifact(html));
-  return usable.at(-1) ?? '';
+  return usable
+    .sort((a, b) => {
+      const aKindBonus = preferredKind && hasProductionHtmlQuality(a, preferredKind) ? 100000 : 0;
+      const bKindBonus = preferredKind && hasProductionHtmlQuality(b, preferredKind) ? 100000 : 0;
+      return bKindBonus + scoreHtmlArtifact(b) - (aKindBonus + scoreHtmlArtifact(a));
+    })[0] ?? '';
 }
 
 function hasUsableHtmlArtifact(content: string, kind?: ArtifactKind | null) {
@@ -376,6 +395,7 @@ function escapeHtml(value: string) {
 function detectArtifactKind(text: string): ArtifactKind | null {
   if (!isArtifactRequest(text)) return null;
   const normalized = text.toLowerCase();
+  if (!/\b(game|canvas|runner|snake|arcade)\b|игр|шутер|платформер/.test(normalized) && /\b(web-?app|mvp|crm|dashboard|admin|kanban|todo|tracker|app)\b|прилож|программ|панел|дашборд|кабинет|сервис|утилит|инструмент|трекер/.test(normalized)) return 'app';
   if (/игр|game|canvas|runner|snake|arcade|шутер|платформер/.test(normalized)) return 'game';
   if (/чатбот|бот|bot|agent|агент|диалог/.test(normalized)) return 'bot';
   if (/сайт|лендинг|landing|website|страниц|html/.test(normalized)) return 'site';
@@ -477,7 +497,7 @@ function buildPremiumProductHtml(kind: Exclude<ArtifactKind, 'game'>, title: str
     body::after{content:"";position:fixed;inset:0;z-index:-1;background:linear-gradient(#ffffff0a 1px,transparent 1px),linear-gradient(90deg,#ffffff0a 1px,transparent 1px);background-size:42px 42px;mask-image:radial-gradient(circle at 50% 18%,#000 0 48%,transparent 82%);animation:gridMove 18s linear infinite}
     @keyframes gridMove{to{background-position:42px 42px}}
     .shell{min-height:100vh;padding:24px}.wrap{width:min(1180px,100%);margin:auto}.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 16px;border:1px solid var(--line);border-radius:24px;background:#0b0b0dcc;backdrop-filter:blur(18px);position:sticky;top:16px;z-index:5}.brand{display:flex;align-items:center;gap:10px;font-weight:950}.logo{width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--line2);border-radius:12px;background:#050506}.nav a{color:var(--soft);text-decoration:none;font-weight:800}.links{display:flex;gap:18px}.btn{border:1px solid var(--line2);border-radius:14px;min-height:44px;padding:0 18px;background:#f4f4f5;color:#09090b;font-weight:950;cursor:pointer;box-shadow:0 16px 40px #0007;transition:.22s ease}.btn.dark{background:#0a0a0b;color:white}.btn:hover{transform:translateY(-2px);filter:brightness(1.08)}
-    .hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(360px,.86fr);gap:24px;align-items:center;padding:76px 0 44px}.badge{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:999px;padding:8px 13px;background:#ffffff0b;color:#e5e5e7;font-weight:900}.dot{width:8px;height:8px;border-radius:50%;background:#fff;box-shadow:0 0 18px #fff}h1{font-size:clamp(44px,7vw,88px);line-height:.93;margin:18px 0;text-wrap:balance;letter-spacing:0}.lead{font-size:clamp(17px,2vw,22px);line-height:1.55;color:var(--muted);max-width:760px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:28px}.metric{border:1px solid var(--line);border-radius:18px;background:#ffffff09;padding:16px}.metric b{display:block;font-size:28px}.metric span{color:var(--muted);font-weight:800;font-size:13px}
+    .hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(360px,.86fr);gap:24px;align-items:center;padding:58px 0 38px}.badge{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:999px;padding:8px 13px;background:#ffffff0b;color:#e5e5e7;font-weight:900}.dot{width:8px;height:8px;border-radius:50%;background:#fff;box-shadow:0 0 18px #fff}h1{font-size:clamp(36px,5.8vw,68px);line-height:1;margin:18px 0;text-wrap:balance;overflow-wrap:anywhere;letter-spacing:0}.lead{font-size:clamp(17px,2vw,22px);line-height:1.55;color:var(--muted);max-width:760px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:28px}.metric{border:1px solid var(--line);border-radius:18px;background:#ffffff09;padding:16px}.metric b{display:block;font-size:28px}.metric span{color:var(--muted);font-weight:800;font-size:13px}
     .product{border:1px solid var(--line2);border-radius:28px;background:linear-gradient(180deg,#151517,#0b0b0d);box-shadow:0 30px 110px #000b;padding:18px;overflow:hidden}.screen{min-height:440px;border:1px solid var(--line);border-radius:22px;background:linear-gradient(180deg,#0c0c0e,#080809);padding:18px;display:grid;gap:14px}.screen-top{display:flex;justify-content:space-between;gap:10px;align-items:center}.tabs{display:flex;gap:8px;flex-wrap:wrap}.tab{border:1px solid var(--line);border-radius:999px;background:#050506;color:#d4d4d8;padding:9px 12px;font-weight:900;cursor:pointer}.tab.active{background:#f4f4f5;color:#050506}.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.card{border:1px solid var(--line);border-radius:18px;background:#141416;padding:16px;min-height:120px}.card b{font-size:24px}.card span{display:block;color:var(--muted);margin-top:8px;line-height:1.45}.workspace{display:grid;grid-template-columns:1fr .8fr;gap:12px}.panel{border:1px solid var(--line);border-radius:20px;background:#101012;padding:16px}.panel h3{margin:0 0 12px}.list{display:grid;gap:8px}.item{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:14px;background:#ffffff08}.item.done{opacity:.58}.item button{border:0;background:transparent;color:white;cursor:pointer}.form{display:flex;gap:8px;margin-top:12px}.form input{flex:1;min-width:0;border:1px solid var(--line2);border-radius:14px;background:#050506;color:white;padding:13px}.mini-chat{display:grid;gap:10px;max-height:270px;overflow:auto}.bubble{padding:12px 14px;border-radius:16px;background:#ffffff0d;color:#e4e4e7}.bubble.user{background:#f4f4f5;color:#09090b;margin-left:22px}.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.chip{border:1px solid var(--line);border-radius:999px;background:#0a0a0b;color:#fff;padding:8px 10px;font-weight:800;cursor:pointer}
     section.block{padding:44px 0}.section-title{font-size:clamp(30px,4vw,52px);line-height:1;margin:0 0 14px}.feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.feature{border:1px solid var(--line);border-radius:22px;background:#0f0f11;padding:20px;min-height:170px}.feature i{display:grid;place-items:center;width:42px;height:42px;border-radius:14px;background:#f4f4f5;color:#050506;font-style:normal;font-weight:950}.feature p{color:var(--muted);line-height:1.55}.footer{border-top:1px solid var(--line);padding:26px 0;color:#a1a1aa;display:flex;justify-content:space-between;gap:12px}
     @media(max-width:860px){.shell{padding:12px}.links{display:none}.hero{grid-template-columns:1fr;padding-top:42px}.metrics,.cards,.feature-grid,.workspace{grid-template-columns:1fr}.screen{min-height:auto}.form{flex-direction:column}.btn{width:100%}.footer{flex-direction:column}}
@@ -1049,7 +1069,7 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
       <aside className={`acode-side ${sidebarOpen ? 'open' : ''}`}>
         <div className="acode-brand">
           <button className="acode-logo" onClick={onHome} title="На главный экран">
-            <img className="brand-pixel-logo" src="/amethyst-logo-pixel.svg" alt="" />
+            <span className="mono-product-mark small">AI</span>
             <span>Amethyst</span>
           </button>
           <button className="acode-icon mobile-only" onClick={() => setSidebarOpen(false)} title="Закрыть">
@@ -1105,7 +1125,7 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
             <Icon name="menu" size={17} />
           </button>
           <div className="acode-model">
-            <img className="brand-pixel-logo" src="/amethyst-logo-pixel.svg" alt="" />
+            <span className="mono-product-mark small">AI</span>
             <div>
               <strong>Amethyst</strong>
               <span>{messages.length ? active.title : 'ИИ-ассистент для кода и продуктов'}</span>
@@ -1199,7 +1219,7 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
             </div>
           ) : (
             messages.map((message) => {
-              const htmlArtifact = message.role === 'assistant' ? extractHtmlArtifact(message.content) : '';
+              const htmlArtifact = message.role === 'assistant' ? extractHtmlArtifact(message.content, detectArtifactKind(active.title)) : '';
               const isHtmlResult = Boolean(htmlArtifact);
               return (
                 <article key={message.id} className={`acode-msg ${message.role}`}>
@@ -1212,8 +1232,8 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
                         <div className="acode-artifact-head">
                           <span className="mono-product-mark small">HTML</span>
                           <div>
-                            <strong>HTML-артефакт готов</strong>
-                            <span>Сайт собран. Скачай файл или скопируй код.</span>
+                            <strong>Готовый HTML-результат</strong>
+                            <span>Артефакт собран. Открой превью, скачай файл или скопируй код.</span>
                           </div>
                         </div>
                         <div className="acode-artifact-live">

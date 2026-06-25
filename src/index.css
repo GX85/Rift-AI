@@ -20219,3 +20219,163 @@ html body .acode-artifact-live iframe {
     grid-template-columns: 1fr !important;
   }
 }
+
+/* Emergency demo rescue: monochrome grid app chrome, no amethyst/purple UI. */
+html body .acode {
+  --mono-bg: #050505;
+  --mono-panel: #101011;
+  --mono-panel-2: #161617;
+  --mono-line: rgba(255,255,255,.14);
+  --mono-line-strong: rgba(255,255,255,.24);
+  --mono-text: #f5f5f5;
+  --mono-muted: #a3a3a3;
+  background:
+    radial-gradient(circle at var(--mx, 62%) var(--my, 28%), rgba(255,255,255,.105), transparent 22%),
+    linear-gradient(rgba(255,255,255,.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.055) 1px, transparent 1px),
+    #050505 !important;
+  background-size: auto, 52px 52px, 52px 52px, auto !important;
+  color: var(--mono-text) !important;
+}
+
+html body .acode::before,
+html body .acode::after,
+html body .acode-main::before,
+html body .acode-main::after,
+html body .acode-thread::before,
+html body .acode-thread::after,
+html body .acode-side::before,
+html body .acode-side::after,
+html body .acode-top::before,
+html body .acode-top::after,
+html body .acode-chat-item::before,
+html body .acode-chat-item::after,
+html body .acode-compose::before,
+html body .acode-compose::after {
+  background: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  opacity: 0 !important;
+}
+
+html body .acode-main,
+html body .acode-thread {
+  background: transparent !important;
+  background-image: none !important;
+}
+
+html body .acode-side,
+html body .acode-top,
+html body .acode-compose,
+html body .acode-empty,
+html body .acode-msg-body,
+html body .acode-artifact-card,
+html body .acode-studio-grid button,
+html body .acode-starters button,
+html body .acode-login-card,
+html body .mobile-entry-card,
+html body .mobile-qr-card {
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.052), rgba(255,255,255,.018)),
+    #0b0b0c !important;
+  background-image:
+    linear-gradient(180deg, rgba(255,255,255,.052), rgba(255,255,255,.018)) !important;
+  border-color: var(--mono-line) !important;
+  box-shadow: 0 24px 90px rgba(0,0,0,.55) !important;
+}
+
+html body .acode-new,
+html body .acode-icon,
+html body .acode-send,
+html body .acode-copy,
+html body .acode-output-strip span,
+html body .acode-chat-item,
+html body .acode-mobile-strip span,
+html body .mobile-entry button,
+html body .mobile-entry a,
+html body .mobile-qr-actions a,
+html body .mobile-qr-actions button {
+  color: var(--mono-text) !important;
+  background: #070708 !important;
+  background-image: none !important;
+  border: 1px solid var(--mono-line) !important;
+  box-shadow: 0 12px 30px rgba(0,0,0,.38) !important;
+  text-shadow: none !important;
+}
+
+html body .acode-new:hover,
+html body .acode-icon:hover,
+html body .acode-send:hover,
+html body .acode-copy:hover,
+html body .acode-output-strip span:hover,
+html body .acode-chat-item:hover,
+html body .acode-chat-item.active,
+html body .acode-studio-grid button:hover,
+html body .acode-starters button:hover {
+  background: #151516 !important;
+  background-image: none !important;
+  border-color: var(--mono-line-strong) !important;
+  color: #fff !important;
+  transform: translateY(-1px) !important;
+}
+
+html body .acode-compose textarea,
+html body .mobile-entry input,
+html body .mobile-entry textarea {
+  background: #050505 !important;
+  background-image:
+    linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px) !important;
+  background-size: 34px 34px !important;
+  border-color: rgba(255,255,255,.20) !important;
+  color: var(--mono-text) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.05) !important;
+}
+
+html body .acode-compose textarea:focus,
+html body .mobile-entry input:focus,
+html body .mobile-entry textarea:focus {
+  border-color: rgba(255,255,255,.42) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.06),
+    0 0 0 4px rgba(255,255,255,.08) !important;
+}
+
+html body .mono-product-mark,
+html body .mono-product-mark.small,
+html body .acode-msg-avatar,
+html body .acode-studio-icon {
+  color: #f7f7f7 !important;
+  background: #080809 !important;
+  background-image: none !important;
+  border-color: rgba(255,255,255,.18) !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+html body .brand-pixel-logo {
+  filter: grayscale(1) contrast(1.08) brightness(1.08) !important;
+  opacity: .95 !important;
+}
+
+html body .acode-top {
+  width: min(1180px, calc(100% - 44px)) !important;
+  margin: 20px auto 0 !important;
+}
+
+html body .acode-artifact-live {
+  background: #050505 !important;
+  border-color: rgba(255,255,255,.18) !important;
+}
+
+html body .acode a,
+html body .acode button,
+html body .acode textarea,
+html body .acode input {
+  transition:
+    transform .22s ease,
+    border-color .22s ease,
+    background-color .22s ease,
+    box-shadow .22s ease,
+    opacity .22s ease !important;
+}
