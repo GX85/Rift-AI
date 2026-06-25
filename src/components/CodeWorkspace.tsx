@@ -270,14 +270,67 @@ function looksBrokenHtmlArtifact(html: string) {
   return false;
 }
 
+function hasProductionHtmlQuality(html: string, kind: ArtifactKind) {
+  if (looksBrokenHtmlArtifact(html)) return false;
+
+  const lower = html.toLowerCase();
+  const text = visibleHtmlText(html);
+  const css = html.match(/<style\b[^>]*>([\s\S]*?)<\/style>/i)?.[1] ?? '';
+  const script = html.match(/<script\b[^>]*>([\s\S]*?)<\/script>/i)?.[1] ?? '';
+  const hasEnoughContent = text.length >= 120 || /<(canvas|svg)\b/i.test(html);
+  const hasLayoutCss = css.length >= 240 && /(display\s*:|grid|flex|position|padding|margin|background|@media)/i.test(css);
+  const hasInteraction =
+    /(addEventListener|onclick|onsubmit|onpointer|onkeydown|querySelector|getElementById|localStorage|requestAnimationFrame|setInterval)/i.test(
+      script,
+    );
+
+  if (!hasEnoughContent || !hasLayoutCss) return false;
+
+  if (kind === 'site') {
+    return (
+      /<(nav|header)\b/i.test(html) &&
+      /<h1\b/i.test(html) &&
+      /<(main|section|article)\b/i.test(html) &&
+      /<(a|button|form)\b/i.test(html) &&
+      /(@media|clamp\(|minmax\(|grid-template-columns)/i.test(css)
+    );
+  }
+
+  if (kind === 'game') {
+    return (
+      /<(canvas|svg)\b/i.test(html) &&
+      /(requestAnimationFrame|setInterval)/i.test(script) &&
+      /(keydown|keyup|pointer|touch|click)/i.test(script) &&
+      /(score|сч[её]т|lives|жизн|level|уров|restart|reset|старт|start)/i.test(lower)
+    );
+  }
+
+  if (kind === 'app') {
+    return (
+      /<(form|input|textarea|select|button)\b/i.test(html) &&
+      /(localStorage|const\s+\w+\s*=\s*\[|let\s+\w+\s*=\s*\[|JSON\.parse)/i.test(script) &&
+      /(submit|click|filter|search|tab|render|map\(|forEach|getElementById|querySelector)/i.test(script) &&
+      /<(ul|ol|table|section|article|div)\b/i.test(html)
+    );
+  }
+
+  return (
+    /<(form|input|textarea|button)\b/i.test(html) &&
+    /(chat|message|intent|fallback|reply|dialog|бот|сообщ|ответ)/i.test(lower) &&
+    hasInteraction
+  );
+}
+
 function extractHtmlArtifact(content: string) {
   const artifacts = findHtmlArtifacts(content);
   const usable = artifacts.filter((html) => !looksBrokenHtmlArtifact(html));
   return usable.at(-1) ?? '';
 }
 
-function hasUsableHtmlArtifact(content: string) {
-  return Boolean(extractHtmlArtifact(content));
+function hasUsableHtmlArtifact(content: string, kind?: ArtifactKind | null) {
+  const artifacts = findHtmlArtifacts(content);
+  if (!kind) return artifacts.some((html) => !looksBrokenHtmlArtifact(html));
+  return artifacts.some((html) => hasProductionHtmlQuality(html, kind));
 }
 
 function downloadText(filename: string, text: string) {
@@ -310,6 +363,7 @@ function htmlFilename(content: string) {
 }
 
 type ArtifactKind = 'site' | 'game' | 'bot' | 'app';
+type TaskMode = 'chat' | 'site' | 'game' | 'app' | 'bot' | 'review' | 'code' | 'business' | 'computer';
 
 function escapeHtml(value: string) {
   return value
@@ -327,6 +381,51 @@ function detectArtifactKind(text: string): ArtifactKind | null {
   if (/сайт|лендинг|landing|website|страниц|html/.test(normalized)) return 'site';
   if (/программ|прилож|app|web-app|mvp|crm|dashboard|панел|сервис|утилит|инструмент|трекер|todo/.test(normalized)) return 'app';
   return null;
+}
+
+function artifactKindToMode(kind: ArtifactKind): TaskMode {
+  return kind;
+}
+
+function detectTaskMode(text: string, artifactKind: ArtifactKind | null, hasFile: boolean, hasComputerIntent: boolean): TaskMode {
+  if (hasComputerIntent) return 'computer';
+  if (artifactKind) return artifactKindToMode(artifactKind);
+
+  const normalized = text.toLowerCase();
+  if (hasFile) return /review|code review|ошиб|bug|fix|исправ|почин|разбер/i.test(normalized) ? 'review' : 'code';
+  if (/review|code review|ошиб|bug|fix|debug|исправ|почин|разбер/i.test(normalized)) return 'review';
+  if (/react|typescript|javascript|tsx|jsx|api|supabase|sql|код|компонент|рефактор/i.test(normalized)) return 'code';
+  if (/pitch|презентац|оффер|продаж|бизнес|стартап|mvp|cjm|маркетинг|план/i.test(normalized)) return 'business';
+  return 'chat';
+}
+
+function preferredGeminiModel(mode: TaskMode) {
+  if (mode === 'chat' || mode === 'business') return 'gemini-3.5-flash';
+  return 'gemini-3.1-pro-preview';
+}
+
+function taskModeContract(mode: TaskMode, artifactKind: ArtifactKind | null) {
+  const artifactLine = artifactKind
+    ? `Artifact subtype: ${artifactKind}. Return one complete single-file HTML artifact in a fenced html block.`
+    : 'Artifact subtype: none unless the user explicitly asks for code or a product.';
+
+  return `Current Amethyst mode: ${mode.toUpperCase()}.
+${artifactLine}
+
+Hard routing contract:
+- CHAT: answer in natural Russian text. No code blocks, no HTML, no CSS, no JS.
+- BUSINESS: give a useful product/business answer in Russian. No code unless asked.
+- REVIEW: lead with the bug/risk, then exact fix and verification. Use code only when needed.
+- CODE: return working code with file paths or a complete snippet, not vague advice.
+- SITE/GAME/APP/BOT: create a finished runnable result, not a plan.
+
+Artifact quality gate:
+- Every generated site/game/app/bot must include <!doctype html>, <style>, visible first screen, mobile layout, and no external CDN.
+- SITE needs nav/header, hero, CTA, sections, footer, and responsive CSS.
+- GAME needs canvas or DOM scene, start/restart, score, controls for keyboard and touch, and requestAnimationFrame or setInterval.
+- APP needs mock data, form/input, list/table/cards, filters or tabs, localStorage, and real click/submit handlers.
+- BOT needs chat UI, input, scripted intents/fallback, message history, and working dialog logic.
+- If the result would be weak or blank, rewrite it before answering.`;
 }
 
 function buildPremiumProductHtml(kind: Exclude<ArtifactKind, 'game'>, title: string, request: string) {
@@ -533,7 +632,7 @@ function ensureCreatedArtifact(request: string, response: string) {
   const kind = detectArtifactKind(request);
   if (!kind) return cleanPlainConversationResponse(request, response);
   const htmlArtifacts = findHtmlArtifacts(response);
-  const usable = htmlArtifacts.find((html) => !looksBrokenHtmlArtifact(html));
+  const usable = htmlArtifacts.find((html) => hasProductionHtmlQuality(html, kind));
   if (usable) return response;
 
   const fallback = buildGuaranteedHtmlArtifact(kind, request);
@@ -571,10 +670,11 @@ ${brokenResponse.slice(0, 22000)}`;
 async function repairArtifactWithGemini(kind: ArtifactKind, request: string, brokenResponse: string, signal: AbortSignal) {
   let repaired = '';
   for await (const chunk of streamGemini({
-    system: buildSystem(),
+    system: buildSystem(artifactKindToMode(kind), kind),
     prompt: buildRepairPrompt(kind, request, brokenResponse),
     temperature: 0.12,
     maxTokens: 28000,
+    model: preferredGeminiModel(artifactKindToMode(kind)),
     signal,
   })) {
     repaired += chunk;
@@ -599,8 +699,10 @@ function buildInstantArtifactResponse(kind: ArtifactKind, request: string) {
 ${buildGuaranteedHtmlArtifact(kind, request)}`;
 }
 
-function buildSystem() {
-  return `Ты — Amethyst, сильный coding/product assistant на базе Gemini.
+function buildSystem(mode: TaskMode = 'chat', artifactKind: ArtifactKind | null = null) {
+  return `${taskModeContract(mode, artifactKind)}
+
+Ты — Amethyst, сильный coding/product assistant на базе Gemini.
 
 Маршрутизация намерений:
 • Если пользователь задаёт обычный вопрос, просит объяснение, спрашивает погоду/факт/совет и НЕ просит создать код, сайт, игру, приложение или компонент — отвечай обычным текстом, без HTML и без code block.
@@ -783,6 +885,8 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
     const computerIntent = file ? null : detectComputerIntent(text);
     const localAnswer = computerIntent || file ? '' : localConversationAnswer(text);
     const artifactKind = file ? null : detectArtifactKind(text);
+    const taskMode = detectTaskMode(text, artifactKind, Boolean(file), Boolean(computerIntent));
+    const preferredModel = preferredGeminiModel(taskMode);
     const instantArtifact = artifactKind ? buildInstantArtifactResponse(artifactKind, text) : '';
 
     setInput('');
@@ -853,11 +957,12 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
 
     try {
       for await (const chunk of streamGemini({
-        system: buildSystem(),
+        system: buildSystem(taskMode, artifactKind),
         history: messages.map((message) => ({ role: message.role, text: message.content })),
         prompt,
         temperature: artifactKind ? 0.16 : 0.42,
         maxTokens: artifactKind ? 32000 : 12000,
+        model: preferredModel,
         signal: controller.signal,
       })) {
         streamed += chunk;
@@ -880,7 +985,7 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
 
     if (!controller.signal.aborted) {
       let finalAnswer = artifactKind ? streamed.trim() : streamed || full;
-      if (artifactKind && finalAnswer && !hasUsableHtmlArtifact(finalAnswer)) {
+      if (artifactKind && finalAnswer && !hasUsableHtmlArtifact(finalAnswer, artifactKind)) {
         applyChat(active.id, (chat) => ({
           ...chat,
           messages: chat.messages.map((message) =>

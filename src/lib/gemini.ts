@@ -21,6 +21,7 @@ type GeminiRequest = {
   history?: ChatMessage[];
   temperature?: number;
   maxTokens?: number;
+  model?: string;
   signal?: AbortSignal;
   onStep?: (step: AgentStep) => void;
 };
@@ -35,6 +36,7 @@ type ChunkHandler = (chunk: string) => void;
 type InvokeOptions = {
   temperature?: number;
   maxTokens?: number;
+  model?: string;
   history?: ChatMessage[];
 };
 
@@ -333,6 +335,7 @@ async function invokeAi(
       history: normalizeHistory(options?.history),
       temperature: options?.temperature,
       maxTokens: options?.maxTokens,
+      model: options?.model,
     },
   });
 
@@ -380,7 +383,12 @@ export async function* streamGemini(
       signal,
       typeof input === 'string'
         ? undefined
-        : { temperature: input.temperature, maxTokens: input.maxTokens, history: input.history ?? input.messages },
+        : {
+            temperature: input.temperature,
+            maxTokens: input.maxTokens,
+            model: input.model,
+            history: input.history ?? input.messages,
+          },
     );
   } catch {
     text = localFallback(base.prompt, system);
@@ -407,7 +415,12 @@ export async function runAgent(
       typeof input !== 'string' ? input.signal : undefined,
       typeof input === 'string'
         ? undefined
-        : { temperature: input.temperature, maxTokens: input.maxTokens, history: input.history ?? input.messages },
+        : {
+            temperature: input.temperature,
+            maxTokens: input.maxTokens,
+            model: input.model,
+            history: input.history ?? input.messages,
+          },
     );
   } catch {
     return localFallback(base.prompt, system);
