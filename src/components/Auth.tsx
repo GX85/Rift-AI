@@ -137,17 +137,7 @@ export function Landing({ onEnter }: { onEnter?: () => void }) {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState('');
 
-  async function start() {
-    if (onEnter) {
-      const normalizedCode = accessCode.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
-      if (!ACCESS_CODES.includes(normalizedCode)) {
-        setMessage("Введи код доступа: It'sAmethyst, AmethystAI или AmethystPlus.");
-        return;
-      }
-      if (wish.trim()) localStorage.setItem('rift_wish', wish.trim());
-      onEnter();
-      return;
-    }
+  async function signInWithGoogle() {
     if (wish.trim()) localStorage.setItem('rift_wish', wish.trim());
     setBusy(true);
     setMessage('');
@@ -159,6 +149,20 @@ export function Landing({ onEnter }: { onEnter?: () => void }) {
       setMessage('Не удалось войти через Google: ' + error.message);
       setBusy(false);
     }
+  }
+
+  async function start() {
+    if (onEnter) {
+      const normalizedCode = accessCode.trim().toLowerCase().replace(/[^a-z0-9]/g, '');
+      if (!ACCESS_CODES.includes(normalizedCode)) {
+        setMessage("Введи код доступа: It'sAmethyst, AmethystAI или AmethystPlus.");
+        return;
+      }
+      if (wish.trim()) localStorage.setItem('rift_wish', wish.trim());
+      onEnter();
+      return;
+    }
+    await signInWithGoogle();
   }
 
   function onSubmit(e: React.FormEvent) {
@@ -212,12 +216,17 @@ export function Landing({ onEnter }: { onEnter?: () => void }) {
           />
         )}
 
-        <button className="google-btn" onClick={start} disabled={busy}>
+        <button type="button" className="google-btn" onClick={signInWithGoogle} disabled={busy}>
           {busy && <span className="spinner" />}
-          {!busy && !onEnter && <GoogleIcon />}
-          {onEnter ? 'Открыть Amethyst' : 'Войти через Google'}
+          {!busy && <GoogleIcon />}
+          Войти через Google
         </button>
-        <p className="cta-note">{onEnter ? "Коды: It'sAmethyst, AmethystAI, AmethystPlus" : 'Без паролей — вход за пару секунд.'}</p>
+        {onEnter && (
+          <button type="button" className="secondary-btn hero-access-btn" onClick={start} disabled={busy}>
+            Открыть по коду
+          </button>
+        )}
+        <p className="cta-note">{onEnter ? "Google-вход основной. Коды для демо: It'sAmethyst, AmethystAI, AmethystPlus" : 'Без паролей — вход за пару секунд.'}</p>
 
         <form className="composer" onSubmit={onSubmit}>
           <textarea

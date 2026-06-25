@@ -20410,3 +20410,13 @@ html body .acode-limit {
   line-height: 1.15 !important;
   color: rgba(255,255,255,.58) !important;
 }
+
+html body .hero-access-btn {
+  width: min(310px, 100%) !important;
+  min-height: 48px !important;
+  margin-top: 10px !important;
+}
+
+html body .google-icon {
+  filter: none !important;
+}
