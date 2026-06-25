@@ -3,6 +3,7 @@ import { Markdown } from './Markdown';
 import { Icon } from './Icons';
 import { streamGemini } from '../lib/gemini';
 import { deleteChatRow, loadChats, saveChat } from '../lib/chatsStore';
+import { detectComputerIntent, runComputerIntent } from '../lib/computerControl';
 
 type Message = { id: string; role: 'user' | 'assistant'; content: string };
 type Chat = { id: string; title: string; messages: Message[]; updatedAt: number };
@@ -554,7 +555,8 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
     const baseMessages = [...messages, userMessage];
     const firstTitle = messages.length === 0 ? titleFrom(text) : active.title;
     const controller = new AbortController();
-    const localAnswer = file ? '' : localConversationAnswer(text);
+    const computerIntent = file ? null : detectComputerIntent(text);
+    const localAnswer = computerIntent || file ? '' : localConversationAnswer(text);
     const artifactKind = file ? null : detectArtifactKind(text);
     const instantArtifact = artifactKind ? buildInstantArtifactResponse(artifactKind, text) : '';
 
@@ -571,6 +573,27 @@ export function CodeWorkspace({ name, email, avatar, onSignOut, onHome }: Props)
       messages: [...baseMessages, { id: assistantId, role: 'assistant', content: '' }],
       updatedAt: Date.now(),
     }));
+
+    if (computerIntent) {
+      const result = await runComputerIntent(computerIntent);
+      applyChat(active.id, (chat) => ({
+        ...chat,
+        messages: chat.messages.map((message) =>
+          message.id === assistantId ? { ...message, content: result } : message,
+        ),
+        updatedAt: Date.now(),
+      }));
+      await saveChat({
+        id: active.id,
+        title: firstTitle,
+        model: 'amethyst-computer-control',
+        messages: [...baseMessages, { id: assistantId, role: 'assistant', content: result }],
+        updatedAt: Date.now(),
+      });
+      abortRef.current = null;
+      setBusy(false);
+      return;
+    }
 
     let full = instantArtifact;
     let streamed = '';

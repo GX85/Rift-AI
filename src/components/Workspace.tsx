@@ -95,8 +95,8 @@ const IMAGE_PRESETS: CreatorPreset[] = [
 
 // Инструменты доступны, когда Amethyst работает в десктоп-версии (управление ПК).
 const DESKTOP_NOTE =
-  '\n\nУ тебя есть доступ к компьютеру через инструменты (run_command, read_file, write_file, list_dir): ' +
-  'РЕАЛЬНО выполняй задачи сам — создавай файлы, запускай скрипты, ищи по папкам. Сначала действуй, потом поясни.';
+  '\n\nВ desktop-версии есть безопасный Computer Control Plugin: systemInfo, openUrl, openApp из allowlist, listDir/readFile/writeFile только внутри папки пользователя или проекта, showItem. ' +
+  'Не обещай произвольный shell и не проси опасные команды. Для действий с ПК используй только разрешенные операции и объясняй результат коротко.';
 
 const CREATION_RULES = `
 

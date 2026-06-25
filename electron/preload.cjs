@@ -4,6 +4,7 @@ const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('rift', {
   desktop: true,
+  computerControl: (action, payload) => ipcRenderer.invoke('rift:computerControl', action, payload),
   runCommand: (cmd) => ipcRenderer.invoke('rift:runCommand', cmd),
   readFile: (p) => ipcRenderer.invoke('rift:readFile', p),
   writeFile: (p, content) => ipcRenderer.invoke('rift:writeFile', p, content),
