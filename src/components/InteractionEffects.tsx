@@ -35,7 +35,7 @@ function createAudioKit(): AudioKit | null {
   const lfoGain = ctx.createGain();
   const noise = createNoiseBuffer(ctx);
 
-  master.gain.value = 0.064;
+  master.gain.value = 0.16;
   filter.type = 'lowpass';
   filter.frequency.value = 720;
   filter.Q.value = 0.42;
@@ -90,17 +90,23 @@ export function InteractionEffects() {
       return kitRef.current;
     }
 
+    function isTypingTarget(target: EventTarget | null) {
+      if (!(target instanceof HTMLElement)) return false;
+      return target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target.isContentEditable;
+    }
+
     async function startBackgroundMusic() {
       const audio = musicRef.current;
-      if (!audio || musicTriedRef.current) return;
+      if (!audio || (musicTriedRef.current && !audio.paused)) return;
       musicTriedRef.current = true;
-      audio.volume = 0.16;
+      audio.volume = 0.12;
       audio.loop = true;
       try {
         await audio.play();
         const kit = ensureAudio();
         if (kit) kit.ambient.gain.setTargetAtTime(0.018, kit.ctx.currentTime, 0.8);
       } catch {
+        musicTriedRef.current = false;
         const kit = ensureAudio();
         if (kit) kit.ambient.gain.setTargetAtTime(0.066, kit.ctx.currentTime, 0.8);
       }
@@ -118,7 +124,7 @@ export function InteractionEffects() {
       const kit = ensureAudio();
       if (!kit) return;
       const now = kit.ctx.currentTime;
-      if (now - lastTapRef.current < 0.024) return;
+      if (now - lastTapRef.current < 0.018) return;
       lastTapRef.current = now;
 
       const noise = kit.ctx.createBufferSource();
@@ -134,19 +140,19 @@ export function InteractionEffects() {
       noiseFilter.frequency.value = soft ? 920 : 1650;
       noiseFilter.Q.value = soft ? 2.6 : 5.8;
       noiseGain.gain.setValueAtTime(0.0001, now);
-      noiseGain.gain.exponentialRampToValueAtTime(soft ? 0.028 : 0.055, now + 0.004);
+      noiseGain.gain.exponentialRampToValueAtTime(soft ? 0.06 : 0.13, now + 0.004);
       noiseGain.gain.exponentialRampToValueAtTime(0.0001, now + (soft ? 0.07 : 0.046));
 
       thock.type = 'triangle';
       thock.frequency.setValueAtTime(soft ? 138 : 164 + Math.random() * 18, now);
       thockGain.gain.setValueAtTime(0.0001, now);
-      thockGain.gain.exponentialRampToValueAtTime(soft ? 0.018 : 0.031, now + 0.008);
+      thockGain.gain.exponentialRampToValueAtTime(soft ? 0.04 : 0.072, now + 0.008);
       thockGain.gain.exponentialRampToValueAtTime(0.0001, now + (soft ? 0.12 : 0.082));
 
       snap.type = 'square';
       snap.frequency.setValueAtTime(soft ? 420 : 740 + Math.random() * 90, now);
       snapGain.gain.setValueAtTime(0.0001, now);
-      snapGain.gain.exponentialRampToValueAtTime(soft ? 0.004 : 0.011, now + 0.003);
+      snapGain.gain.exponentialRampToValueAtTime(soft ? 0.008 : 0.024, now + 0.003);
       snapGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.022);
 
       noise.connect(noiseFilter);
@@ -174,21 +180,31 @@ export function InteractionEffects() {
     };
     const onKeyDown = (event: KeyboardEvent) => {
       void startBackgroundMusic();
+      if (isTypingTarget(event.target) && event.key.length === 1) return;
       if (!event.repeat) {
         root.classList.add('fx-keying');
         window.setTimeout(() => root.classList.remove('fx-keying'), 120);
         playKeyClick();
       }
     };
+    const onInput = (event: Event) => {
+      if (!isTypingTarget(event.target)) return;
+      void startBackgroundMusic();
+      root.classList.add('fx-keying');
+      window.setTimeout(() => root.classList.remove('fx-keying'), 120);
+      playKeyClick();
+    };
 
     window.addEventListener('pointermove', onPointerMove, { passive: true });
     window.addEventListener('pointerdown', onPointerDown, { passive: true });
     window.addEventListener('keydown', onKeyDown);
+    window.addEventListener('input', onInput, true);
 
     return () => {
       window.removeEventListener('pointermove', onPointerMove);
       window.removeEventListener('pointerdown', onPointerDown);
       window.removeEventListener('keydown', onKeyDown);
+      window.removeEventListener('input', onInput, true);
       window.clearTimeout(touchTimer);
       const kit = kitRef.current;
       kitRef.current = null;

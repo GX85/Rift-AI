@@ -45,8 +45,62 @@ function normalizeHistory(messages?: ChatMessage[]) {
   }));
 }
 
-function polishedLocalFallback(prompt: string, system: string): string {
-  const text = `${system}\n${prompt}`.toLowerCase();
+function userPromptOnly(prompt: string) {
+  return prompt
+    .split('\n\n--- Amethyst ')[0]
+    .split('\n\n--- File:')[0]
+    .trim();
+}
+
+function wantsLocalArtifact(text: string) {
+  const normalized = text.toLowerCase().trim();
+  const buildVerb =
+    /(создай|сделай|собери|сгенерируй|построй|разработай|сверстай|запрограммируй|реализуй|напиши|create|make|build|generate|implement|write)/.test(
+      normalized,
+    );
+  const artifactNoun =
+    /(сайт|лендинг|страниц|web-?app|прилож|игр|game|canvas|бот|чатбот|agent|агент|компонент|react|typescript|html|css|javascript|код|mvp|dashboard|прототип)/.test(
+      normalized,
+    );
+  const fixIntent =
+    /(исправь|почини|найди ошиб|разбери код|проведи code review|code review|review|fix|debug|bug)/.test(normalized) &&
+    /(код|react|typescript|javascript|html|css|ошиб|bug|component|компонент)/.test(normalized);
+  const explicitArtifact =
+    /(одним html|html-файл|готовый html|полный html|рабочий сайт|рабочую игру|рабочее приложение|напиши код|write code|write html|сделай игру|создай сайт|собери сайт|создай лендинг|собери web-app|создай бота)/.test(
+      normalized,
+    );
+  const casualWriting = /напиши (эссе|текст|письмо|пост|сообщение|описание|план|идею|идеи|ответ|речь|презентац)/.test(normalized);
+  const informationQuestion =
+    /^(какая|какой|какое|какие|когда|где|куда|почему|зачем|сколько|как|что такое|объясни|расскажи|who|what|when|where|why|how)\b/.test(
+      normalized,
+    );
+
+  return !casualWriting && (fixIntent || explicitArtifact || (buildVerb && artifactNoun && !informationQuestion));
+}
+
+function localPlainFallback(text: string) {
+  const normalized = text.toLowerCase().trim();
+  if (/^(привет|здравствуй|здравствуйте|хай|hello|hi)[!.?\s]*$/.test(normalized)) {
+    return 'Привет. Я Amethyst: могу просто поговорить, объяснить тему, помочь с презентацией или собрать сайт, игру, приложение и код, когда ты прямо попросишь.';
+  }
+  if (/^(как дела|как ты|ты тут|давай поговорим|можешь поговорить)[?.!\s]*$/.test(normalized)) {
+    return 'Я тут и готов нормально общаться без кода. Можем обсудить идею, презентацию, учебу, бизнес или перейти к разработке, если ты попросишь создать конкретный продукт.';
+  }
+  if (/(погода|weather|температура)/.test(normalized)) {
+    return 'По погоде у меня нет прямого live-доступа к прогнозу. Напиши город, и я дам общий совет, либо открой погодный сервис для точных градусов и осадков. Код для этого не нужен.';
+  }
+  if (/(почему|зачем|снова|опять).*(код|html)|всучиваешь|пишешь код|не просил код/.test(normalized)) {
+    return 'Согласен, обычный вопрос не должен превращаться в код. Я отвечаю текстом, пока ты явно не попросишь создать сайт, игру, приложение, компонент, исправить код или провести ревью.';
+  }
+  if (/^(что ты умеешь|что умеешь|помощь|help)/.test(normalized)) {
+    return 'Я умею общаться на разные темы, объяснять код, искать ошибки, писать React/TypeScript, собирать HTML-сайты, простые игры и MVP-приложения с живым превью.';
+  }
+  return 'Понял. Отвечаю без кода: могу объяснить, обсудить идею, помочь с презентацией, планом, текстом или обычным разговором. Если нужен сайт, игра или приложение, напиши это прямо.';
+}
+
+function polishedLocalFallback(prompt: string, _system: string): string {
+  const text = userPromptOnly(prompt).toLowerCase();
+  if (!wantsLocalArtifact(text)) return localPlainFallback(text);
   const isGame = /(игр|game|canvas|platformer|snake|runner|arcade|shooter|платформер|шутер)/i.test(text);
   const isBot = /(чатбот|бот|bot|agent|агент|system prompt|workflow|диалог)/i.test(text);
   const isSite = /(сайт|лендинг|landing|html|верстк|website|страниц|web-app|прототип|mvp)/i.test(text);

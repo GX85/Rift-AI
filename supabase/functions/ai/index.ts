@@ -16,8 +16,8 @@ declare const Deno: {
 };
 
 const GEMINI_API_KEY = Deno.env.get('GEMINI_API_KEY');
-// Максимальный интеллект для сложного кода, сайтов, игр и agentic-задач.
-const MODEL = Deno.env.get('GEMINI_MODEL') ?? 'gemini-3.1-pro-preview';
+// Максимальный актуальный дефолт для сложного кода, сайтов, игр и agentic-задач.
+const MODEL = Deno.env.get('GEMINI_MODEL') ?? 'gemini-3.5-flash';
 
 const cors = {
   'Access-Control-Allow-Origin': '*',
