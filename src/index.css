@@ -18455,3 +18455,496 @@ html body .progress i {
   background-color: #f4f4f5 !important;
   background-image: none !important;
 }
+
+/* Nuclear monochrome cleanup: final layer wins over every older purple/amethyst pass. */
+:root {
+  --pointer-x: 50%;
+  --pointer-y: 50%;
+}
+
+@keyframes softPanelIn {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0) scale(.985);
+    filter: blur(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes quietGridDrift {
+  0% { background-position: 0 0, 0 0, 0 0, 0 0; }
+  100% { background-position: 80px 42px, 0 0, 42px 42px, 42px 42px; }
+}
+
+html body,
+html body #root,
+html body .hero2,
+html body .platform-page,
+html body .reviews-page,
+html body .mobile-entry,
+html body .mobile-qr-page,
+html body .acode,
+html body .bg-overlay {
+  background-color: #030304 !important;
+  background-image:
+    radial-gradient(520px 380px at var(--pointer-x, 50%) var(--pointer-y, 50%), rgba(255,255,255,.055), transparent 70%),
+    linear-gradient(115deg, transparent 16%, rgba(255,255,255,.035) 42%, transparent 68%),
+    repeating-linear-gradient(0deg, rgba(255,255,255,.05) 0 1px, transparent 1px 42px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.05) 0 1px, transparent 1px 42px) !important;
+  color: #f5f5f5 !important;
+  animation: quietGridDrift 22s linear infinite !important;
+}
+
+html body .amethyst-bg,
+html body .amethyst-bg canvas,
+html body .hero-bg,
+html body .hero-vignette,
+html body .hero-grid,
+html body .acode-empty-orbit {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+html body .acode-main,
+html body .acode-thread,
+html body .acode-side,
+html body .acode-top,
+html body .acode-empty,
+html body .acode-empty-hero,
+html body .acode-live-preview,
+html body .acode-compose-wrap,
+html body .acode-compose,
+html body .acode-user,
+html body .hero-nav,
+html body .features,
+html body .platform-shell,
+html body .platform-window,
+html body .platform-showcase,
+html body .reviews-hero,
+html body .reviews-grid,
+html body .review-card,
+html body .app-review-card,
+html body .mobile-entry-card,
+html body .mobile-qr-card,
+html body .crystal-perk-tile {
+  color: #f5f5f5 !important;
+  background-color: rgba(8, 8, 10, .92) !important;
+  background-image:
+    linear-gradient(180deg, rgba(255,255,255,.048), rgba(255,255,255,.016)),
+    repeating-linear-gradient(0deg, rgba(255,255,255,.024) 0 1px, transparent 1px 28px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.024) 0 1px, transparent 1px 28px) !important;
+  border-color: rgba(255,255,255,.13) !important;
+  border-radius: 24px !important;
+  box-shadow:
+    0 28px 80px rgba(0,0,0,.48),
+    inset 0 1px 0 rgba(255,255,255,.055) !important;
+  clip-path: none !important;
+  filter: none !important;
+}
+
+html body .acode-main,
+html body .acode-thread {
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+html body .acode-top,
+html body .hero-nav {
+  backdrop-filter: blur(24px) saturate(1.08) !important;
+}
+
+html body .acode-side {
+  border-right: 1px solid rgba(255,255,255,.12) !important;
+}
+
+html body .acode-main::before,
+html body .acode-main::after,
+html body .acode-thread::before,
+html body .acode-thread::after,
+html body .acode-side::before,
+html body .acode-side::after,
+html body .acode-top::before,
+html body .acode-top::after,
+html body .acode-empty::before,
+html body .acode-empty::after,
+html body .acode-empty-hero::before,
+html body .acode-empty-hero::after,
+html body .acode-compose::before,
+html body .acode-compose::after,
+html body .acode-chat-item::before,
+html body .acode-chat-item::after,
+html body .review-card::before,
+html body .review-card::after,
+html body .app-review-card::before,
+html body .app-review-card::after,
+html body .review-avatar::before,
+html body .review-avatar::after,
+html body .platform-card::before,
+html body .platform-card::after,
+html body .platform-icon::before,
+html body .platform-icon::after,
+html body .platform-shell::before,
+html body .platform-shell::after,
+html body .platform-window::before,
+html body .platform-window::after,
+html body .hero-nav::before,
+html body .hero-nav::after,
+html body .crystal-perk-tile::before,
+html body .crystal-perk-tile::after,
+html body .mono-card-index::before,
+html body .mono-card-index::after {
+  display: none !important;
+  content: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  opacity: 0 !important;
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  transform: none !important;
+  clip-path: none !important;
+}
+
+html body button,
+html body [role="button"],
+html body input[type="button"],
+html body input[type="submit"],
+html body input[type="reset"],
+html body a.nav-open,
+html body .nav-open,
+html body .google-btn,
+html body .composer-cta,
+html body .platform-card,
+html body .platform-links a,
+html body .mobile-qr-actions a,
+html body .mobile-qr-actions button,
+html body .mobile-entry-card button,
+html body .hero-links a,
+html body .hero-prompt-grid button,
+html body .acode-logo,
+html body .acode-new,
+html body .acode-icon,
+html body .acode-send,
+html body .acode-copy,
+html body .acode-chat-item,
+html body .acode-studio-grid button,
+html body .acode-starters button,
+html body .acode-output-strip span,
+html body .acode-mobile-strip span,
+html body .plus-chip,
+html body .hero-pill,
+html body .platform-badge,
+html body .platform-icon,
+html body .platform-detect,
+html body .platform-flow span,
+html body .mono-card-index,
+html body .mono-product-mark,
+html body .mobile-app-icon > span,
+html body .ai-ava > span,
+html body .review-avatar,
+html body .review-avatar.small,
+html body .acode-msg-avatar,
+html body .acode-msg-avatar span {
+  color: #f5f5f5 !important;
+  -webkit-text-fill-color: currentColor !important;
+  background: #08080a !important;
+  background-color: #08080a !important;
+  background-image: none !important;
+  border: 1px solid rgba(255,255,255,.145) !important;
+  border-radius: 16px !important;
+  box-shadow:
+    0 14px 36px rgba(0,0,0,.42),
+    inset 0 1px 0 rgba(255,255,255,.065) !important;
+  text-shadow: none !important;
+  filter: none !important;
+  clip-path: none !important;
+  transition:
+    transform .32s cubic-bezier(.16, 1, .3, 1),
+    background-color .32s cubic-bezier(.16, 1, .3, 1),
+    border-color .32s cubic-bezier(.16, 1, .3, 1),
+    box-shadow .32s cubic-bezier(.16, 1, .3, 1),
+    opacity .32s cubic-bezier(.16, 1, .3, 1) !important;
+}
+
+html body .acode-chat-item.active,
+html body .acode-chat-item:hover,
+html body button:hover,
+html body [role="button"]:hover,
+html body a.nav-open:hover,
+html body .nav-open:hover,
+html body .google-btn:hover,
+html body .composer-cta:hover,
+html body .platform-card:hover,
+html body .platform-links a:hover,
+html body .mobile-qr-actions a:hover,
+html body .mobile-qr-actions button:hover,
+html body .mobile-entry-card button:hover,
+html body .hero-links a:hover,
+html body .hero-prompt-grid button:hover,
+html body .acode-logo:hover,
+html body .acode-new:hover,
+html body .acode-icon:hover,
+html body .acode-send:hover,
+html body .acode-copy:hover,
+html body .acode-studio-grid button:hover,
+html body .acode-starters button:hover {
+  color: #ffffff !important;
+  background: #121214 !important;
+  background-color: #121214 !important;
+  background-image: none !important;
+  border-color: rgba(255,255,255,.32) !important;
+  box-shadow:
+    0 20px 52px rgba(0,0,0,.54),
+    inset 0 1px 0 rgba(255,255,255,.1) !important;
+  transform: translate3d(0, -2px, 0) !important;
+}
+
+html body button:active,
+html body [role="button"]:active,
+html body a.nav-open:active,
+html body .nav-open:active,
+html body .google-btn:active,
+html body .composer-cta:active,
+html body .platform-card:active,
+html body .acode-logo:active,
+html body .acode-new:active,
+html body .acode-icon:active,
+html body .acode-send:active,
+html body .acode-copy:active,
+html body .acode-studio-grid button:active,
+html body .acode-starters button:active {
+  transform: translate3d(0, 0, 0) scale(.985) !important;
+}
+
+html body .acode-chat-item,
+html body .acode-chat-item.active {
+  min-height: 78px !important;
+  padding: 18px 20px !important;
+}
+
+html body .review-avatar,
+html body .review-avatar.small,
+html body .mono-card-index,
+html body .platform-icon,
+html body .mono-product-mark,
+html body .mobile-app-icon > span,
+html body .ai-ava > span,
+html body .acode-msg-avatar,
+html body .acode-msg-avatar span {
+  display: inline-grid !important;
+  place-items: center !important;
+  min-width: 48px !important;
+  width: 48px !important;
+  height: 48px !important;
+  padding: 0 !important;
+  font-weight: 900 !important;
+}
+
+html body .review-avatar,
+html body .review-avatar.small {
+  margin-bottom: 24px !important;
+}
+
+html body .platform-card,
+html body .review-card,
+html body .app-review-card,
+html body .acode-studio-grid button,
+html body .hero-prompt-grid button,
+html body .crystal-perk-tile {
+  background: rgba(8,8,10,.96) !important;
+  background-color: rgba(8,8,10,.96) !important;
+  background-image:
+    linear-gradient(180deg, rgba(255,255,255,.052), rgba(255,255,255,.014)),
+    repeating-linear-gradient(0deg, rgba(255,255,255,.022) 0 1px, transparent 1px 26px),
+    repeating-linear-gradient(90deg, rgba(255,255,255,.022) 0 1px, transparent 1px 26px) !important;
+  border: 1px solid rgba(255,255,255,.13) !important;
+  border-radius: 22px !important;
+}
+
+html body .platform-card strong,
+html body .platform-card small,
+html body .platform-badge,
+html body .review-text,
+html body .review-person,
+html body .review-role,
+html body .acode-chat-item span,
+html body .acode-chat-item b,
+html body .acode-card-title,
+html body .acode-card-text,
+html body .plus-sub,
+html body .crystal-perk-title,
+html body .crystal-perk-text,
+html body .hero-p,
+html body .platform-sub,
+html body .reviews-sub,
+html body .mobile-kicker {
+  color: #f5f5f5 !important;
+  -webkit-text-fill-color: currentColor !important;
+  background: none !important;
+  background-image: none !important;
+  text-shadow: none !important;
+}
+
+html body .platform-card p,
+html body .review-card p,
+html body .app-review-card p,
+html body .acode-studio-grid p,
+html body .hero-prompt-grid button,
+html body .crystal-perk-text,
+html body .acode-empty-kicker,
+html body .acode-model p,
+html body .acode-user p {
+  color: #b9b9c0 !important;
+}
+
+html body .platform-badge,
+html body .hero-pill,
+html body .plus-chip,
+html body .platform-detect,
+html body .platform-flow span,
+html body .acode-output-strip span,
+html body .acode-mobile-strip span {
+  min-height: 36px !important;
+  padding: 0 16px !important;
+  border-radius: 999px !important;
+}
+
+html body .platform-grid {
+  align-items: stretch !important;
+}
+
+html body .platform-card {
+  min-height: 260px !important;
+  justify-content: flex-start !important;
+  gap: 18px !important;
+  padding: 34px !important;
+}
+
+html body .platform-card strong {
+  max-width: 100% !important;
+  font-size: clamp(28px, 3vw, 44px) !important;
+  line-height: 1.05 !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+}
+
+html body .platform-card small {
+  max-width: 360px !important;
+  font-size: clamp(15px, 1.6vw, 18px) !important;
+  line-height: 1.45 !important;
+  overflow-wrap: anywhere !important;
+}
+
+html body .acode-compose {
+  max-width: min(100%, 1320px) !important;
+  margin-inline: auto !important;
+}
+
+html body .acode-compose textarea,
+html body .composer-input,
+html body .hero-code-input,
+html body input,
+html body textarea {
+  color: #f5f5f5 !important;
+  caret-color: #ffffff !important;
+  background: #09090b !important;
+  background-image: none !important;
+  border-color: rgba(255,255,255,.16) !important;
+  border-radius: 18px !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.055) !important;
+  transition:
+    border-color .3s cubic-bezier(.16,1,.3,1),
+    box-shadow .3s cubic-bezier(.16,1,.3,1),
+    background-color .3s cubic-bezier(.16,1,.3,1) !important;
+}
+
+html body .acode-compose textarea:focus,
+html body .composer-input:focus,
+html body .hero-code-input:focus,
+html body input:focus,
+html body textarea:focus {
+  border-color: rgba(255,255,255,.38) !important;
+  box-shadow:
+    0 0 0 4px rgba(255,255,255,.075),
+    inset 0 1px 0 rgba(255,255,255,.08) !important;
+}
+
+html body .acode-top,
+html body .acode-side,
+html body .acode-studio-grid button,
+html body .acode-starters button,
+html body .hero-prompt-grid button,
+html body .platform-card,
+html body .review-card,
+html body .app-review-card,
+html body .crystal-perk-tile,
+html body .acode-compose,
+html body .acode-msg,
+html body .mobile-entry-card,
+html body .mobile-qr-card {
+  animation: softPanelIn .62s cubic-bezier(.16, 1, .3, 1) both !important;
+}
+
+html body .acode-studio-grid button:nth-child(2),
+html body .hero-prompt-grid button:nth-child(2),
+html body .platform-card:nth-child(2),
+html body .review-card:nth-child(2),
+html body .crystal-perk-tile:nth-child(2) { animation-delay: .05s !important; }
+
+html body .acode-studio-grid button:nth-child(3),
+html body .hero-prompt-grid button:nth-child(3),
+html body .platform-card:nth-child(3),
+html body .review-card:nth-child(3),
+html body .crystal-perk-tile:nth-child(3) { animation-delay: .1s !important; }
+
+html body .acode-studio-grid button:nth-child(4),
+html body .hero-prompt-grid button:nth-child(4),
+html body .review-card:nth-child(4),
+html body .crystal-perk-tile:nth-child(4) { animation-delay: .15s !important; }
+
+@media (max-width: 760px) {
+  html body .acode {
+    grid-template-columns: 1fr !important;
+  }
+
+  html body .acode-side {
+    border-radius: 0 !important;
+  }
+
+  html body .acode-main {
+    min-width: 0 !important;
+    padding-inline: 12px !important;
+  }
+
+  html body .acode-top,
+  html body .acode-compose {
+    border-radius: 22px !important;
+  }
+
+  html body .platform-card {
+    min-height: 190px !important;
+    padding: 24px !important;
+  }
+
+  html body .platform-card strong {
+    font-size: clamp(26px, 11vw, 40px) !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html body,
+  html body *,
+  html body *::before,
+  html body *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
+}

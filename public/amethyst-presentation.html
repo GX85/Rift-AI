@@ -471,6 +471,116 @@
       filter: grayscale(1) saturate(0) brightness(1.12) !important;
       box-shadow: none !important;
     }
+
+    /* Final deck lock: black grid, smooth cards, no purple/pink/amethyst button styling. */
+    @keyframes deckSoftIn {
+      from { opacity: 0; transform: translate3d(0, 18px, 0) scale(.985); filter: blur(10px); }
+      to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); filter: blur(0); }
+    }
+
+    @keyframes deckGridMove {
+      from { background-position: 0 0, 0 0, 0 0; }
+      to { background-position: 84px 84px, 42px 42px, 0 0; }
+    }
+
+    html,
+    body {
+      background-color: #030304 !important;
+      background-image:
+        repeating-linear-gradient(0deg, rgba(255,255,255,.05) 0 1px, transparent 1px 42px),
+        repeating-linear-gradient(90deg, rgba(255,255,255,.05) 0 1px, transparent 1px 42px),
+        linear-gradient(135deg, #030304, #08090c 54%, #030304) !important;
+      color: #f5f5f5 !important;
+      animation: deckGridMove 24s linear infinite !important;
+    }
+
+    .slide,
+    .top,
+    .card,
+    .device,
+    .qr,
+    .mock-card {
+      background: rgba(8,8,10,.94) !important;
+      background-image:
+        linear-gradient(180deg, rgba(255,255,255,.052), rgba(255,255,255,.014)),
+        repeating-linear-gradient(0deg, rgba(255,255,255,.022) 0 1px, transparent 1px 26px),
+        repeating-linear-gradient(90deg, rgba(255,255,255,.022) 0 1px, transparent 1px 26px) !important;
+      border-color: rgba(255,255,255,.13) !important;
+      border-radius: 22px !important;
+      box-shadow: 0 28px 80px rgba(0,0,0,.48), inset 0 1px 0 rgba(255,255,255,.055) !important;
+      clip-path: none !important;
+    }
+
+    button,
+    .nav button,
+    .nav a,
+    .tag,
+    .brand,
+    .bottom span {
+      color: #f5f5f5 !important;
+      -webkit-text-fill-color: currentColor !important;
+      background: #08080a !important;
+      background-image: none !important;
+      border: 1px solid rgba(255,255,255,.145) !important;
+      border-radius: 16px !important;
+      box-shadow: 0 14px 36px rgba(0,0,0,.42), inset 0 1px 0 rgba(255,255,255,.065) !important;
+      text-shadow: none !important;
+      filter: none !important;
+      transition: transform .32s cubic-bezier(.16,1,.3,1), background-color .32s cubic-bezier(.16,1,.3,1), border-color .32s cubic-bezier(.16,1,.3,1), box-shadow .32s cubic-bezier(.16,1,.3,1) !important;
+    }
+
+    button:hover,
+    .nav button:hover,
+    .nav a:hover {
+      background: #121214 !important;
+      border-color: rgba(255,255,255,.32) !important;
+      transform: translate3d(0, -2px, 0) !important;
+    }
+
+    button::before,
+    button::after,
+    .nav a::before,
+    .nav a::after,
+    .card::before,
+    .card::after,
+    .tag::before,
+    .tag::after {
+      display: none !important;
+      content: none !important;
+      background: transparent !important;
+      background-image: none !important;
+      box-shadow: none !important;
+    }
+
+    .accent,
+    .violet,
+    h1 span,
+    h2 span,
+    .metric strong {
+      color: #f5f5f5 !important;
+      -webkit-text-fill-color: currentColor !important;
+      background: none !important;
+      background-image: none !important;
+      text-shadow: none !important;
+    }
+
+    .slide,
+    .card,
+    .device,
+    .qr,
+    .nav {
+      animation: deckSoftIn .62s cubic-bezier(.16,1,.3,1) both !important;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
   </style>
 </head>
 <body>
