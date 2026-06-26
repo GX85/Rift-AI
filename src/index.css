@@ -20420,3 +20420,607 @@ html body .hero-access-btn {
 html body .google-icon {
   filter: none !important;
 }
+
+/* 2026-06-26 studio-grade empty state.
+   The app should feel like a real coding/product workspace before the first prompt. */
+html body .acode,
+html body .acode-main {
+  background-color: #030303 !important;
+  background-image:
+    linear-gradient(rgba(255,255,255,.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.055) 1px, transparent 1px),
+    radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 28%), rgba(255,255,255,.08), transparent 340px),
+    linear-gradient(180deg, #020202 0%, #050505 100%) !important;
+  background-size: 42px 42px, 42px 42px, auto, auto !important;
+}
+
+html body .acode::before,
+html body .acode::after,
+html body .acode-side::before,
+html body .acode-side::after,
+html body .acode-chat-item::before,
+html body .acode-chat-item::after,
+html body .acode-studio-grid button::before,
+html body .acode-studio-grid button::after,
+html body .acode-starters button::before,
+html body .acode-starters button::after {
+  content: none !important;
+  display: none !important;
+}
+
+html body .acode-side {
+  background: rgba(18, 18, 19, .94) !important;
+  border-color: rgba(255,255,255,.12) !important;
+  box-shadow: 26px 0 80px rgba(0,0,0,.34), inset -1px 0 0 rgba(255,255,255,.04) !important;
+}
+
+html body .acode-chat-item,
+html body .acode-chat-item.active {
+  background: #0b0b0c !important;
+  background-image: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.012)) !important;
+  border-color: rgba(255,255,255,.15) !important;
+  color: #f6f6f7 !important;
+}
+
+html body .acode-chat-item.active {
+  box-shadow: 0 18px 42px rgba(0,0,0,.38), inset 0 0 0 1px rgba(255,255,255,.06) !important;
+}
+
+html body .acode-top {
+  width: min(1320px, calc(100% - 56px)) !important;
+  min-height: 94px !important;
+  margin: 24px auto 0 !important;
+  padding: 18px 24px !important;
+  border-radius: 28px !important;
+  background: rgba(18, 18, 19, .92) !important;
+  background-image:
+    linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.018)),
+    linear-gradient(90deg, rgba(255,255,255,.035), transparent 42%) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  box-shadow: 0 26px 80px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.08) !important;
+  backdrop-filter: blur(22px) saturate(112%) !important;
+}
+
+html body .acode-model {
+  gap: 15px !important;
+  align-items: center !important;
+}
+
+html body .acode-model strong {
+  font-size: 26px !important;
+  line-height: 1 !important;
+}
+
+html body .acode-model span {
+  max-width: 520px !important;
+  color: rgba(255,255,255,.72) !important;
+}
+
+html body .acode-main[data-empty="true"] .acode-thread {
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  padding: 26px clamp(22px, 3vw, 48px) 194px !important;
+  overflow-x: hidden !important;
+}
+
+html body .acode-main[data-empty="true"] .acode-empty {
+  width: min(1280px, 100%) !important;
+  min-height: auto !important;
+  margin: 0 auto !important;
+  padding: 0 0 32px !important;
+  display: grid !important;
+  align-content: start !important;
+  gap: 18px !important;
+}
+
+html body .acode-main[data-empty="true"] .acode-empty-hero {
+  position: relative !important;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 480px) !important;
+  align-items: stretch !important;
+  gap: 24px !important;
+  width: 100% !important;
+  max-width: none !important;
+  min-height: 360px !important;
+  margin: 0 !important;
+  padding: 30px !important;
+  text-align: left !important;
+  overflow: hidden !important;
+  border-radius: 32px !important;
+  border: 1px solid rgba(255,255,255,.15) !important;
+  background: rgba(15, 15, 16, .88) !important;
+  background-image:
+    radial-gradient(circle at 24% 0%, rgba(255,255,255,.09), transparent 310px),
+    linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.014)),
+    linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px) !important;
+  background-size: auto, auto, 34px 34px, 34px 34px !important;
+  box-shadow: 0 32px 100px rgba(0,0,0,.44), inset 0 1px 0 rgba(255,255,255,.08) !important;
+}
+
+html body .acode-main[data-empty="true"] .acode-empty-hero::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: -1px !important;
+  display: block !important;
+  pointer-events: none !important;
+  background:
+    linear-gradient(115deg, transparent 0 26%, rgba(255,255,255,.07) 27% 29%, transparent 30% 100%),
+    radial-gradient(circle at var(--mouse-x, 50%) var(--mouse-y, 42%), rgba(255,255,255,.11), transparent 260px) !important;
+  opacity: .75 !important;
+}
+
+html body .acode-main[data-empty="true"] .acode-empty-copy {
+  position: relative !important;
+  z-index: 1 !important;
+  display: grid !important;
+  align-content: center !important;
+  justify-items: start !important;
+  gap: 14px !important;
+  max-width: 720px !important;
+}
+
+html body .acode-main[data-empty="true"] .mono-product-mark.hero {
+  width: 48px !important;
+  height: 48px !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 16px !important;
+  font-size: 13px !important;
+  font-weight: 900 !important;
+  color: #f8f8f9 !important;
+  background: #080809 !important;
+  border: 1px solid rgba(255,255,255,.18) !important;
+  box-shadow: 0 18px 44px rgba(0,0,0,.42), inset 0 1px 0 rgba(255,255,255,.08) !important;
+}
+
+html body .acode-main[data-empty="true"] .acode-empty-orbit {
+  display: none !important;
+}
+
+html body .acode-main[data-empty="true"] .acode-empty-kicker {
+  display: inline-flex !important;
+  align-items: center !important;
+  width: fit-content !important;
+  min-height: 34px !important;
+  padding: 0 14px !important;
+  border-radius: 999px !important;
+  color: rgba(255,255,255,.82) !important;
+  background: #0a0a0b !important;
+  border: 1px solid rgba(255,255,255,.15) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06) !important;
+}
+
+html body .acode-main[data-empty="true"] .acode-empty h1 {
+  max-width: 720px !important;
+  margin: 0 !important;
+  color: #f7f7f8 !important;
+  font-size: 64px !important;
+  line-height: .96 !important;
+  letter-spacing: 0 !important;
+  text-align: left !important;
+}
+
+html body .acode-main[data-empty="true"] .acode-empty p {
+  max-width: 660px !important;
+  margin: 0 !important;
+  color: rgba(255,255,255,.68) !important;
+  font-size: 18px !important;
+  line-height: 1.55 !important;
+  text-align: left !important;
+}
+
+html body .acode-main[data-empty="true"] .acode-hero-metrics {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: flex-start !important;
+  gap: 10px !important;
+  margin-top: 8px !important;
+}
+
+html body .acode-main[data-empty="true"] .acode-hero-metrics span {
+  min-width: 134px !important;
+  padding: 12px 14px !important;
+  display: grid !important;
+  gap: 4px !important;
+  border-radius: 18px !important;
+  color: #f5f5f6 !important;
+  background: rgba(5,5,5,.82) !important;
+  border: 1px solid rgba(255,255,255,.13) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.055) !important;
+}
+
+html body .acode-main[data-empty="true"] .acode-hero-metrics b {
+  font-size: 24px !important;
+  line-height: 1 !important;
+}
+
+html body .acode-main[data-empty="true"] .acode-hero-metrics small {
+  color: rgba(255,255,255,.58) !important;
+  font-size: 12px !important;
+  line-height: 1.2 !important;
+}
+
+html body .acode-main[data-empty="true"] .acode-live-preview {
+  position: relative !important;
+  z-index: 1 !important;
+  display: grid !important;
+  grid-template-rows: auto minmax(0, 1fr) auto auto !important;
+  gap: 12px !important;
+  min-height: 300px !important;
+  padding: 16px !important;
+  border-radius: 28px !important;
+  background: #070708 !important;
+  background-image:
+    linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.012)),
+    linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px) !important;
+  background-size: auto, 28px 28px, 28px 28px !important;
+  border: 1px solid rgba(255,255,255,.15) !important;
+  box-shadow: 0 22px 70px rgba(0,0,0,.42), inset 0 1px 0 rgba(255,255,255,.07) !important;
+}
+
+html body .acode-preview-top {
+  display: flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  min-height: 28px !important;
+  color: rgba(255,255,255,.52) !important;
+  font-size: 12px !important;
+}
+
+html body .acode-preview-top i {
+  width: 9px !important;
+  height: 9px !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,.55) !important;
+}
+
+html body .acode-preview-top span {
+  margin-left: auto !important;
+}
+
+html body .acode-preview-screen {
+  display: grid !important;
+  align-content: start !important;
+  gap: 10px !important;
+  min-height: 158px !important;
+  padding: 18px !important;
+  border-radius: 22px !important;
+  border: 1px solid rgba(255,255,255,.12) !important;
+  background: rgba(255,255,255,.035) !important;
+}
+
+html body .acode-preview-screen b,
+html body .acode-preview-screen span,
+html body .acode-preview-screen i,
+html body .acode-preview-code span {
+  display: block !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,.72) !important;
+}
+
+html body .acode-preview-screen b {
+  width: 62% !important;
+  height: 18px !important;
+}
+
+html body .acode-preview-screen > span {
+  width: 82% !important;
+  height: 10px !important;
+  opacity: .48 !important;
+}
+
+html body .acode-preview-screen > span + span {
+  width: 48% !important;
+}
+
+html body .acode-preview-screen div {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+  margin-top: auto !important;
+}
+
+html body .acode-preview-screen i {
+  height: 44px !important;
+  border-radius: 16px !important;
+  opacity: .18 !important;
+}
+
+html body .acode-preview-code {
+  display: grid !important;
+  gap: 7px !important;
+  padding: 12px !important;
+  border-radius: 18px !important;
+  background: rgba(0,0,0,.38) !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+}
+
+html body .acode-preview-code span {
+  height: 8px !important;
+  opacity: .28 !important;
+}
+
+html body .acode-preview-code span:nth-child(1) {
+  width: 76% !important;
+}
+
+html body .acode-preview-code span:nth-child(2) {
+  width: 92% !important;
+}
+
+html body .acode-preview-code span:nth-child(3) {
+  width: 64% !important;
+}
+
+html body .acode-preview-code span:nth-child(4) {
+  width: 84% !important;
+}
+
+html body .acode-pipeline {
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 8px !important;
+}
+
+html body .acode-pipeline span {
+  min-height: 34px !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 13px !important;
+  color: rgba(255,255,255,.74) !important;
+  background: rgba(255,255,255,.045) !important;
+  border: 1px solid rgba(255,255,255,.1) !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+}
+
+html body .acode-main[data-empty="true"] .acode-studio-grid {
+  width: 100% !important;
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 14px !important;
+  margin: 0 !important;
+}
+
+html body .acode-main[data-empty="true"] .acode-studio-grid button {
+  min-height: 174px !important;
+  display: grid !important;
+  grid-template-rows: auto auto 1fr !important;
+  align-content: start !important;
+  gap: 13px !important;
+  padding: 20px !important;
+  border-radius: 26px !important;
+  text-align: left !important;
+  color: #f4f4f5 !important;
+  background: #080809 !important;
+  background-image: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.012)) !important;
+  border: 1px solid rgba(255,255,255,.14) !important;
+  box-shadow: 0 20px 58px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.065) !important;
+}
+
+html body .acode-main[data-empty="true"] .acode-studio-grid button svg {
+  width: 38px !important;
+  height: 38px !important;
+  padding: 10px !important;
+  border-radius: 14px !important;
+  color: #f6f6f7 !important;
+  background: rgba(255,255,255,.06) !important;
+  border: 1px solid rgba(255,255,255,.13) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06) !important;
+}
+
+html body .acode-main[data-empty="true"] .acode-studio-grid button strong {
+  display: block !important;
+  color: #f8f8f9 !important;
+  font-size: 22px !important;
+  line-height: 1.05 !important;
+}
+
+html body .acode-main[data-empty="true"] .acode-studio-grid button span {
+  display: block !important;
+  color: rgba(255,255,255,.62) !important;
+  font-size: 14px !important;
+  line-height: 1.42 !important;
+}
+
+html body .acode-main[data-empty="true"] .acode-output-strip {
+  width: 100% !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  justify-content: flex-start !important;
+  gap: 10px !important;
+  margin: 0 !important;
+  padding: 12px !important;
+  border-radius: 24px !important;
+  background: rgba(13,13,14,.82) !important;
+  border: 1px solid rgba(255,255,255,.11) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.055) !important;
+}
+
+html body .acode-main[data-empty="true"] .acode-output-strip span {
+  min-height: 36px !important;
+  padding: 0 14px !important;
+  border-radius: 999px !important;
+  color: rgba(255,255,255,.82) !important;
+  background: #080809 !important;
+  border-color: rgba(255,255,255,.14) !important;
+}
+
+html body .acode-main[data-empty="true"] .acode-starters {
+  width: 100% !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  margin: 0 !important;
+}
+
+html body .acode-main[data-empty="true"] .acode-starters button {
+  min-height: 76px !important;
+  padding: 16px 18px !important;
+  border-radius: 22px !important;
+  text-align: left !important;
+  white-space: normal !important;
+  line-height: 1.25 !important;
+  color: #f4f4f5 !important;
+  background: #080809 !important;
+  background-image: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.012)) !important;
+  border: 1px solid rgba(255,255,255,.13) !important;
+}
+
+html body .acode-main[data-empty="true"] .acode-compose-wrap {
+  padding: 14px clamp(18px, 3vw, 48px) 20px !important;
+  background:
+    linear-gradient(180deg, transparent, rgba(0,0,0,.78) 28%, rgba(0,0,0,.96)) !important;
+}
+
+html body .acode-compose {
+  width: min(1240px, calc(100% - 44px)) !important;
+  min-height: 128px !important;
+  padding: 16px !important;
+  border-radius: 28px !important;
+  background: rgba(16,16,17,.95) !important;
+  background-image:
+    linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.012)),
+    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px) !important;
+  background-size: auto, 30px 30px, 30px 30px !important;
+  border: 1px solid rgba(255,255,255,.15) !important;
+  box-shadow: 0 28px 90px rgba(0,0,0,.56), inset 0 1px 0 rgba(255,255,255,.07) !important;
+}
+
+html body .acode-compose textarea {
+  min-height: 58px !important;
+  border-radius: 20px !important;
+  padding: 18px 20px !important;
+  color: #f7f7f8 !important;
+  background: #050505 !important;
+  background-image: none !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+  font-size: 19px !important;
+}
+
+html body .acode-send,
+html body .acode-icon,
+html body .acode-new,
+html body .acode-copy {
+  border-radius: 18px !important;
+  color: #f8f8f9 !important;
+  background: #080809 !important;
+  background-image: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.012)) !important;
+  border: 1px solid rgba(255,255,255,.16) !important;
+}
+
+html body .acode-send:not(:disabled):hover,
+html body .acode-icon:not(:disabled):hover,
+html body .acode-new:not(:disabled):hover,
+html body .acode-copy:not(:disabled):hover,
+html body .acode-main[data-empty="true"] .acode-studio-grid button:hover,
+html body .acode-main[data-empty="true"] .acode-starters button:hover {
+  transform: translateY(-3px) !important;
+  border-color: rgba(255,255,255,.28) !important;
+  background-color: #121214 !important;
+  box-shadow: 0 22px 66px rgba(0,0,0,.48), inset 0 1px 0 rgba(255,255,255,.08) !important;
+}
+
+@media (max-width: 1180px) {
+  html body .acode-main[data-empty="true"] .acode-empty h1 {
+    font-size: 54px !important;
+  }
+
+  html body .acode-main[data-empty="true"] .acode-empty-hero {
+    grid-template-columns: 1fr !important;
+  }
+
+  html body .acode-main[data-empty="true"] .acode-live-preview {
+    min-height: 260px !important;
+  }
+
+  html body .acode-main[data-empty="true"] .acode-studio-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+
+@media (max-width: 760px) {
+  html body .acode {
+    grid-template-columns: 1fr !important;
+  }
+
+  html body .acode-top {
+    width: min(100% - 24px, 720px) !important;
+    min-height: 82px !important;
+    margin-top: 12px !important;
+    padding: 14px 16px !important;
+    border-radius: 24px !important;
+  }
+
+  html body .acode-model strong {
+    font-size: 20px !important;
+  }
+
+  html body .acode-model span {
+    max-width: 240px !important;
+    font-size: 13px !important;
+  }
+
+  html body .acode-main[data-empty="true"] .acode-thread {
+    padding: 16px 14px 186px !important;
+  }
+
+  html body .acode-main[data-empty="true"] .acode-empty {
+    gap: 14px !important;
+  }
+
+  html body .acode-main[data-empty="true"] .acode-empty-hero {
+    min-height: auto !important;
+    padding: 20px !important;
+    border-radius: 26px !important;
+  }
+
+  html body .acode-main[data-empty="true"] .acode-empty h1 {
+    font-size: 38px !important;
+    line-height: 1 !important;
+  }
+
+  html body .acode-main[data-empty="true"] .acode-empty p {
+    font-size: 15px !important;
+  }
+
+  html body .acode-main[data-empty="true"] .acode-hero-metrics span {
+    min-width: 0 !important;
+    flex: 1 1 120px !important;
+  }
+
+  html body .acode-main[data-empty="true"] .acode-live-preview {
+    min-height: 230px !important;
+    padding: 12px !important;
+    border-radius: 22px !important;
+  }
+
+  html body .acode-pipeline {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  html body .acode-main[data-empty="true"] .acode-studio-grid,
+  html body .acode-main[data-empty="true"] .acode-starters {
+    grid-template-columns: 1fr !important;
+  }
+
+  html body .acode-main[data-empty="true"] .acode-studio-grid button {
+    min-height: 142px !important;
+  }
+
+  html body .acode-compose {
+    width: min(100% - 20px, 720px) !important;
+    min-height: 124px !important;
+    border-radius: 24px !important;
+    padding: 12px !important;
+  }
+
+  html body .acode-compose textarea {
+    min-height: 52px !important;
+    font-size: 16px !important;
+    padding: 15px 16px !important;
+  }
+}
