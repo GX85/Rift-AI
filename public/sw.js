@@ -1,4 +1,4 @@
-const CACHE_NAME = 'amethyst-mobile-v8-pixel-logo-builder-20260625';
+const CACHE_NAME = 'amethyst-mobile-v9-login-logo-builder-20260626';
 const APP_SHELL = [
   '/',
   '/mobile',

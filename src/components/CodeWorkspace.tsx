@@ -120,14 +120,14 @@ function isArtifactRequest(text: string) {
       normalized,
     );
   const artifactNoun =
-    /(сайт|лендинг|страниц|web-?app|прилож|программ|утилит|инструмент|сервис|панел|трекер|todo|игр|game|canvas|бот|чатбот|agent|агент|компонент|react|typescript|html|css|javascript|код|mvp|dashboard|прототип)/.test(
+    /(сайт|лендинг|страниц|web-?app|проект|продукт|прилож|программ|утилит|инструмент|сервис|панел|трекер|todo|игр|game|canvas|бот|чатбот|agent|агент|компонент|react|typescript|html|css|javascript|код|mvp|dashboard|прототип)/.test(
       normalized,
     );
   const fixIntent =
     /(исправь|почини|найди ошиб|разбери код|проведи code review|code review|review|fix|debug|bug)/.test(normalized) &&
     /(код|react|typescript|javascript|html|css|ошиб|bug|component|компонент)/.test(normalized);
   const explicitArtifact =
-    /(одним html|html-файл|готовый html|полный html|рабочий сайт|рабочую игру|рабочее приложение|рабочую программу|напиши код|write code|write html|сделай игру|создай сайт|собери сайт|создай лендинг|собери web-app|создай бота|сделай программу|создай программу|собери приложение|сделай приложение)/.test(
+    /(одним html|html-файл|готовый html|полный html|рабочий сайт|рабочую игру|рабочее приложение|рабочую программу|готовый проект|рабочий проект|напиши код|write code|write html|сделай игру|создай сайт|собери сайт|создай лендинг|собери web-app|создай бота|сделай программу|создай программу|собери приложение|сделай приложение|создай проект|сделай проект|собери проект|создай продукт|собери продукт)/.test(
       normalized,
     );
   const casualWriting = /напиши (эссе|текст|письмо|пост|сообщение|описание|план|идею|идеи|ответ|речь|презентац)/.test(normalized);
@@ -188,7 +188,7 @@ function buildTaskBrief(text: string) {
       'Для чатбота верни system prompt, intents, сценарии, fallback, guardrails, memory policy, тестовые диалоги и UI/JS-прототип при реализации.',
     );
   }
-  if (/программ|прилож|app|web-app|mvp|crm|dashboard|панел|сервис|утилит|трекер|todo/.test(normalized)) {
+  if (/проект|продукт|программ|прилож|app|web-app|mvp|crm|dashboard|панел|сервис|утилит|трекер|todo/.test(normalized)) {
     rules.push(
       'Для приложения верни один рабочий HTML-прототип с интерфейсом, мок-данными, формой, состояниями, localStorage и понятными действиями.',
     );
@@ -420,11 +420,11 @@ function escapeHtml(value: string) {
 function detectArtifactKind(text: string): ArtifactKind | null {
   if (!isArtifactRequest(text)) return null;
   const normalized = text.toLowerCase();
-  if (!/\b(game|canvas|runner|snake|arcade)\b|игр|шутер|платформер/.test(normalized) && /\b(web-?app|mvp|crm|dashboard|admin|kanban|todo|tracker|app)\b|прилож|программ|панел|дашборд|кабинет|сервис|утилит|инструмент|трекер/.test(normalized)) return 'app';
+  if (!/\b(game|canvas|runner|snake|arcade)\b|игр|шутер|платформер/.test(normalized) && /\b(web-?app|mvp|crm|dashboard|admin|kanban|todo|tracker|app|project|product)\b|проект|продукт|прилож|программ|панел|дашборд|кабинет|сервис|утилит|инструмент|трекер/.test(normalized)) return 'app';
   if (/игр|game|canvas|runner|snake|arcade|шутер|платформер/.test(normalized)) return 'game';
   if (/чатбот|бот|bot|agent|агент|диалог/.test(normalized)) return 'bot';
   if (/сайт|лендинг|landing|website|страниц|html/.test(normalized)) return 'site';
-  if (/программ|прилож|app|web-app|mvp|crm|dashboard|панел|сервис|утилит|инструмент|трекер|todo/.test(normalized)) return 'app';
+  if (/проект|продукт|программ|прилож|app|web-app|mvp|crm|dashboard|панел|сервис|утилит|инструмент|трекер|todo/.test(normalized)) return 'app';
   return null;
 }
 

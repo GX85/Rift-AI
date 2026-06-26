@@ -187,8 +187,8 @@ export function Landing({ onEnter }: { onEnter?: () => void }) {
           <a href="#plus">Для Google</a>
           <a href="/reviews">Отзывы</a>
         </div>
-        <button className="nav-open" onClick={start} disabled={busy}>
-          {onEnter ? 'Войти' : 'Войти'}
+        <button className="nav-open" onClick={signInWithGoogle} disabled={busy}>
+          Войти через Google
         </button>
       </nav>
 

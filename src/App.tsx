@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { Session } from '@supabase/supabase-js';
 import { supabase } from './lib/supabase';
-import { Landing, PlatformChoice, ReviewsPage } from './components/Auth';
+import { Landing, ReviewsPage } from './components/Auth';
 import { CodeWorkspace } from './components/CodeWorkspace';
 import { InteractionEffects } from './components/InteractionEffects';
 import { MobileApp, MobileEntry, MobileQrPage } from './components/MobileApp';
@@ -50,7 +50,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [guest, setGuest] = useState(() => localStorage.getItem(GUEST_KEY) === '1');
   const [platformPicked, setPlatformPicked] = useState(() => localStorage.getItem(PLATFORM_PICKED_KEY) === '1' || localStorage.getItem(GUEST_KEY) === '1');
-  const [entryPlatform, setEntryPlatform] = useState<EntryPlatform>(readEntryPlatform);
+  const [entryPlatform] = useState<EntryPlatform>(readEntryPlatform);
   // 'app' — чат, 'home' — главный экран (лендинг), доступен и после входа.
   const [view, setViewState] = useState<AppView>(readAppView);
 
@@ -139,31 +139,6 @@ export default function App() {
     supabase.auth.signOut();
   }
 
-  function isPhoneLike() {
-    return (
-      window.matchMedia('(max-width: 820px), (pointer: coarse)').matches ||
-      /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent)
-    );
-  }
-
-  function choosePhone() {
-    if (!isPhoneLike()) {
-      window.location.href = '/qr';
-      return;
-    }
-    setEntryPlatform('phone');
-    rememberPlatform('phone');
-    setPlatformPicked(true);
-    setView('home');
-  }
-
-  function chooseDesktop() {
-    setEntryPlatform('desktop');
-    rememberPlatform('desktop');
-    setPlatformPicked(true);
-    setView('home');
-  }
-
   function enterSelectedGuest() {
     if (entryPlatform === 'phone') {
       localStorage.setItem(GUEST_KEY, '1');
@@ -229,14 +204,6 @@ export default function App() {
       </>
     );
   }
-
-  if (!platformPicked && !session && !guest)
-    return (
-      <>
-        {bg}
-        <PlatformChoice onDesktop={chooseDesktop} onPhone={choosePhone} />
-      </>
-    );
 
   if (!session && !guest)
     return (
